@@ -1,0 +1,26 @@
+Complete Spring Boot Project | Smart Contact Manager
+
+for initialising TailWind
+
+    1. run command "npm init -y
+            this will create a "package.json" in the project
+
+    2. add " "type": "module"," in the "package.json" file after main
+
+    3. run "npm install tailwindcss @tailwindcss/cli" 
+            this will install TailWind packages 
+            you can also check dependencies in "package.json" file to confirm
+
+    4. run "npx @tailwindcss/cli -i src/main/resources/static/css/input.css -o src/main/resources/static/css/output.css"
+            this will create output.css file at the provided location
+            and we need output.css file for styling
+
+
+
+
+
+Thymeleaf Fragments -> for inserting commons html file into a html page like header or footer file which is commons
+                       many html pages.
+
+
+                       

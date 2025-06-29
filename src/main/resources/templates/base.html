@@ -1,0 +1,29 @@
+<html>
+
+<body>
+
+    <div class="base-fragment" th:fragment="baseFragment(x,y)">
+        <h1>This is first fragment of base page</h1>
+        <p>Good Morning</p>
+        <h1>Value of x ix <span th:text="${x}"></span></h1>
+        <h1>Value of y ix <span th:text="${y}"></span></h1>
+
+    </div>
+    <div class="base-fragment" th:fragment="baseFragmentForHTML(content)">
+        <h1>This is second fragment of base page</h1>
+        <p>Good Morning</p>
+        <div th:replace="${content}"></div>
+
+    </div>
+
+    <div class="base-fragment" th:fragment="baseFragment3ForHTML">
+        <h1>This is third fragment of base page</h1>
+        <p>Good Morning</p>
+    </div>
+    <div class="base-fragment" th:fragment="baseFragment4ForHTML">
+        <h1>This is fourth fragment of base page</h1>
+        <p>Good Morning</p>
+    </div>
+</body>
+
+</html>
