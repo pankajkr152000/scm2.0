@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" th:fragment="parent(content, title, script)" xmlns:th="http://www.thymeleaf.org">
+<html class="light" lang="en" th:fragment="parent(content, title, script)" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,9 @@
     <!-- insert header fragment-->
     <section data-th-replace="~{navbar :: #navbar-header}"></section>
     <!-- main content -->
-    <section data-th-replace="${content}"> </section>
+    <div class="p-4 h-screen w-full dark:bg-gray-800">
+        <section data-th-replace="${content}"> </section>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <th:block data-th-replace="${script}"></th:block>
 </body>
