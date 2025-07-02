@@ -1,25 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" th:replace="~{base :: parent (~{::#content}, ~{::title}, ~{::script})}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>about</title>
+    <title>About Page</title>
 </head>
 
 <body>
-
-    <!-- Using Fragment of base page -->
-    <div class="fragment" th:replace="~{base :: baseFragment(one,two)}">
-
+    <div id="content">
+        <h1>Welcome to about page...</h1>
     </div>
-    <hr>
-    <h1>This is about page!!!</h1>
-
-    <div th:replace="~{base :: baseFragmentForHTML(~{::p})}">
-        <p>This is dynamic content.</p>
-    </div>
+    <script>console.log("about page");</script>
 </body>
-
 
 </html>

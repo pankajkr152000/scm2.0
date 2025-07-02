@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />
-    <title>Title</title>
+
+    <title>Home</title>
     <!-- <style>
         .container {
             margin: 5%;
@@ -15,7 +13,7 @@
 </head>
 
 <body>
-    <div class="text-2xl font-stretch-extra-expanded">
+    <div id="content">
         <h1 class="bg-emerald-200 fill-stone-600">
             Welcome to My Home Page of Smart Contact Manager <br>
             <p> Name : <span th:text="${name}"></span></p>
@@ -27,7 +25,7 @@
             for styling i am using <b>tailwindcss.</b>
         </p>
     </div>
-    <span></span>
+    <script>console.log("home page");</script>
 </body>
 
 </html>

@@ -1,31 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>services</title>
+    <title>Services Page</title>
 </head>
 
 <body>
-    <h1>This is services page!!!</h1>
-    <hr>
-    <!-- Using Fragment of base page -->
-
-    <div th:replace="~{base :: baseFragmentForHTML(~{::.using-class})}">
-        <section id="using-id">
-            This is id dynamic services passed to base page.
-        </section>
-
-        <section class="using-class">
-            This is class dynamic services passed to base page.
-        </section>
-
-    </div>
-
-    <div th:replace="${isTrue} ? ~{base :: baseFragment3ForHTML} : ~{base :: baseFragment4ForHTML}"></div>
-
+    <section id="content">
+        <H1>Welcome to Services Page....</H1>
+        <p>Services offered by SCM2.0</p>
+    </section>
+    <script>
+        console.log("services page")
+    </script>
 </body>
-
 
 </html>

@@ -28,11 +28,23 @@ public class PageContollers {
         return "base";
     }
 
-     @RequestMapping("/services")
+    @RequestMapping("/services")
     public String services(Model model) {
         model.addAttribute("isTrue", false);
         System.out.println("This is services page.");
         return "services";
+    }
+    @RequestMapping("/contact")
+    public String contact(Model model) {
+        // model.addAttribute("isTrue", false);
+        System.out.println("This is contact page.");
+        return "contact";
+    }
+    @RequestMapping("/login")
+    public String login(Model model) {
+        // model.addAttribute("isTrue", false);
+        System.out.println("This is login page.");
+        return "login";
     }
 
 }

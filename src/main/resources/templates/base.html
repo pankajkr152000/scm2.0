@@ -1,29 +1,21 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" th:fragment="parent(content, title, script)" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-th-replace="${title}"></title>
+    <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />
+    <link th:href="@{https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css}" rel="stylesheet" />
+</head>
 
 <body>
-
-    <div class="base-fragment" th:fragment="baseFragment(x,y)">
-        <h1>This is first fragment of base page</h1>
-        <p>Good Morning</p>
-        <h1>Value of x ix <span th:text="${x}"></span></h1>
-        <h1>Value of y ix <span th:text="${y}"></span></h1>
-
-    </div>
-    <div class="base-fragment" th:fragment="baseFragmentForHTML(content)">
-        <h1>This is second fragment of base page</h1>
-        <p>Good Morning</p>
-        <div th:replace="${content}"></div>
-
-    </div>
-
-    <div class="base-fragment" th:fragment="baseFragment3ForHTML">
-        <h1>This is third fragment of base page</h1>
-        <p>Good Morning</p>
-    </div>
-    <div class="base-fragment" th:fragment="baseFragment4ForHTML">
-        <h1>This is fourth fragment of base page</h1>
-        <p>Good Morning</p>
-    </div>
+    <!-- insert header fragment-->
+    <section data-th-replace="~{navbar :: #navbar-header}"></section>
+    <!-- main content -->
+    <section data-th-replace="${content}"> </section>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <th:block data-th-replace="${script}"></th:block>
 </body>
 
 </html>
