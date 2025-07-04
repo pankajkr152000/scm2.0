@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PageContollers {
 
     @RequestMapping("/home")
-    public String home(Model model) { //model is used to send dynamic dato to the html page
+    public String home(Model model) { // model is used to send dynamic dato to the html page
         System.out.println("My Home page Handler");
-        model.addAttribute("name","Pankaj Kumar");
+        model.addAttribute("name", "Pankaj Kumar");
         model.addAttribute("company", "TCSL");
-        //here we are returning the html page direct from templates folder
-        return "home"; //home is home.html page present inside templates folder
+        // here we are returning the html page direct from templates folder
+        return "home"; // home is home.html page present inside templates folder
     }
 
     @RequestMapping("/about")
@@ -34,12 +34,14 @@ public class PageContollers {
         System.out.println("This is services page.");
         return "services";
     }
+
     @RequestMapping("/contact")
     public String contact(Model model) {
         // model.addAttribute("isTrue", false);
         System.out.println("This is contact page.");
         return "contact";
     }
+
     @RequestMapping("/login")
     public String login(Model model) {
         // model.addAttribute("isTrue", false);
