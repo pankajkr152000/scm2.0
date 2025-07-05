@@ -48,5 +48,11 @@ public class PageContollers {
         System.out.println("This is login page.");
         return "login";
     }
-
+    
+    @RequestMapping("/signup")
+    public String signup(Model model) {
+        // model.addAttribute("isTrue", false);
+        System.out.println("This is signup page.");
+        return "signup";
+    }
 }
