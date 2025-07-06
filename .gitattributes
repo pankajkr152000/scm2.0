@@ -1,2 +1,20 @@
+#  Maven Wrapper
 /mvnw text eol=lf
 *.cmd text eol=crlf
+
+
+# Handle all text files automatically
+* text=auto
+
+# Enforce LF endings for scripts and source files
+*.java text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.sh text eol=lf
+
+# Windows-specific batch files should use CRLF
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
