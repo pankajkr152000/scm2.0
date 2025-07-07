@@ -1,9 +1,11 @@
-package com.scm.CONSTANTS;
+package com.scm.contants;
 
 public enum Providers {
     SELF,
     FACEBOOK,
     TWITTER,
-    GOOGLE
+    GOOGLE,
+    GITHUB,
+    LINKEDIN
 
 }
