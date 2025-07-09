@@ -42,6 +42,7 @@ public class Users {
     private String profilePic;
 
     private Providers provider = Providers.SELF;
+    private String providerUserId;
 
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Contacts> contactList = new ArrayList<>();
