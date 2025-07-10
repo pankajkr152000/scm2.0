@@ -2,15 +2,16 @@
 <html lang="en" data-th-replace="~{base :: parent(~{::#content}, ~{::title}, ~{::script})}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Signup</title>
 </head>
 
 <body>
     <div id="content">
         <!-- card or signup form -->
-        <div class="grid grid-cols-12"> <!-- this will spilts the screen into 12 columns -->
+        <div class="grid grid-cols-12">
+            <!-- this will spilts the screen into 12 columns -->
             <div class="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-4"></div>
             <!-- columns will be taken from left side -->
             <!-- <form class="mx-auto w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5"> -->
@@ -19,14 +20,14 @@
 
                 <div
                     class="block p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"><strong>Register
-                            Here</strong></h5>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        <strong>Register Here</strong>
+                    </h5>
                     <div
                         class="mb-2 text-xs font-bold tracking-tight text-gray-400 dark:text-gray-400 flex justify-center">
                         Start Managing Contacts On Cloud
                     </div>
-
+                    <!-- Form starts -->
                     <form type="">
                         <!-- Username -->
                         <div class="mb-3 pt-3">
@@ -85,16 +86,14 @@
                                 <b>Reset</b>
                             </button>
                         </div>
-
                     </form>
+                    <!-- form ends here -->
                 </div>
-
             </div>
         </div>
-
     </div>
     <script>
-        console.log("signup page")
+        console.log("signup page");
     </script>
 </body>
 
