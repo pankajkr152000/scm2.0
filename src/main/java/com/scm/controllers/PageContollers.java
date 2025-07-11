@@ -2,7 +2,11 @@ package com.scm.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.scm.formRequestResponse.UserSignupFormRequest;
 
 @Controller
 public class PageContollers {
@@ -53,6 +57,23 @@ public class PageContollers {
     public String signup(Model model) {
         // model.addAttribute("isTrue", false);
         System.out.println("This is signup page.");
+        UserSignupFormRequest signupRequest = new UserSignupFormRequest();
+        //signupRequest.setUsername("Pankaj");
+        model.addAttribute("userSignupFormRequest", signupRequest);
         return "signup";
+    }
+
+
+    // processing signup/register form
+    @RequestMapping(value="/do-signup", method = RequestMethod.POST)
+    public String doSignup(@ModelAttribute UserSignupFormRequest userSignupFormRequest) {
+        System.out.println("Processing Signup .... ");
+        System.out.println(userSignupFormRequest);
+        // TODOFetch form data
+        // TODOValidate form data
+        // TODOSave the data into database
+        // TODOmessage : "Registration Successful"
+        // TODORedirect the form
+        return "redirect:/signup";
     }
 }
