@@ -12,7 +12,7 @@ for initialising TailWind
             you can also check dependencies in "package.json" file to confirm
 
     4. run ""
-            this will create output.css file at the provided locationnpx @tailwindcss/cli -i src/main/resources/static/css/input.css -o src/main/resources/static/css/output.css
+            this will create output.css file at the provided location npx tailwindcss -i src/main/resources/static/css/input.css -o src/main/resources/static/css/output.css --watch
             and we need output.css file for styling
 
 

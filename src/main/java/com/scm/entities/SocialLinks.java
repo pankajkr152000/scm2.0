@@ -12,20 +12,63 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "socialLinks") //
+/**
+ * Represents a social link entity in the system.
+ *
+ * <p>This entity is mapped to the <b>socialLinks</b> table in the database.</p>
+ *
+ * <p><b>Attributes:</b></p>
+ * <ol>
+ *   <li>{@code id}      - {@link Long} : Auto-generated unique identifier for the social link (Primary Key)</li>
+ *   <li>{@code title}   - {@link String} : Title/label of the social link (e.g., Facebook, Twitter, GitHub) (optional)</li>
+ *   <li>{@code link}    - {@link String} : URL of the social link (not null)</li>
+ *   <li>{@code contact} - {@link Contacts} : Contact associated with this social link (Many-to-One relationship)</li>
+ * </ol>
+ *
+ * <p>Other notes:</p>
+ * <ul>
+ *   <li>Uses Lombok annotations {@code @Getter}, {@code @Setter}, {@code @NoArgsConstructor}, {@code @AllArgsConstructor}, {@code @Builder}.</li>
+ *   <li>Primary key {@code id} is auto-incremented using {@code GenerationType.IDENTITY} strategy.</li>
+ *   <li>Maintains a many-to-one relationship with {@link Contacts}.</li>
+ * </ul>
+ */
+@Entity(name = "socialLinks")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class SocialLinks {
+
+    /**
+     * Auto-generated unique identifier for the social link.
+     * Acts as the primary key in the database.
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // this will auto increment the value of id.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment strategy
     private Long id;
+
+    /**
+     * Title or label for the social link.
+     * Example: "Facebook", "GitHub", "Portfolio".
+     */
     private String title;
+
+    /**
+     * URL of the social link.
+     * Cannot be {@code null}.
+     */
     @Column(nullable = false)
     private String link;
 
+    /**
+     * Contact associated with this social link.
+     * <p>
+     * - Many social links can belong to one contact.<br>
+     * - Relationship is managed via {@link Contacts}.
+     * </p>
+     */
     @ManyToOne
     private Contacts contact;
 }
+

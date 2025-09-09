@@ -1,54 +1,152 @@
 package com.scm.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.scm.entities.Users;
+import com.scm.repositories.IUserRepositories;
 import com.scm.services.IUserSignupFormServices;
+import com.scm.services.helpers.ResourceNotFoundException;
 
 
+// @Service // spring will find that it is a Service , spring will automatically creates an object of this class
+
+/**
+ * Implementation of {@link IUserSignupFormServices}.
+ *
+ * <p>This service class handles business logic related to user management, such as
+ * saving, retrieving, updating, and deleting users. It interacts with the database
+ * through the {@link IUserRepositories} repository.</p>
+ *
+ * <p><b>Key Features:</b></p>
+ * <ul>
+ *   <li>Annotated with {@code @Service} so Spring can automatically detect and manage it.</li>
+ *   <li>Uses {@code @Autowired} to inject the {@link IUserRepositories} dependency.</li>
+ *   <li>Handles exceptions and logs events using SLF4J {@link Logger}.</li>
+ * </ul>
+ */
 @Service
 public class UserSignupFormServicesImpl implements IUserSignupFormServices {
 
+    /**
+     * Repository for interacting with the {@link Users} entity in the database.
+     */
+    @Autowired
+    private IUserRepositories userRepository;
+
+    /**
+     * Logger instance for logging important events and errors.
+     */
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    /**
+     * Saves a new user in the system.
+     *
+     * @param user the {@link Users} entity to save
+     * @return the saved {@link Users} entity
+     */
     @Override
     public Users saveUser(Users user) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        log.info("Saving new user: {}", user.getEmail());
+        return userRepository.save(user);
     }
 
+    /**
+     * Retrieves a user by their unique ID.
+     *
+     * @param id the unique identifier of the user
+     * @return an {@link Optional} containing the user if found, otherwise empty
+     */
     @Override
-    public Users getUserById(String id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Optional<Users> getUserById(String id) {
+        log.debug("Fetching user with ID: {}", id);
+        return userRepository.findById(id);
     }
 
+    /**
+     * Updates an existing user’s details.
+     *
+     * @param newUser the {@link Users} entity with updated details
+     * @return an {@link Optional} containing the updated user if successful
+     * @throws ResourceNotFoundException if the user is not found
+     */
     @Override
-    public Users updateUser(Users user) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Optional<Users> updateUser(Users newUser) {
+        log.info("Updating user with ID: {}", newUser.getUserId());
+
+        Users existingUser = userRepository.findById(newUser.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
+
+        // update fields
+        existingUser.setFirstName(newUser.getFirstName());
+        existingUser.setLastName(newUser.getLastName());
+        existingUser.setEmail(newUser.getEmail());
+        existingUser.setEmailVerified(newUser.isEmailVerified());
+        existingUser.setContactNumber(newUser.getContactNumber());
+        existingUser.setContactNumberVerified(newUser.isContactNumberVerified());
+        existingUser.setAbout(newUser.getAbout());
+        existingUser.setPassword(newUser.getPassword());
+        existingUser.setProfilePic(newUser.getProfilePic());
+        existingUser.setProvider(newUser.getProvider());
+        existingUser.setProviderUserId(newUser.getProviderUserId());
+
+        Users updatedUser = userRepository.save(existingUser);
+
+        return Optional.ofNullable(updatedUser);
     }
 
+    /**
+     * Deletes a user by their ID.
+     *
+     * @param id the unique identifier of the user
+     */
     @Override
     public void deleteUser(String id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        log.warn("Deleting user with ID: {}", id);
+        userRepository.deleteById(id);
     }
 
+    /**
+     * Checks whether a user exists by their ID.
+     *
+     * @param id the unique identifier of the user
+     * @return {@code true} if the user exists, otherwise {@code false}
+     */
     @Override
     public boolean isUserExitsById(String id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return userRepository.existsById(id);
     }
 
+    /**
+     * Checks whether a user exists by their email address.
+     *
+     * @param email the email address of the user
+     * @return {@code true} if a user with the given email exists, otherwise {@code false}
+     */
     @Override
     public boolean isUserExistsByEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return userRepository.findByEmail(email) != null;
     }
 
+    /**
+     * Retrieves all users from the system.
+     *
+     * @return a list of all {@link Users} entities
+     */
     @Override
     public List<Users> getAllUsers() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        log.debug("Fetching all users");
+        return userRepository.findAll();
     }
 
     @Override
     public String toString() {
         return "UserSignupFormServicesImpl []";
     }
-
 }
+

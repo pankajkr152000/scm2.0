@@ -57,16 +57,16 @@ public class PageContollers {
     public String signup(Model model) {
         // model.addAttribute("isTrue", false);
         System.out.println("This is signup page.");
-        UserSignupFormRequest signupRequest = new UserSignupFormRequest();
+        UserSignupFormRequest userSignupFormRequest = new UserSignupFormRequest();
         //signupRequest.setUsername("Pankaj");
-        model.addAttribute("userSignupFormRequest", signupRequest);
+        model.addAttribute("userSignupFormRequest", userSignupFormRequest);
         return "signup";
     }
 
 
     // processing signup/register form
     @RequestMapping(value="/do-signup", method = RequestMethod.POST)
-    public String doSignup(@ModelAttribute UserSignupFormRequest userSignupFormRequest) {
+    public String doSignup(@ModelAttribute UserSignupFormRequest userSignupFormRequest) { //object will be automatically created & form data will come into userSignupFormRequest
         System.out.println("Processing Signup .... ");
         System.out.println(userSignupFormRequest);
         // TODOFetch form data

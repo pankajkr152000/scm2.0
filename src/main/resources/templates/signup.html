@@ -27,6 +27,11 @@
                         class="mb-2 text-xs font-bold tracking-tight text-gray-400 dark:text-gray-400 flex justify-center">
                         Start Managing Contacts On Cloud
                     </div>
+
+                    <!-- Success alert maessage fragment additoion -->
+                    <div th:replace="~{fragments\successfulMessageAlert.html :: success-alert-message}">
+                    </div>
+
                     <!-- Form starts -->
                     <form data-th-action="@{'/do-signup'}" method="post" data-th-object="${userSignupFormRequest}">
                         <!-- Username -->
@@ -42,7 +47,7 @@
                         <div class="mb-3">
                             <label for="email"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                            <input type="email" id="email" data-th-field = "*{email}"
+                            <input type="email" id="email" data-th-field="*{email}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="email@gmail.com" required />
                         </div>
@@ -51,7 +56,7 @@
                         <div class="mb-3">
                             <label for="password"
                                 class="block mb-2 text-sm font-medium text-black dark:text-white">Password</label>
-                            <input type="password" id="password" data-th-field = "*{password}"
+                            <input type="password" id="password" data-th-field="*{password}"
                                 class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="**********" required />
                         </div>
@@ -59,7 +64,7 @@
                         <div class="mb-3">
                             <label for="contactNumber"
                                 class="block mb-2 text-sm font-medium text-black dark:text-white">Contact Number</label>
-                            <input type="text" id="contactNumber" data-th-field = "*{contactNumber}"
+                            <input type="text" id="contactNumber" data-th-field="*{contactNumber}"
                                 class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="123456789" required />
                         </div>
@@ -68,7 +73,7 @@
                         <div class="mb-3">
                             <label for="about"
                                 class="block mb-2 text-sm font-medium text-black dark:text-white">About</label>
-                            <textarea type="text" id="about" rows="4" data-th-field = "*{about}"
+                            <textarea type="text" id="about" rows="4" data-th-field="*{about}"
                                 class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Write something about yourself ..."></textarea>
                         </div>
