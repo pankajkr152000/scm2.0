@@ -3,8 +3,6 @@ package com.scm.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aspectj.lang.annotation.SuppressAjWarnings;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -125,7 +123,6 @@ public class Contacts {
      * - Orphan social links are removed automatically.
      * </p>
      */
-    @SuppressAjWarnings("true")
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<SocialLinks> socialLinkList = new ArrayList<>();
 }

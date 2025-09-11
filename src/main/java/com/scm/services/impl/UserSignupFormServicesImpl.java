@@ -2,16 +2,18 @@ package com.scm.services.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.scm.dto.UserSignupFormRequest;
 import com.scm.entities.Users;
 import com.scm.repositories.IUserRepositories;
 import com.scm.services.IUserSignupFormServices;
 import com.scm.services.helpers.ResourceNotFoundException;
+import com.scm.utils.Utility;
 
 
 // @Service // spring will find that it is a Service , spring will automatically creates an object of this class
@@ -36,8 +38,10 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
     /**
      * Repository for interacting with the {@link Users} entity in the database.
      */
-    @Autowired
-    private IUserRepositories userRepository;
+    private final IUserRepositories userRepository;
+    public UserSignupFormServicesImpl(IUserRepositories userRepositories) {
+        this.userRepository = userRepositories;
+    }
 
     /**
      * Logger instance for logging important events and errors.
@@ -53,6 +57,11 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
     @Override
     public Users saveUser(Users user) {
         log.info("Saving new user: {}", user.getEmail());
+        //generate user id
+        String id = UUID.randomUUID().toString();
+        user.setUserId(id);
+        //ecode Password
+        //user.setPassword(encodedPassword);
         return userRepository.save(user);
     }
 
@@ -95,6 +104,7 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         existingUser.setProvider(newUser.getProvider());
         existingUser.setProviderUserId(newUser.getProviderUserId());
 
+        //save  updated user into database
         Users updatedUser = userRepository.save(existingUser);
 
         return Optional.ofNullable(updatedUser);
@@ -108,7 +118,10 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
     @Override
     public void deleteUser(String id) {
         log.warn("Deleting user with ID: {}", id);
-        userRepository.deleteById(id);
+        // userRepository.deleteById(id);
+        Users deleteUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        userRepository.delete(deleteUser);
     }
 
     /**
@@ -142,6 +155,21 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
     public List<Users> getAllUsers() {
         log.debug("Fetching all users");
         return userRepository.findAll();
+    }
+
+    @Override
+    public Users createUser(UserSignupFormRequest request) {
+        Users user = Users.builder()
+                .firstName(Utility.firstNameFromString(request.getUsername()))
+                .lastName(Utility.lastNameFromString(request.getUsername()))
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .contactNumber(request.getContactNumber())
+                .about(request.getAbout())
+                .profilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643")
+                .build();
+        System.out.println("User Saved : " + user);
+        return this.saveUser(user);
     }
 
     @Override

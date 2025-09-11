@@ -1,4 +1,4 @@
-package com.scm.formRequestResponse;
+package com.scm.dto;
 
 import com.scm.entities.Users;
 

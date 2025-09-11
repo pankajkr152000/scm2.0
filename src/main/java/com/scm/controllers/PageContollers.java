@@ -3,14 +3,24 @@ package com.scm.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.scm.formRequestResponse.UserSignupFormRequest;
+import com.scm.dto.UserSignupFormRequest;
+import com.scm.services.IUserSignupFormServices;
+
 
 @Controller
 public class PageContollers {
 
+    //constructor injection of IUserSignupFormServices
+    private final IUserSignupFormServices userSignupFormServices;
+
+    public PageContollers(IUserSignupFormServices userSignupFormServices) {
+        this.userSignupFormServices = userSignupFormServices;
+    }
+    
     @RequestMapping("/home")
     public String home(Model model) { // model is used to send dynamic dato to the html page
         System.out.println("My Home page Handler");
@@ -58,20 +68,26 @@ public class PageContollers {
         // model.addAttribute("isTrue", false);
         System.out.println("This is signup page.");
         UserSignupFormRequest userSignupFormRequest = new UserSignupFormRequest();
-        //signupRequest.setUsername("Pankaj");
+        userSignupFormRequest.setUsername("Pankaj");
         model.addAttribute("userSignupFormRequest", userSignupFormRequest);
         return "signup";
     }
 
 
     // processing signup/register form
+    @PostMapping()
     @RequestMapping(value="/do-signup", method = RequestMethod.POST)
     public String doSignup(@ModelAttribute UserSignupFormRequest userSignupFormRequest) { //object will be automatically created & form data will come into userSignupFormRequest
         System.out.println("Processing Signup .... ");
         System.out.println(userSignupFormRequest);
         // TODOFetch form data
+        
         // TODOValidate form data
         // TODOSave the data into database
+        // form(signup form) data comes into userSignupFormRequest 
+        // we will save user data from signup form from userSignupFormRequest into User
+        userSignupFormServices.createUser(userSignupFormRequest);
+        
         // TODOmessage : "Registration Successful"
         // TODORedirect the form
         return "redirect:/signup";

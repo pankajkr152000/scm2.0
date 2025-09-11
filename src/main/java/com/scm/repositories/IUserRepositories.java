@@ -1,5 +1,7 @@
 package com.scm.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -56,6 +58,6 @@ public interface IUserRepositories extends JpaRepository<Users, String> {
      * @param email the email address of the user
      * @return the {@link Users} entity if found, otherwise {@code null}
      */
-    Users findByEmail(String email);
+    Optional<Users> findByEmail(String email);
 }
 
