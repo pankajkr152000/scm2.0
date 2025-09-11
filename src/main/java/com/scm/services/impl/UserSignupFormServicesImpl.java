@@ -159,15 +159,26 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
 
     @Override
     public Users createUser(UserSignupFormRequest request) {
-        Users user = Users.builder()
-                .firstName(Utility.firstNameFromString(request.getUsername()))
-                .lastName(Utility.lastNameFromString(request.getUsername()))
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .contactNumber(request.getContactNumber())
-                .about(request.getAbout())
-                .profilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643")
-                .build();
+        // commenting this bcz it did not populating the default data for provider
+        // Users user = Users.builder()
+        //         .firstName(Utility.firstNameFromString(request.getUsername()))
+        //         .lastName(Utility.lastNameFromString(request.getUsername()))
+        //         .email(request.getEmail())
+        //         .password(request.getPassword())
+        //         .contactNumber(request.getContactNumber())
+        //         .about(request.getAbout())
+        //         .profilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643")
+        //         .build();
+        
+        Users user = new Users();
+        user.setFirstName(Utility.firstNameFromString(request.getUsername()));
+        user.setLastName(Utility.lastNameFromString(request.getUsername()));
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setContactNumber(request.getContactNumber());
+        user.setAbout(request.getAbout());
+        user.setProfilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643");
+        
         System.out.println("User Saved : " + user);
         return this.saveUser(user);
     }
