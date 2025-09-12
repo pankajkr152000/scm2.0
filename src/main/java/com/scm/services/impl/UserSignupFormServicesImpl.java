@@ -13,6 +13,7 @@ import com.scm.entities.Users;
 import com.scm.repositories.IUserRepositories;
 import com.scm.services.IUserSignupFormServices;
 import com.scm.services.helpers.ResourceNotFoundException;
+import com.scm.utils.SCMDate;
 import com.scm.utils.Utility;
 
 
@@ -178,7 +179,7 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         user.setContactNumber(request.getContactNumber());
         user.setAbout(request.getAbout());
         user.setProfilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643");
-        
+        user.setUserCreationRecordDate(SCMDate.getBusinessDate());
         System.out.println("User Saved : " + user);
         return this.saveUser(user);
     }
