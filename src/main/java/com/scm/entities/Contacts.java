@@ -1,6 +1,7 @@
 package com.scm.entities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -92,6 +93,7 @@ public class Contacts {
     /**
      * Indicates whether this contact is marked as a favorite.
      */
+    @Builder.Default
     private boolean isFavoriteContact = false;
 
     /**
@@ -104,6 +106,11 @@ public class Contacts {
      */
     private String linkedInLink;
 
+    /**
+     * store the time of contact addition
+     */
+    private Date contactAdditionRecordDate;
+    
     /**
      * User who owns this contact.
      * <p>
@@ -123,6 +130,7 @@ public class Contacts {
      * - Orphan social links are removed automatically.
      * </p>
      */
+    @Builder.Default
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<SocialLinks> socialLinkList = new ArrayList<>();
 }

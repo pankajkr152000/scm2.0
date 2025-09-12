@@ -1,5 +1,7 @@
 package com.scm.entities;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -70,5 +72,11 @@ public class SocialLinks {
      */
     @ManyToOne
     private Contacts contact;
+
+    /**
+     * store the time of Social link addition time
+     */
+    private Date socialLinkRecordDate;
+    
 }
 

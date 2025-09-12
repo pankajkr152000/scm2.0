@@ -1,6 +1,7 @@
 package com.scm.entities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.scm.contants.Providers;
@@ -85,6 +86,7 @@ public class Users {
     /**
      * Indicates whether the user's email is verified.
      */
+    @Builder.Default
     private boolean isEmailVerified = false;
 
     /**
@@ -109,6 +111,7 @@ public class Users {
     /**
      * Indicates whether the user's contact number is verified.
      */
+    @Builder.Default
     private boolean isContactNumberVerified = false;
 
     /**
@@ -119,6 +122,7 @@ public class Users {
     /**
      * Provider used for authentication (e.g., SELF, GOOGLE, FACEBOOK).
      */
+    @Builder.Default
     @Enumerated(value = EnumType.STRING)
     private Providers provider = Providers.SELF;
 
@@ -126,6 +130,11 @@ public class Users {
      * Provider-specific user ID (used when logged in via social login providers).
      */
     private String providerUserId;
+
+    /**
+     * store the time of user creation
+     */
+    private Date userCreationRecordDate;
 
     /**
      * List of contacts associated with the user.
@@ -136,6 +145,7 @@ public class Users {
      * - Orphan contacts are removed automatically.
      * </p>
      */
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Contacts> contactList = new ArrayList<>();
 }
