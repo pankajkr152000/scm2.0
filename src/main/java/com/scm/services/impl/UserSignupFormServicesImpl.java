@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.scm.config.QueryCaptureEventListener;
 import com.scm.dto.UserSignupFormRequest;
 import com.scm.entities.Users;
 import com.scm.repositories.IUserRepositories;
@@ -181,7 +182,17 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         user.setProfilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643");
         user.setUserCreationRecordDate(SCMDate.getBusinessDate());
         System.out.println("User Saved : " + user);
-        return this.saveUser(user);
+        Users savedUser =  this.saveUser(user);
+        // Users savedUser =  user;
+
+        ////////  Generated SQL Query from Event Listenser and HTTPSession  ////////
+        String sql = QueryCaptureEventListener.getLastQuery();
+        String params = QueryCaptureEventListener.getLastParamsAsString();
+
+        System.out.println("Captured SQL: " + sql);
+        System.out.println("Captured Params: " + params);
+        //////////                                           /////////////////////////
+        return savedUser;
     }
 
     @Override
