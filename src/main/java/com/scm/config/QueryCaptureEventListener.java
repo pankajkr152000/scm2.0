@@ -94,8 +94,11 @@ public class QueryCaptureEventListener implements
     private void capture(EntityPersister persister, Object[] state, String action, Object id) {
         String[] propertyNames = persister.getPropertyNames();
         String tableName = Utility.getOnlyEntityName(persister.getEntityName());
-
-        StringBuilder sb = new StringBuilder(action).append(" ").append(tableName);
+        StringBuilder sb = new StringBuilder(action);
+        if(action.equalsIgnoreCase("INSERT"))
+            sb.append(" INTO ").append(tableName);
+        else
+            sb.append(" ").append(tableName);
 
         switch (action) {
             case "INSERT" -> {

@@ -36,7 +36,7 @@ public class Utility {
             System.out.println(lastName.toString());
             i++;
         }
-        return ((lastName.toString().strip().length() != 0) ? null : lastName.toString().strip());
+        return ((lastName.toString().strip().length() == 0) ? null : lastName.toString().strip());
     }
 
     public static String capitalizeFirstLetter(String str) {
