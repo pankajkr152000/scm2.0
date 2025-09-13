@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.scm.utils.Utility;
+
 /**
  * Event listener for capturing Hibernate entity persistence operations
  * (INSERT, UPDATE, DELETE).
@@ -91,7 +93,7 @@ public class QueryCaptureEventListener implements
      */
     private void capture(EntityPersister persister, Object[] state, String action, Object id) {
         String[] propertyNames = persister.getPropertyNames();
-        String tableName = persister.getEntityName();
+        String tableName = Utility.getOnlyEntityName(persister.getEntityName());
 
         StringBuilder sb = new StringBuilder(action).append(" ").append(tableName);
 
