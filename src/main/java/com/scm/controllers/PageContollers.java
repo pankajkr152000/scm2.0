@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.scm.dto.UserSignupFormRequest;
 import com.scm.services.IUserSignupFormServices;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 public class PageContollers {
@@ -77,7 +79,7 @@ public class PageContollers {
     // processing signup/register form
     @PostMapping()
     @RequestMapping(value="/do-signup", method = RequestMethod.POST)
-    public String doSignup(@ModelAttribute UserSignupFormRequest userSignupFormRequest) { //object will be automatically created & form data will come into userSignupFormRequest
+    public String doSignup(@ModelAttribute UserSignupFormRequest userSignupFormRequest, HttpSession session) { //object will be automatically created & form data will come into userSignupFormRequest
         System.out.println("Processing Signup .... ");
         System.out.println(userSignupFormRequest);
         // TODOFetch form data
@@ -89,6 +91,7 @@ public class PageContollers {
         userSignupFormServices.createUser(userSignupFormRequest);
         
         // TODOmessage : "Registration Successful"
+        session.setAttribute("message", "Registration Successfull");
         // TODORedirect the form
         return "redirect:/signup";
     }

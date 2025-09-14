@@ -1,4 +1,4 @@
-package com.scm.contants;
+package com.scm.constants;
 
 import com.scm.entities.Users;
 
