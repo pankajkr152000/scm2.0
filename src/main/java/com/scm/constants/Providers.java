@@ -51,5 +51,9 @@ public enum Providers {
     GITHUB,
 
     /** Authentication via LinkedIn */
-    LINKEDIN
+    LINKEDIN;
+
+    public String valueOf() {
+        return this.name();
+    }
 }
