@@ -161,17 +161,6 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
 
     @Override
     public Users createUser(UserSignupFormRequest request) {
-        // commenting this bcz it did not populating the default data for provider
-        // Users user = Users.builder()
-        //         .firstName(Utility.firstNameFromString(request.getUsername()))
-        //         .lastName(Utility.lastNameFromString(request.getUsername()))
-        //         .email(request.getEmail())
-        //         .password(request.getPassword())
-        //         .contactNumber(request.getContactNumber())
-        //         .about(request.getAbout())
-        //         .profilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643")
-        //         .build();
-        
         Users user = new Users();
         user.setFirstName(Utility.firstNameFromString(request.getUsername()));
         user.setLastName(Utility.lastNameFromString(request.getUsername()));
