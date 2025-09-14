@@ -1,4 +1,4 @@
-package com.scm.contants;
+package com.scm.constants;
 
 public class SCMConstants {
     public static final String BUSINESS_Date = "";

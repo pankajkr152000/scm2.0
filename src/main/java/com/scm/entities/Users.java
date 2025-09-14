@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.scm.contants.Providers;
+import com.scm.constants.Providers;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
