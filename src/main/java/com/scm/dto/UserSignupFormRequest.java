@@ -36,8 +36,8 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString 
+@Builder 
+@ToString
 public class UserSignupFormRequest {
 
     /** Username or display name chosen by the user */
