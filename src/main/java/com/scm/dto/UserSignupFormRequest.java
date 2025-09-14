@@ -36,7 +36,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder 
 @ToString
 public class UserSignupFormRequest {
 

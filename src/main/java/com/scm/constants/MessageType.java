@@ -25,7 +25,7 @@ public enum MessageType {
      * Constructor for the enum.
      *
      * @param displayValue Human-readable name
-     * @param colorCode HEX color code
+     * @param colorCode    HEX color code
      */
     MessageType(String displayValue, String colorCode) {
         this.displayValue = displayValue;
@@ -42,7 +42,7 @@ public enum MessageType {
         return colorCode;
     }
 
-    /** Returns the value of Enum */
+    /** Returns the vlaue of ENUM */
     public String valueOf() {
         return this.name();
     }
@@ -53,4 +53,3 @@ public enum MessageType {
         return displayValue;
     }
 }
-
