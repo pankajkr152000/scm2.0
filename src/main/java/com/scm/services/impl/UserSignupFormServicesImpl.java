@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.scm.config.QueryCaptureEventListener;
+import com.scm.config.UnifiedQueryCapture;
 import com.scm.dto.UserSignupFormRequest;
 import com.scm.entities.Users;
 import com.scm.repositories.IUserRepositories;
@@ -164,10 +164,10 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         Users user = new Users();
         user.setFirstName(Utility.firstNameFromString(request.getUsername()));
         user.setLastName(Utility.lastNameFromString(request.getUsername()));
-        user.setEmail(request.getEmail());
+        user.setEmail(request.getEmail().strip());
         user.setPassword(request.getPassword());
-        user.setContactNumber(request.getContactNumber());
-        user.setAbout(request.getAbout());
+        user.setContactNumber(request.getContactNumber().strip());
+        user.setAbout(request.getAbout().strip());
         user.setProfilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643");
         user.setUserCreationRecordDate(SCMDate.getBusinessDate());
         System.out.println("User Saved : " + user);
@@ -175,8 +175,8 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         // Users savedUser =  user;
 
         ////////  Generated SQL Query from Event Listenser and HTTPSession  ////////
-        String sql = QueryCaptureEventListener.getLastQuery();
-        String params = QueryCaptureEventListener.getLastParamsAsString();
+        String sql = UnifiedQueryCapture.getLastQuery();
+        String params = UnifiedQueryCapture.getLastParamsAsString();
 
         System.out.println("Captured SQL: " + sql);
         System.out.println("Captured Params: " + params);
