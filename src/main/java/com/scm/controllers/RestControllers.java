@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scm.dto.UserSignupFormRequest;
+import com.scm.dto.UserSignupFormRequestTO;
 import com.scm.entities.Users;
 import com.scm.services.IUserSignupFormServices;
 import com.scm.services.helpers.ApiResponse;
@@ -27,7 +27,7 @@ public class RestControllers {
     }
 
     @PostMapping("/do-signup")
-    public ApiResponse<Users> doSignup(@RequestBody UserSignupFormRequest request) {
+    public ApiResponse<Users> doSignup(@RequestBody UserSignupFormRequestTO request) {
         Users user = userSignupFormServices.createUser(request); // same service method
         return new ApiResponse<>("success", "User registered successfully!", user);
     }

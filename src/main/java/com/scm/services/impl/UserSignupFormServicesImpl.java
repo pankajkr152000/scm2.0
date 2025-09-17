@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.scm.config.UnifiedQueryCapture;
-import com.scm.dto.UserSignupFormRequest;
+import com.scm.dto.UserSignupFormRequestTO;
 import com.scm.entities.Users;
 import com.scm.repositories.IUserRepositories;
 import com.scm.services.IUserSignupFormServices;
@@ -160,10 +160,10 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
     }
 
     @Override
-    public Users createUser(UserSignupFormRequest request) {
+    public Users createUser(UserSignupFormRequestTO request) {
         Users user = new Users();
-        user.setFirstName(Utility.firstNameFromString(request.getUsername()));
-        user.setLastName(Utility.lastNameFromString(request.getUsername()));
+        user.setFirstName(Utility.firstNameFromString(request.getFullName()));
+        user.setLastName(Utility.lastNameFromString(request.getFullName()));
         user.setEmail(request.getEmail().strip());
         user.setPassword(request.getPassword());
         user.setContactNumber(request.getContactNumber().strip());
