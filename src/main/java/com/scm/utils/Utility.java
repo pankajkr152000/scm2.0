@@ -8,9 +8,9 @@ public class Utility {
         String[] parts = fullName.trim().split("\\s+");
         if (parts[0].length() <= 1 && StringUtils.hasText(parts[1]) && !parts[1].isEmpty()) {
             if(parts[1].length() >= 1)
-                return ((capitalizeFirstLetter(parts[0]) + " " + capitalizeFirstLetter(parts[1])).strip());
+                return ((capitalizeFirstLetter(capitalizeFirstLetter(parts[0])) + " " + capitalizeFirstLetter(parts[1])).strip());
         }
-        return parts[0].strip();
+        return capitalizeFirstLetter(parts[0]).strip();
     }
 
     public static String lastNameFromString(String fullName) {

@@ -7,22 +7,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.scm.dto.UserSignupFormRequest;
+import com.scm.dto.UserSignupFormRequestTO;
 import com.scm.services.IUserSignupFormServices;
 
 import jakarta.servlet.http.HttpSession;
 
-
 @Controller
 public class PageContollers {
 
-    //constructor injection of IUserSignupFormServices
+    // constructor injection of IUserSignupFormServices
     private final IUserSignupFormServices userSignupFormServices;
 
     public PageContollers(IUserSignupFormServices userSignupFormServices) {
         this.userSignupFormServices = userSignupFormServices;
     }
-    
+
     @RequestMapping("/home")
     public String home(Model model) { // model is used to send dynamic dato to the html page
         System.out.println("My Home page Handler");
@@ -64,32 +63,32 @@ public class PageContollers {
         System.out.println("This is login page.");
         return "login";
     }
-    
+
     @RequestMapping("/signup")
     public String signup(Model model) {
         // model.addAttribute("isTrue", false);
         System.out.println("This is signup page.");
-        UserSignupFormRequest userSignupFormRequest = new UserSignupFormRequest();
-        userSignupFormRequest.setUsername("Pankaj");
-        model.addAttribute("userSignupFormRequest", userSignupFormRequest);
+        UserSignupFormRequestTO userSignupFormRequestTO = new UserSignupFormRequestTO();
+        //userSignupFormRequest.setFullName("Pankaj");
+        model.addAttribute("userSignupFormRequest", userSignupFormRequestTO);
         return "signup";
     }
 
-
     // processing signup/register form
     @PostMapping()
-    @RequestMapping(value="/do-signup", method = RequestMethod.POST)
-    public String doSignup(@ModelAttribute UserSignupFormRequest userSignupFormRequest, HttpSession session) { //object will be automatically created & form data will come into userSignupFormRequest
+    @RequestMapping(value = "/do-signup", method = RequestMethod.POST)
+    // object will be automatically created & form data will come into userSignupFormRequest
+    public String doSignup(@ModelAttribute UserSignupFormRequestTO userSignupFormRequestTO, HttpSession session) {
         System.out.println("Processing Signup .... ");
-        System.out.println(userSignupFormRequest);
+        System.out.println(userSignupFormRequestTO);
         // TODOFetch form data
-        
+
         // TODOValidate form data
         // TODOSave the data into database
-        // form(signup form) data comes into userSignupFormRequest 
+        // form(signup form) data comes into userSignupFormRequest
         // we will save user data from signup form from userSignupFormRequest into User
-        userSignupFormServices.createUser(userSignupFormRequest);
-        
+        userSignupFormServices.createUser(userSignupFormRequestTO);
+
         // TODOmessage : "Registration Successful"
         session.setAttribute("message", "Registration Successfull");
         // TODORedirect the form

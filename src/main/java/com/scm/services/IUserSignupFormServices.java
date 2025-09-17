@@ -3,7 +3,7 @@ package com.scm.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.scm.dto.UserSignupFormRequest;
+import com.scm.dto.UserSignupFormRequestTO;
 import com.scm.entities.Users;
 
 /**
@@ -87,6 +87,6 @@ public interface IUserSignupFormServices {
      */
     List<Users> getAllUsers();
 
-    Users createUser(UserSignupFormRequest request);
+    Users createUser(UserSignupFormRequestTO request);
 }
 
