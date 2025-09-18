@@ -6,14 +6,15 @@ package com.scm.constants;
  */
 public enum MessageType {
 
-    BLUE("Blue Message", "#0000FF"),
-    GREEN("Green Message", "#00FF00"),
-    RED("Red Message", "#FF0000"),
-    YELLOW("Yellow Message", "#FFFF00"),
-    SUCCESS("Success", "#28a745"),
-    WARNING("Warning", "#ffc107"),
-    FAILED("Failed", "#dc3545"),
-    ERROR("Error", "#FF0000");
+    BLUE("Blue Message", "text-blue-800 border-blue-300 bg-blue-50"),
+    GREEN("Green Message", "text-green-800 border-green-300 bg-green-50"),
+    RED("Red Message", "text-red-800 border-red-300 bg-red-50"),
+    YELLOW("Yellow Message", "text-yellow-800 border-yellow-300 bg-yellow-50"),
+    SUCCESS("Success", "text-green-800 border-green-300 bg-green-50"),
+    WARNING("Warning", "text-yellow-800 border-yellow-300 bg-yellow-50"),
+    FAILED("Failed", "text-red-800 border-red-300 bg-red-50"),
+    ERROR("Error", "text-red-800 border-red-300 bg-red-50"),
+    REGISTRATION_SUCCESSFULL("Registration Successful...", "text-green-800 border-green-300 bg-green-50");
 
     /** Human-readable display string */
     private final String displayValue;
@@ -40,11 +41,6 @@ public enum MessageType {
     /** Returns the color code */
     public String getColorCode() {
         return colorCode;
-    }
-
-    /** Returns the vlaue of ENUM */
-    public String valueOf() {
-        return this.name();
     }
 
     /** Override toString() to return display value */

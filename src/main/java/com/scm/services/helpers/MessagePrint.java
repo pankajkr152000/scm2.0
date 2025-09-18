@@ -1,6 +1,7 @@
 package com.scm.services.helpers;
 
 import com.scm.constants.MessageType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,6 @@ public class MessagePrint {
     private String content;
 
     /** Message type (defaults to SUCCESS) */
-    @Builder.Default
-    private MessageType messageType = MessageType.SUCCESS;
+    private MessageType messageType;
 
 }

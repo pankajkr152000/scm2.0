@@ -29,7 +29,7 @@
                     </div>
 
                     <!-- Success alert maessage fragment additoion -->
-                    <div th:replace="~{fragments\successfulMessageAlert.html :: success-alert-message}">
+                    <div th:replace="~{fragments\messageAlert.html :: success-alert-message(messageType=${messageType})}">
                     </div>
 
                     <!-- Form starts -->
