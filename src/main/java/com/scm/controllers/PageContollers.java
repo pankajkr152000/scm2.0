@@ -88,7 +88,7 @@ public class PageContollers {
         // TODOSave the data into database
         // form(signup form) data comes into userSignupFormRequest
         // we will save user data from signup form from userSignupFormRequest into User
-        //userSignupFormServices.createUser(userSignupFormRequestTO);
+        userSignupFormServices.createUser(userSignupFormRequestTO);
 
         // TODOmessage : "Registration Successful"
         String msgType = MessageType.REGISTRATION_SUCCESSFULL.getDisplayValue();
