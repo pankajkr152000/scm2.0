@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.scm.constants.MessageType;
 import com.scm.dto.UserSignupFormRequestTO;
 import com.scm.services.IUserSignupFormServices;
 
@@ -87,10 +88,11 @@ public class PageContollers {
         // TODOSave the data into database
         // form(signup form) data comes into userSignupFormRequest
         // we will save user data from signup form from userSignupFormRequest into User
-        userSignupFormServices.createUser(userSignupFormRequestTO);
+        //userSignupFormServices.createUser(userSignupFormRequestTO);
 
         // TODOmessage : "Registration Successful"
-        session.setAttribute("message", "Registration Successfull");
+        String msgType = MessageType.REGISTRATION_SUCCESSFULL.getDisplayValue();
+        session.setAttribute("message", msgType);
         // TODORedirect the form
         return "redirect:/signup";
     }
