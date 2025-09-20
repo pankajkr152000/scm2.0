@@ -1,7 +1,11 @@
 package com.scm.dto;
 
+import com.scm.customAnnotation.ContactNumberValidator;
 import com.scm.entities.Users;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -53,15 +57,22 @@ import lombok.ToString;
 public class UserSignupFormRequestTO {
 
     /** Username or display name chosen by the user */
+    @NotBlank(message="Name Required")
+    @Size(min=3 , message="Minimum 3 characters")
     private String fullName;
 
     /** Email address of the user (required for login) */
+    @Email(message="Invalid Email Address")
     private String email;
 
     /** Raw password entered by the user */
+    @NotBlank(message="Password Required")
+    @Size(min=6, max=16, message="Password length should be between 6 to 16 characters")
     private String password;
 
     /** Phone number of the user */
+    @ContactNumberValidator
+    @NotBlank(message="Contact Number Required")
     private String contactNumber;
 
     /** Short bio or description provided by the user */

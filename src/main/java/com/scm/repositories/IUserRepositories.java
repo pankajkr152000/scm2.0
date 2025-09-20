@@ -3,6 +3,8 @@ package com.scm.repositories;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.scm.entities.Users;
@@ -59,5 +61,18 @@ public interface IUserRepositories extends JpaRepository<Users, String> {
      * @return the {@link Users} entity if found, otherwise {@code null}
      */
     Optional<Users> findByEmail(String email);
+    
+    /**
+     * Finds a user by their contactNumber.
+     *
+     * @param contactNumber the contactNumber of the user
+     * @return the {@link true} if found, otherwise {@code false}
+     */
+    // @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM Users u WHERE u.contactNumber = :contactNumber")
+    // boolean isUserExistsByContactNumber(@Param("contactNumber") String contactNumber);
+
+    @Query("SELECT COUNT(u) FROM users u WHERE u.contactNumber = :contactNumber")
+    Long countByContactNumber(@Param("contactNumber") String contactNumber);
+
 }
 
