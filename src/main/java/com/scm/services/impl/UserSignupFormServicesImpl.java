@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.scm.config.UnifiedQueryCapture;
 import com.scm.constants.ExceptionCollection;
@@ -211,7 +212,7 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         user.setEmail(request.getEmail().strip());
         user.setPassword(request.getPassword());
         user.setContactNumber(request.getContactNumber().strip());
-        if(request.getAbout() != null) {
+        if(request.getAbout() != null && StringUtils.hasText(request.getAbout())) {
             user.setAbout(request.getAbout().strip());
         }
         user.setProfilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643");
