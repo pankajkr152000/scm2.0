@@ -211,7 +211,9 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         user.setEmail(request.getEmail().strip());
         user.setPassword(request.getPassword());
         user.setContactNumber(request.getContactNumber().strip());
-        user.setAbout(request.getAbout().strip());
+        if(request.getAbout() != null) {
+            user.setAbout(request.getAbout().strip());
+        }
         user.setProfilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643");
         user.setUserCreationRecordDate(SCMDate.getBusinessDate());
         Users savedUser =  this.saveUser(user);
