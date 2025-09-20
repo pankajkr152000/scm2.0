@@ -79,6 +79,15 @@ public interface IUserSignupFormServices {
      * @return {@code true} if a user exists with the given email, otherwise {@code false}
      */
     boolean isUserExistsByEmail(String email);
+    
+    /**
+     * Checks whether a user exists by their email address.
+     *
+     * @param contactNumber the contactNumber of the user
+     * @return {@code true} if a user exists with the given contactNumber, otherwise {@code false}
+     */
+    boolean isUserExistsByContactNumber(String contactNumber);
+
 
     /**
      * Retrieves all users from the system.
@@ -86,7 +95,12 @@ public interface IUserSignupFormServices {
      * @return a list of all {@link Users} entities
      */
     List<Users> getAllUsers();
-
+    
+    /**
+     * Create users from the system.
+     *
+     * @return a {@link Users} entities
+     */
     Users createUser(UserSignupFormRequestTO request);
 }
 

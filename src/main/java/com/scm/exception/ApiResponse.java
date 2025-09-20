@@ -1,4 +1,4 @@
-package com.scm.services.helpers;
+package com.scm.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

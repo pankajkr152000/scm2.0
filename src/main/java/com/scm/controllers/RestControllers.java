@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scm.dto.UserSignupFormRequestTO;
 import com.scm.entities.Users;
+import com.scm.exception.ApiResponse;
 import com.scm.services.IUserSignupFormServices;
-import com.scm.services.helpers.ApiResponse;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -27,7 +29,9 @@ public class RestControllers {
     }
 
     @PostMapping("/do-signup")
-    public ApiResponse<Users> doSignup(@RequestBody UserSignupFormRequestTO request) {
+    public ApiResponse<Users> doSignup(@Valid @RequestBody UserSignupFormRequestTO request) {
+        //preValidation(request);
+        
         Users user = userSignupFormServices.createUser(request); // same service method
         return new ApiResponse<>("success", "User registered successfully!", user);
     }

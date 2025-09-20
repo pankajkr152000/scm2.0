@@ -9,11 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.scm.config.UnifiedQueryCapture;
+import com.scm.constants.ExceptionCollection;
 import com.scm.dto.UserSignupFormRequestTO;
+import com.scm.entities.ResourceNotFoundException;
 import com.scm.entities.Users;
+import com.scm.exception.AppRuntimeException;
 import com.scm.repositories.IUserRepositories;
 import com.scm.services.IUserSignupFormServices;
-import com.scm.services.helpers.ResourceNotFoundException;
 import com.scm.utils.SCMDate;
 import com.scm.utils.Utility;
 
@@ -58,6 +60,17 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
      */
     @Override
     public Users saveUser(Users user) {
+
+        if(isUserExistsByEmail(user.getEmail())) {
+            log.error("Email already exists : {}", user.getEmail());
+            throw new AppRuntimeException(ExceptionCollection.USER_EMAIL_ALREADY_EXISTS);
+        }
+        
+        if(isUserExistsByContactNumber(user.getContactNumber())) {
+            log.error("Contact Number already exists : {}", user.getContactNumber());
+            throw new AppRuntimeException(ExceptionCollection.USER_PHONE_NUMBER_ALREADY_EXISTS);
+        }
+
         log.info("Saving new user: {}", user.getEmail());
         //generate user id
         String id = UUID.randomUUID().toString();
@@ -91,7 +104,7 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         log.info("Updating user with ID: {}", newUser.getUserId());
 
         Users existingUser = userRepository.findById(newUser.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
+                .orElseThrow(() -> new AppRuntimeException(ExceptionCollection.RESOURCE_NOT_FOUND));
 
         // update fields
         existingUser.setFirstName(newUser.getFirstName());
@@ -136,6 +149,26 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
     public boolean isUserExitsById(String id) {
         return userRepository.existsById(id);
     }
+    
+    /**
+     * Checks whether a user exists by their contactNumber.
+     *
+     * @param contactNumber the unique identifier of the user
+     * @return {@code true} if the user contactNumber, otherwise {@code false}
+     */
+    @Override
+    public boolean isUserExistsByContactNumber(String contactNumber) {
+
+        Long count = userRepository.countByContactNumber(contactNumber);
+         ////////  Generated SQL Query from Event Listenser and HTTPSession  ////////
+        String sql = UnifiedQueryCapture.getLastQuery();
+        String params = UnifiedQueryCapture.getLastParamsAsString();
+
+        System.out.println("Captured SQL: " + sql);
+        System.out.println("Captured Params: " + params);
+        //////////                                           /////////////////////////
+        return count > 0;
+    }
 
     /**
      * Checks whether a user exists by their email address.
@@ -145,7 +178,18 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
      */
     @Override
     public boolean isUserExistsByEmail(String email) {
-        return userRepository.findByEmail(email) != null;
+        ////////  Generated SQL Query from Event Listenser and HTTPSession  ////////
+       String sql = UnifiedQueryCapture.getLastQuery();
+       String params = UnifiedQueryCapture.getLastParamsAsString();
+
+       System.out.println("Captured SQL: " + sql);
+       System.out.println("Captured Params: " + params);
+       //////////                                           /////////////////////////
+
+        boolean isUserExistBySameEmail = userRepository.findByEmail(email).isPresent();
+
+
+        return isUserExistBySameEmail;
     }
 
     /**
@@ -170,9 +214,10 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         user.setAbout(request.getAbout().strip());
         user.setProfilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643");
         user.setUserCreationRecordDate(SCMDate.getBusinessDate());
-        System.out.println("User Saved : " + user);
         Users savedUser =  this.saveUser(user);
         // Users savedUser =  user;
+        
+        System.out.println("User Saved : " + user);
 
         ////////  Generated SQL Query from Event Listenser and HTTPSession  ////////
         String sql = UnifiedQueryCapture.getLastQuery();
