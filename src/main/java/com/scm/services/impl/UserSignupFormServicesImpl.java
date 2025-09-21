@@ -6,15 +6,17 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.scm.config.UnifiedQueryCapture;
+import com.scm.constants.AccountsRole;
 import com.scm.constants.ExceptionCollection;
 import com.scm.dto.UserSignupFormRequestTO;
-import com.scm.entities.ResourceNotFoundException;
 import com.scm.entities.Users;
 import com.scm.exception.AppRuntimeException;
+import com.scm.exception.ResourceNotFoundException;
 import com.scm.repositories.IUserRepositories;
 import com.scm.services.IUserSignupFormServices;
 import com.scm.utils.SCMDate;
@@ -44,9 +46,12 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
      * Repository for interacting with the {@link Users} entity in the database.
      */
     private final IUserRepositories userRepository;
-    public UserSignupFormServicesImpl(IUserRepositories userRepositories) {
+    private final PasswordEncoder passwordEncoder;
+    public UserSignupFormServicesImpl(IUserRepositories userRepositories, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepositories;
+        this.passwordEncoder = passwordEncoder;
     }
+    
 
     /**
      * Logger instance for logging important events and errors.
@@ -77,7 +82,9 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         String id = UUID.randomUUID().toString();
         user.setUserId(id);
         //ecode Password
-        //user.setPassword(encodedPassword);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // set user role
+        user.setRoleList(List.of(AccountsRole.ROLE_USER.toString()));
         return userRepository.save(user);
     }
 
