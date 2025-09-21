@@ -1,13 +1,20 @@
 package com.scm.entities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.scm.constants.Providers;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,42 +27,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-/**
- * Represents a user entity in the system.
- *
- * <p>This entity is mapped to the <b>users</b> table in the database.</p>
- *
- * <p><b>Attributes:</b></p>
- * <ol>
- *   <li>{@code userId}        - {@link String} : Unique identifier of the user (Primary Key)</li>
- *   <li>{@code firstName}     - {@link String} : First name of the user (not null)</li>
- *   <li>{@code lastName}      - {@link String} : Last name of the user (optional)</li>
- *   <li>{@code email}         - {@link String} : Email address of the user (not null)</li>
- *   <li>{@code isEmailVerified} - {@code boolean} : Flag to indicate whether the email is verified</li>
- *   <li>{@code password}      - {@link String} : Encrypted password (not null)</li>
- *   <li>{@code about}         - {@link String} : Short bio or description (optional)</li>
- *   <li>{@code contactNumber} - {@link String} : User's phone number (not null)</li>
- *   <li>{@code isContactNumberVerified} - {@code boolean} : Flag to indicate if the phone number is verified</li>
- *   <li>{@code profilePic}    - {@link String} : Path/URL to profile picture (optional)</li>
- *   <li>{@code provider}      - {@link Providers} : Authentication provider (default SELF)</li>
- *   <li>{@code providerUserId} - {@link String} : Provider-specific user ID (for third-party logins)</li>
- *   <li>{@code contactList}   - {@link java.util.List}{@code <Contacts>} : List of contacts belonging to the user</li>
- * </ol>
- *
- * <p>Other notes:</p>
- * <ul>
- *   <li>Uses Lombok annotations {@code @Getter}, {@code @Setter}, {@code @NoArgsConstructor}, {@code @AllArgsConstructor}.</li>
- *   <li>Maintains a one-to-many relationship with {@link Contacts}.</li>
- * </ul>
- */
 @Entity(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Users {
+public class Users implements UserDetails {
 
     /**
      * Unique identifier for the user.
@@ -115,6 +93,12 @@ public class Users {
     private boolean isContactNumberVerified = false;
 
     /**
+     * Indicates whether the user is active or inactive.
+     */
+    @Builder.Default
+    private boolean isEnabled = true;
+
+    /**
      * Path or URL of the user's profile picture.
      */
     private String profilePic;
@@ -148,5 +132,27 @@ public class Users {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Contacts> contactList = new ArrayList<>();
-}
 
+    @Builder.Default
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roleList = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // List of roles[USER,ADMIN]
+        // collection of SimpleGrantedAuthority[roles{ADMIN, USER}]
+        Collection<SimpleGrantedAuthority> roles = roleList.stream().map(role -> new SimpleGrantedAuthority(role))
+                .collect(Collectors.toList());
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.isEnabled;
+    }
+}

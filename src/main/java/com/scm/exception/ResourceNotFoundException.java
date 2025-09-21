@@ -1,4 +1,4 @@
-package com.scm.entities;
+package com.scm.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 

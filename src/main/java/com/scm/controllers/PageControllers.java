@@ -16,6 +16,8 @@ import com.scm.services.impl.UserSignupFormServicesImpl;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class PageControllers {
@@ -29,6 +31,12 @@ public class PageControllers {
         this.userSignupFormServices = userSignupFormServices;
         this.existingUserAttributeCheck = existingUserAttributeCheck;
     }
+
+    @RequestMapping("/")
+    public String index() {
+        return "redirect:/home";
+    }
+    
 
     @RequestMapping("/home")
     public String home(Model model) { // model is used to send dynamic dato to the html page
