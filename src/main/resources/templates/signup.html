@@ -29,11 +29,13 @@
                     </div>
 
                     <!-- Success alert maessage fragment additoion -->
-                    <div th:replace="~{fragments\messageAlert.html :: success-alert-message(messageType=${messageType})}">
+                    <div
+                        th:replace="~{fragments/messageAlert.html :: success-alert-message(messageType=${messageType})}">
                     </div>
 
                     <!-- Form starts -->
-                    <form data-th-action="@{'/do-signup'}" method="post" data-th-object="${userSignupFormRequest}">
+                    <form data-th-action="@{'/do-signup'}" method="post" data-th-object="${userSignupFormRequestTO}"
+                        novalidate>
                         <!-- Name -->
                         <div class="mb-3 pt-3">
                             <label for="fullName"
@@ -41,39 +43,47 @@
                             <input type="text" id="fullName" th:field="*{fullName}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Enter your name" required />
+                            <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
+                                px-2"></p>
                         </div>
 
                         <!-- Email input -->
                         <div class="mb-3">
                             <label for="email"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                            <input type="email" id="email" data-th-field="*{email}"
+                            <input type="email" id="email" th:field="*{email}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="email@gmail.com" required />
+                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500
+                                px-2"></p>
                         </div>
 
                         <!-- Password Input -->
                         <div class="mb-3">
                             <label for="password"
                                 class="block mb-2 text-sm font-medium text-black dark:text-white">Password</label>
-                            <input type="password" id="password" data-th-field="*{password}"
+                            <input type="password" id="password" th:field="*{password}"
                                 class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="**********" required />
+                            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                                class="text-red-500 px-2"></p>
                         </div>
                         <!-- Contact Number -->
                         <div class="mb-3">
                             <label for="contactNumber"
                                 class="block mb-2 text-sm font-medium text-black dark:text-white">Contact Number</label>
-                            <input type="text" id="contactNumber" data-th-field="*{contactNumber}"
+                            <input type="text" id="contactNumber" th:field="*{contactNumber}"
                                 class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="123456789" required />
+                                placeholder="9999999999" required />
+                            <p th:if="${#fields.hasErrors('contactNumber')}" th:errors="*{contactNumber}"
+                                class="text-red-500 px-2"></p>
                         </div>
 
                         <!-- About -->
                         <div class="mb-3">
                             <label for="about"
                                 class="block mb-2 text-sm font-medium text-black dark:text-white">About</label>
-                            <textarea type="text" id="about" rows="4" data-th-field="*{about}"
+                            <textarea type="text" id="about" rows="4" th:field="*{about}"
                                 class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Write something about yourself ..."></textarea>
                         </div>

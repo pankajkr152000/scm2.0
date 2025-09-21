@@ -14,7 +14,10 @@ public enum MessageType {
     WARNING("Warning", "text-yellow-800 border-yellow-300 bg-yellow-50"),
     FAILED("Failed", "text-red-800 border-red-300 bg-red-50"),
     ERROR("Error", "text-red-800 border-red-300 bg-red-50"),
-    REGISTRATION_SUCCESSFULL("Registration Successful...", "text-green-800 border-green-300 bg-green-50");
+    REGISTRATION_SUCCESSFULL("Registration Successful...", "text-green-800 border-green-300 bg-green-50"),
+    EMAIL_ALREADY_EXISTS("Email already exists", "text-red-800 border-red-300 bg-red-50"),
+    CONTACT_NUMBER_ALREADY_EXISTS("Contact number already exists", "text-red-800 border-red-300 bg-red-50"),
+    EMAIL_AND_CONTACT_NUMBER_ALREADY_EXISTS("Email and Contact number already exists", "text-red-800 border-red-300 bg-red-50");
 
     /** Human-readable display string */
     private final String displayValue;
