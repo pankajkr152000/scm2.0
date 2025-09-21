@@ -63,6 +63,7 @@ public class UserSignupFormRequestTO {
 
     /** Email address of the user (required for login) */
     @Email(message="Invalid Email Address")
+    @NotBlank(message="Email Required")
     private String email;
 
     /** Raw password entered by the user */

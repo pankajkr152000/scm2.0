@@ -2,6 +2,7 @@ package com.scm.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,17 +11,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.scm.constants.MessageType;
 import com.scm.dto.UserSignupFormRequestTO;
 import com.scm.services.IUserSignupFormServices;
+import com.scm.services.helpers.ExistingUserAttributeCheck;
+import com.scm.services.impl.UserSignupFormServicesImpl;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
-public class PageContollers {
+public class PageControllers {
 
     // constructor injection of IUserSignupFormServices
     private final IUserSignupFormServices userSignupFormServices;
-
-    public PageContollers(IUserSignupFormServices userSignupFormServices) {
+    private final ExistingUserAttributeCheck existingUserAttributeCheck;
+    
+    public PageControllers(UserSignupFormServicesImpl userSignupFormServices,
+                           ExistingUserAttributeCheck existingUserAttributeCheck) {
         this.userSignupFormServices = userSignupFormServices;
+        this.existingUserAttributeCheck = existingUserAttributeCheck;
     }
 
     @RequestMapping("/home")
@@ -70,30 +77,35 @@ public class PageContollers {
         // model.addAttribute("isTrue", false);
         System.out.println("This is signup page.");
         UserSignupFormRequestTO userSignupFormRequestTO = new UserSignupFormRequestTO();
-        //userSignupFormRequest.setFullName("Pankaj");
-        model.addAttribute("userSignupFormRequest", userSignupFormRequestTO);
+        // userSignupFormRequest.setFullName("Pankaj");
+        model.addAttribute("userSignupFormRequestTO", userSignupFormRequestTO);
         return "signup";
     }
 
     // processing signup/register form
     @PostMapping()
     @RequestMapping(value = "/do-signup", method = RequestMethod.POST)
-    // object will be automatically created & form data will come into userSignupFormRequest
-    public String doSignup(@ModelAttribute UserSignupFormRequestTO userSignupFormRequestTO, HttpSession session) {
-        System.out.println("Processing Signup .... ");
-        System.out.println(userSignupFormRequestTO);
-        // TODOFetch form data
+    // object will be automatically created & form data will come into userSignupFormRequestTO
+    public String doSignup(
+            @Valid @ModelAttribute UserSignupFormRequestTO userSignupFormRequestTO,
+            BindingResult bindingResult,
+            HttpSession session) {
 
-        // TODOValidate form data
-        // TODOSave the data into database
-        // form(signup form) data comes into userSignupFormRequest
-        // we will save user data from signup form from userSignupFormRequest into User
+        if (bindingResult.hasErrors()) {
+            return "signup";
+        }
+
+        // ✅ Check for duplicates
+        MessageType duplicateMessage = existingUserAttributeCheck.checkDuplicates(userSignupFormRequestTO);
+        if (duplicateMessage != null) {
+            session.setAttribute("message", duplicateMessage.getDisplayValue());
+            return "redirect:/signup";
+        }
+
+        // ✅ Save user if no duplicates
         userSignupFormServices.createUser(userSignupFormRequestTO);
 
-        // TODOmessage : "Registration Successful"
-        String msgType = MessageType.REGISTRATION_SUCCESSFULL.getDisplayValue();
-        session.setAttribute("message", msgType);
-        // TODORedirect the form
+        session.setAttribute("message", MessageType.REGISTRATION_SUCCESSFULL.getDisplayValue());
         return "redirect:/signup";
     }
 }

@@ -57,6 +57,69 @@ th:fragment="success-alert-message"
 </div>
 
 
+<!-- Email already exists -->
+<div 
+th:if="${#strings.equalsIgnoreCase(session.message, 'Email already exists')}"
+th:object="${session.message}"
+th:fragment="success-alert-message"
+  class="flex items-center p-4 mb-4 text-red-800 border-red-300 bg-red-50 rounded-lg  dark:text-red-800 dark:border-red-300 dark:bg-red-50"
+  role="alert">
+  <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+    viewBox="0 0 20 20">
+    <path
+      d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+  </svg>
+  <span class="sr-only">Info</span>
+  <div>
+    <span class="font-medium" th:text="${session.message}"></span>
+  </div>
+  <th:block th:text="${@sessionHelper.removeMessage()}"></th:block>
+</div>
+
+<!-- Contact number already exists -->
+<div 
+th:if="${#strings.equalsIgnoreCase(session.message, 'Contact number already exists')}"
+th:object="${session.message}"
+th:fragment="success-alert-message"
+  class="flex items-center p-4 mb-4 text-red-800 border-red-300 bg-red-50 rounded-lg  dark:text-red-800 dark:border-red-300 dark:bg-red-50"
+  role="alert">
+  <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+    viewBox="0 0 20 20">
+    <path
+      d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+  </svg>
+  <span class="sr-only">Info</span>
+  <div>
+    <span class="font-medium" th:text="${session.message}"></span>
+  </div>
+  <th:block th:text="${@sessionHelper.removeMessage()}"></th:block>
+</div>
+
+<!-- Email and Contact number already exists -->
+<div 
+th:if="${#strings.equalsIgnoreCase(session.message, 'Email and Contact number already exists')}"
+th:object="${session.message}"
+th:fragment="success-alert-message"
+  class="flex items-center p-4 mb-4 text-red-800 border-red-300 bg-red-50 rounded-lg  dark:text-red-800 dark:border-red-300 dark:bg-red-50"
+  role="alert">
+  <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+    viewBox="0 0 20 20">
+    <path
+      d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+  </svg>
+  <span class="sr-only">Info</span>
+  <div>
+    <span class="font-medium" th:text="${session.message}"></span>
+  </div>
+  <th:block th:text="${@sessionHelper.removeMessage()}"></th:block>
+</div>
+
+
+
+
+
+
+
 
 <!-- <div th:switch="${user.role}">
   <p th:case="'admin'">User is an administrator</p>
