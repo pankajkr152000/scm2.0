@@ -5,20 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-th-replace="${title}"></title>
-    <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />
     <link th:href="@{https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css}" rel="stylesheet" />
+    <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body>
-    <!-- insert header fragment-->
+<body class="bg-yellow-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navbar -->
     <section data-th-replace="~{navbar :: #navbar-header}"></section>
-    <!-- main content -->
-    <div class="bg-yellow-50 p-4 h-screen w-full dark:bg-black">
-        <section data-th-replace="${content}"> </section>
+
+    <!-- Main content -->
+    <div class="w-full p-4">
+        <section data-th-replace="${content}"></section>
     </div>
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script data-th-src="@{'js/script.js'}"></script>
     <th:block data-th-replace="${script}"></th:block>

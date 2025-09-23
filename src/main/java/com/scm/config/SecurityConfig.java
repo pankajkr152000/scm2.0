@@ -2,13 +2,11 @@ package com.scm.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,12 +18,11 @@ import com.scm.services.impl.SecurityCustomUserDetailsService;
 
 //     private final SecurityCustomUserDetailsService userDetailsService;
 //     private final SecurityFilterChain securityFilterChain;
-    
+
 //     public SecurityConfig(SecurityCustomUserDetailsService userDetailsService, SecurityFilterChain securityFilterChain) {
 //         this.userDetailsService = userDetailsService;
 //         this.securityFilterChain = securityFilterChain;
 //     }
-
 
 //     // // user create and login using in memory service
 //     // @Bean
@@ -48,7 +45,6 @@ import com.scm.services.impl.SecurityCustomUserDetailsService;
 //     //     return inMemoryUserDetailsManager;
 //     // }
 
-
 //     @Bean
 //     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
@@ -59,8 +55,6 @@ import com.scm.services.impl.SecurityCustomUserDetailsService;
 //         return httpSecurity.build();
 //     }
 
-
-    
 //     @Bean
 //     public AuthenticationProvider authenticationProvider() {
 //         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailsService);
@@ -74,9 +68,6 @@ import com.scm.services.impl.SecurityCustomUserDetailsService;
 //     public PasswordEncoder passwordEncoder() {
 //         return new BCryptPasswordEncoder();
 //     }
-
-
-
 
 // }
 
@@ -96,9 +87,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Define AuthenticationManager (connects Spring Security with your custom UserDetailsService)
+    // Define AuthenticationManager (connects Spring Security with your custom
+    // UserDetailsService)
     @Bean
-     public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailsService);
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -111,12 +103,27 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/signup", "/do-signup", "/home","/", "/css/**", "/js/**", "/png/**", "/jpeg/**", "/images/**").permitAll()
+                .requestMatchers("/login", "/signup", "/do-signup", "/home","/", "/css/**", "/js/**", "/png/**", "/jpeg/**", "/images/**").permitAll()
                 .anyRequest().authenticated()
-            )
-            .formLogin(Customizer.withDefaults());
+            );
+            // .formLogin(Customizer.withDefaults());
+
+        http.formLogin(formLogin -> {
+            formLogin.loginPage("/login");
+            formLogin.defaultSuccessUrl("/user/dashboard");
+            formLogin.loginProcessingUrl("/authenticate");
+            formLogin.usernameParameter("email");
+            formLogin.passwordParameter("password");
+
+        });
+
+        http.csrf(AbstractHttpConfigurer::disable);
+
+        http.logout(logoutCustom -> {
+            logoutCustom.logoutUrl("/logout");
+            logoutCustom.logoutSuccessUrl("/login?logout=true");
+        });
 
         return http.build();
     }
 }
-
