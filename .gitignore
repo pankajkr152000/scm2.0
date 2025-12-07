@@ -6,6 +6,7 @@ target/
 output.css
 .sql
 *.sql
+application.properties
 ### STS ###
 .apt_generated
 .classpath
