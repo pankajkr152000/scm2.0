@@ -85,6 +85,8 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // set user role
         user.setRoleList(List.of(AccountsRole.ROLE_USER.toString()));
+        // set user creation time
+        user.setUserCreationRecordDate(SCMDate.getBusinessDate());
         return userRepository.save(user);
     }
 
@@ -223,7 +225,7 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
             user.setAbout(request.getAbout().strip());
         }
         user.setProfilePic("https://www.vectorstock.com/royalty-free-vector/avatar-photo-default-user-icon-picture-face-vector-48139643");
-        user.setUserCreationRecordDate(SCMDate.getBusinessDate());
+        //user.setUserCreationRecordDate(SCMDate.getBusinessDate());
         Users savedUser =  this.saveUser(user);
         // Users savedUser =  user;
         

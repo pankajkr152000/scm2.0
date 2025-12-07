@@ -7,8 +7,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.scm.services.impl.SecurityCustomUserDetailsService;
@@ -76,24 +74,24 @@ import com.scm.services.impl.SecurityCustomUserDetailsService;
 public class SecurityConfig {
 
     private final SecurityCustomUserDetailsService userDetailsService;
+    private final OAuthSuccessHandler authSuccessHandler;
+    private final PasswordEncoderConfig passwordEncoder;
 
-    public SecurityConfig(SecurityCustomUserDetailsService userDetailsService) {
+    public SecurityConfig(SecurityCustomUserDetailsService userDetailsService, OAuthSuccessHandler authSuccessHandler, PasswordEncoderConfig passwordEncoder) {
         this.userDetailsService = userDetailsService;
+        this.authSuccessHandler = authSuccessHandler;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    // Define PasswordEncoder bean
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     // Define AuthenticationManager (connects Spring Security with your custom
     // UserDetailsService)
+    @SuppressWarnings("deprecation")
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailsService);
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder.passwordEncoder());
 
         return daoAuthenticationProvider;
     }
@@ -103,7 +101,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/signup", "/do-signup", "/home","/", "/css/**", "/js/**", "/png/**", "/jpeg/**", "/images/**").permitAll()
+                .requestMatchers("/login", "/signup", "/do-signup","/oauth2/**", "/home","/", "/css/**", "/js/**", "/png/**", "/jpeg/**", "/images/**").permitAll()
                 .anyRequest().authenticated()
             );
             // .formLogin(Customizer.withDefaults());
@@ -115,6 +113,11 @@ public class SecurityConfig {
             formLogin.usernameParameter("email");
             formLogin.passwordParameter("password");
 
+        });
+
+        http.oauth2Login(oauth2LoginCustomizer -> {
+            oauth2LoginCustomizer.loginPage("/login");
+            oauth2LoginCustomizer.successHandler(authSuccessHandler);
         });
 
         http.csrf(AbstractHttpConfigurer::disable);
