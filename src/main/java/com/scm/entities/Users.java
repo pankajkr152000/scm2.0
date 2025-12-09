@@ -83,7 +83,6 @@ public class Users implements UserDetails {
      * Contact number of the user.
      * Cannot be {@code null}.
      */
-    @Column(nullable = false)
     private String contactNumber;
 
     /**
