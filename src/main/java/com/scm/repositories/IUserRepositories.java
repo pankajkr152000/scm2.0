@@ -74,5 +74,25 @@ public interface IUserRepositories extends JpaRepository<Users, String> {
     @Query("SELECT COUNT(u) FROM users u WHERE u.contactNumber = :contactNumber")
     Long countByContactNumber(@Param("contactNumber") String contactNumber);
 
+    /**
+     * get the last user id from table if there is no record in table then it will return null
+     */
+    // @Query("""
+    //    SELECT u.userId
+    //    FROM Users u
+    //    WHERE u.userCreationRecordDate = (
+    //        SELECT MAX(u2.userCreationRecordDate)
+    //        FROM Users u2
+    //    )
+    //    """)
+    // Optional<String> getLastSavedUserId();
+
+    @Query(
+    value = "SELECT user_id FROM users ORDER BY user_creation_record_date DESC LIMIT 1",
+    nativeQuery = true)
+    Optional<String> getLastSavedUserId();
+
+
+
 }
 
