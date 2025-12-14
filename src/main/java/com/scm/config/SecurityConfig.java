@@ -101,7 +101,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/signup", "/do-signup","/oauth2/**", "/home","/", "/css/**", "/js/**", "/png/**", "/jpeg/**", "/images/**").permitAll()
+                .requestMatchers(
+                    "/api/**",                 // ✅ API endpoints
+                    "/login", "/signup", "/do-signup",
+                    "/oauth2/**", 
+                    "/home","/", 
+                    "/css/**", "/js/**", "/png/**", "/jpeg/**", "/images/**").permitAll()
                 .anyRequest().authenticated()
             );
             // .formLogin(Customizer.withDefaults());

@@ -2,12 +2,12 @@ package com.scm.services.impl;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.scm.config.UnifiedQueryCapture;
@@ -19,6 +19,7 @@ import com.scm.exception.AppRuntimeException;
 import com.scm.exception.ResourceNotFoundException;
 import com.scm.repositories.IUserRepositories;
 import com.scm.services.IUserSignupFormServices;
+import com.scm.services.UserIdGeneratorService;
 import com.scm.utils.SCMDate;
 import com.scm.utils.Utility;
 
@@ -47,9 +48,11 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
      */
     private final IUserRepositories userRepository;
     private final PasswordEncoder passwordEncoder;
-    public UserSignupFormServicesImpl(IUserRepositories userRepositories, PasswordEncoder passwordEncoder) {
+    private final UserIdGeneratorService userIdGeneratorService;
+    public UserSignupFormServicesImpl(IUserRepositories userRepositories, PasswordEncoder passwordEncoder, UserIdGeneratorService userIdGeneratorService) {
         this.userRepository = userRepositories;
         this.passwordEncoder = passwordEncoder;
+        this.userIdGeneratorService = userIdGeneratorService;
     }
     
 
@@ -64,6 +67,7 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
      * @param user the {@link Users} entity to save
      * @return the saved {@link Users} entity
      */
+    @Transactional
     @Override
     public Users saveUser(Users user) {
 
@@ -78,9 +82,17 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         }
 
         log.info("Saving new user: {}", user.getEmail());
-        //generate user id
-        String id = UUID.randomUUID().toString();
+
+        //get last user id
+        // Optional<String> lastUserIdOptional = userRepository.getLastSavedUserId();
+        // String lastUserId = lastUserIdOptional.orElse(null);
+        // lastUserIdOptional.ifPresent(id -> log.info("Last userId: {}", id));
+        
+        //generate new user id
+        String id = userIdGeneratorService.generateUserId();
         user.setUserId(id);
+        log.info("UserId of {} : {}", user.getEmail(), id);
+
         //ecode Password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // set user role
@@ -213,6 +225,7 @@ public class UserSignupFormServicesImpl implements IUserSignupFormServices {
         return userRepository.findAll();
     }
 
+    @Transactional
     @Override
     public Users createUser(UserSignupFormRequestTO request) {
         Users user = new Users();

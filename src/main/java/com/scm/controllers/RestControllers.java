@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scm.dto.UserSignupFormRequestTO;
+import com.scm.dto.UserSignupResponseDTO;
 import com.scm.entities.Users;
 import com.scm.exception.ApiResponse;
-import com.scm.services.IUserSignupFormServices;
+import com.scm.services.impl.UserSignupFormServicesImpl;
 
 import jakarta.validation.Valid;
 
@@ -17,10 +18,10 @@ import jakarta.validation.Valid;
 @RequestMapping("/api")
 public class RestControllers {
 
-    private final IUserSignupFormServices userSignupFormServices;
+    private final UserSignupFormServicesImpl userSignupFormServicesImpl;
 
-    public RestControllers(IUserSignupFormServices userSignupFormServices) {
-        this.userSignupFormServices = userSignupFormServices;
+    public RestControllers(UserSignupFormServicesImpl userSignupFormServicesImpl) {
+        this.userSignupFormServicesImpl = userSignupFormServicesImpl;
     }
 
     @GetMapping("/test")
@@ -29,11 +30,21 @@ public class RestControllers {
     }
 
     @PostMapping("/do-signup")
-    public ApiResponse<Users> doSignup(@Valid @RequestBody UserSignupFormRequestTO request) {
+    public ApiResponse<UserSignupResponseDTO> doSignup(@Valid @RequestBody UserSignupFormRequestTO request) {
         //preValidation(request);
         
-        Users user = userSignupFormServices.createUser(request); // same service method
-        return new ApiResponse<>("success", "User registered successfully!", user);
+        Users user = userSignupFormServicesImpl.createUser(request); // same service method
+
+        // if user is created & saved into DB
+        UserSignupResponseDTO userSignupResponseDTO = new UserSignupResponseDTO();
+        if (user != null) {
+            userSignupResponseDTO = UserSignupResponseDTO.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .contactNumber(user.getContactNumber())
+                .build();
+        }
+        return new ApiResponse<>("success", "User registered successfully!", userSignupResponseDTO);
     }
 
 }

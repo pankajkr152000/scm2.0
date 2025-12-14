@@ -23,4 +23,15 @@ Thymeleaf Fragments -> for inserting commons html file into a html page like hea
                        many html pages.
 
 
+JSON
+ ↓
+@RequestBody + @Valid   ← validation happens here
+ ↓
+Mapper                 ← mapping happens here
+ ↓
+Service logic           ← business rules
+ ↓
+Repository              ← DB
+
+
                        
