@@ -15,7 +15,7 @@ th:fragment="success-alert-message"
   <div>
     <span class="font-medium" th:text="${session.message}"></span>
   </div>
-  <th:block th:text="${@sessionHelper.removeMessage()}"></th:block>
+  <th:block th:text="${@sessionService.removeMessage()}"></th:block>
 </div>
 
 <!-- Warning -->
@@ -34,7 +34,7 @@ th:fragment="success-alert-message"
   <div>
     <span class="font-medium" th:text="${session.message}"></span>
   </div>
-  <th:block th:text="${@sessionHelper.removeMessage()}"></th:block>
+  <th:block th:text="${@sessionService.removeMessage()}"></th:block>
 </div>
 
 <!-- Error -->
@@ -53,7 +53,7 @@ th:fragment="success-alert-message"
   <div>
     <span class="font-medium" th:text="${session.message}"></span>
   </div>
-  <th:block th:text="${@sessionHelper.removeMessage()}"></th:block>
+  <th:block th:text="${@sessionService.removeMessage()}"></th:block>
 </div>
 
 
@@ -73,7 +73,7 @@ th:fragment="success-alert-message"
   <div>
     <span class="font-medium" th:text="${session.message}"></span>
   </div>
-  <th:block th:text="${@sessionHelper.removeMessage()}"></th:block>
+  <th:block th:text="${@sessionService.removeMessage()}"></th:block>
 </div>
 
 <!-- Contact number already exists -->
@@ -92,7 +92,7 @@ th:fragment="success-alert-message"
   <div>
     <span class="font-medium" th:text="${session.message}"></span>
   </div>
-  <th:block th:text="${@sessionHelper.removeMessage()}"></th:block>
+  <th:block th:text="${@sessionService.removeMessage()}"></th:block>
 </div>
 
 <!-- Email and Contact number already exists -->
@@ -111,7 +111,7 @@ th:fragment="success-alert-message"
   <div>
     <span class="font-medium" th:text="${session.message}"></span>
   </div>
-  <th:block th:text="${@sessionHelper.removeMessage()}"></th:block>
+  <th:block th:text="${@sessionService.removeMessage()}"></th:block>
 </div>
 
 

@@ -1,7 +1,5 @@
 package com.scm.constants;
 
-import com.scm.entities.Users;
-
 /**
  * Enumeration representing the authentication providers supported by the
  * system.
