@@ -20,8 +20,8 @@ import com.scm.repository.IUserRepository;
 import com.scm.security.filters.UnifiedQueryCapture;
 import com.scm.service.IUserSignupFormService;
 import com.scm.service.UserIdGeneratorService;
-import com.scm.utils.SCMDate;
-import com.scm.utils.Utility;
+import com.scm.utils.DateUtils;
+import com.scm.utils.SCMUtilities;
 
 
 // @Service // spring will find that it is a Service , spring will automatically creates an object of this class
@@ -98,7 +98,7 @@ public class UserSignupFormServiceImpl implements IUserSignupFormService {
         // set user role
         user.setRoleList(List.of(AccountsRole.ROLE_USER.toString()));
         // set user creation time
-        user.setUserCreationRecordDate(SCMDate.getBusinessDate());
+        user.setUserCreationRecordDate(DateUtils.getBusinessDate());
         return userRepository.save(user);
     }
 
@@ -230,8 +230,8 @@ public class UserSignupFormServiceImpl implements IUserSignupFormService {
     @Override
     public User createUser(UserSignupFormRequestDTO request) {
         User user = new User();
-        user.setFirstName(Utility.firstNameFromString(request.getFullName()));
-        user.setLastName(Utility.lastNameFromString(request.getFullName()));
+        user.setFirstName(SCMUtilities.firstNameFromString(request.getFullName()));
+        user.setLastName(SCMUtilities.lastNameFromString(request.getFullName()));
         user.setEmail(request.getEmail().strip().toLowerCase());
         user.setPassword(request.getPassword());
         user.setContactNumber(request.getContactNumber().strip());

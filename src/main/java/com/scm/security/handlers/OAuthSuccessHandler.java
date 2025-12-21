@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import com.scm.constants.Providers;
 import com.scm.entity.User;
 import com.scm.service.impl.UserSignupFormServiceImpl;
-import com.scm.utils.Utility;
+import com.scm.utils.SCMUtilities;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -117,16 +117,16 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
     // populate Github User
     public void populateGithubUser(DefaultOAuth2User user) {
         if (user.getAttributes().get("name") != null) {
-            userToStore.setFirstName(Utility.firstNameFromString(user.getAttributes().get("name").toString()));
-            log.info("First name -> {}", Utility.firstNameFromString(user.getAttributes().get("name").toString()));
+            userToStore.setFirstName(SCMUtilities.firstNameFromString(user.getAttributes().get("name").toString()));
+            log.info("First name -> {}", SCMUtilities.firstNameFromString(user.getAttributes().get("name").toString()));
         } else if (user.getAttributes().get("login") != null) {
-            userToStore.setFirstName(Utility.firstNameFromString(user.getAttributes().get("login").toString()));
-            log.info("First name -> {}", Utility.firstNameFromString(user.getAttributes().get("login").toString()));
+            userToStore.setFirstName(SCMUtilities.firstNameFromString(user.getAttributes().get("login").toString()));
+            log.info("First name -> {}", SCMUtilities.firstNameFromString(user.getAttributes().get("login").toString()));
         }
 
         if (user.getAttributes().get("name") != null) {
-            userToStore.setLastName(Utility.lastNameFromString(user.getAttributes().get("name").toString()));
-            log.info("Last Name -> {}", Utility.lastNameFromString(user.getAttributes().get("name").toString()));
+            userToStore.setLastName(SCMUtilities.lastNameFromString(user.getAttributes().get("name").toString()));
+            log.info("Last Name -> {}", SCMUtilities.lastNameFromString(user.getAttributes().get("name").toString()));
         }
         if (user.getAttributes().get("email") != null) {
             userToStore.setEmail(user.getAttributes().get("email").toString());
