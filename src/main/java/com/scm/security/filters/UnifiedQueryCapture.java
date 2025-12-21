@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.scm.utils.Utility;
+import com.scm.utils.SCMUtilities;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManagerFactory;
@@ -106,7 +106,7 @@ public class UnifiedQueryCapture implements
                                     String action,
                                     Object id) {
         String[] propertyNames = persister.getPropertyNames();
-        String tableName = Utility.getOnlyEntityName(persister.getEntityName());
+        String tableName = SCMUtilities.getOnlyEntityName(persister.getEntityName());
 
         StringBuilder sb = new StringBuilder(action);
 

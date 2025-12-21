@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.scm.repository.UserIdSequenceRepository;
-import com.scm.utils.SCMDate;
+import com.scm.utils.DateUtils;
 
 @Service
 public class UserIdGeneratorService {
@@ -24,7 +24,7 @@ public class UserIdGeneratorService {
         sequenceRepository.increment();
         Long seq = sequenceRepository.getCurrentSequence();
 
-        String year = SCMDate.getYear();
+        String year = DateUtils.getYear();
         String paddedSeq = String.format("%0" + SEQ_LENGTH + "d", seq);
 
         return PREFIX + "/" + year + "/" + paddedSeq;

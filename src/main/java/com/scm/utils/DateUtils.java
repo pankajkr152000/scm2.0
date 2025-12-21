@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.scm.constants.SCMConstants;
 import com.scm.constants.SCMConstants.PeriodType;
 
-public class SCMDate {
+public class DateUtils {
 
     public static Date getBusinessDate() {
         Locale indiaTimeZone = Locale.of("en", "IN");
@@ -30,7 +30,7 @@ public class SCMDate {
     }
 
 
-    private static final Logger log = LoggerFactory.getLogger(SCMDate.class);
+    private static final Logger log = LoggerFactory.getLogger(DateUtils.class);
     private static final ZoneId ZONE = ZoneId.of(SCMConstants.LOCALE_TIMEZONE);
 
     public static Date addDate(Date currDate, int period, PeriodType periodType) {

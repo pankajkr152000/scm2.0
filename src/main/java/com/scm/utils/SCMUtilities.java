@@ -2,7 +2,7 @@ package com.scm.utils;
 
 import org.springframework.util.StringUtils;
 
-public class Utility {
+public class SCMUtilities {
     public static String firstNameFromString(String fullName) {
 
         String[] parts = fullName.trim().split("\\s+");
