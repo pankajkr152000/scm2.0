@@ -21,7 +21,7 @@ import lombok.Setter;
 @Schema(description = "User signup response")
 public class UserSignupResponseDTO {
 
-    @Schema(example = "SCM07/2025/XXXXXX")
+    @Schema(example = "SCM07/20XX/XXXXXX")
     private String userId;
 
     @Schema(example = "user@example.com")

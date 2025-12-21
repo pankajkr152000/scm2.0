@@ -1,6 +1,6 @@
 package com.scm.validation;
 
-import com.scm.customAnnotation.ContactNumberValidator;
+import com.scm.validation.annotation.ContactNumberValidator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

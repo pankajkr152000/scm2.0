@@ -1,11 +1,11 @@
 package com.scm.exception;
 
-import com.scm.constants.ExceptionCollection;
+import com.scm.constants.ErrorCodes;
 
 public class AppRuntimeException extends RuntimeException implements IErrors {
-    private final ExceptionCollection error;
+    private final ErrorCodes error;
 
-    public AppRuntimeException(ExceptionCollection error) {
+    public AppRuntimeException(ErrorCodes error) {
         super(error.getMessage());
         this.error = error;
     }
@@ -21,7 +21,7 @@ public class AppRuntimeException extends RuntimeException implements IErrors {
     }
 
     @Override
-    public ExceptionCollection getError() {
+    public ErrorCodes getError() {
         return error;
     }
 }

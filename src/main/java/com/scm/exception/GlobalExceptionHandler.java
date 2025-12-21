@@ -10,7 +10,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.scm.constants.ExceptionCollection;
+import com.scm.constants.ErrorCodes;
+import com.scm.dto.ApiResponseDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,13 +37,13 @@ public class GlobalExceptionHandler {
      * Handles custom business exceptions thrown in services/controllers.
      */
     @ExceptionHandler(AppRuntimeException.class)
-    public ResponseEntity<ApiResponse<Object>> handleAppException(AppRuntimeException ex) {
-        ExceptionCollection error = ex.getError();
+    public ResponseEntity<ApiResponseDTO<Object>> handleAppException(AppRuntimeException ex) {
+        ErrorCodes error = ex.getError();
 
         // Log error message + stack trace
         log.error("Business Exception occurred: {}", error.getMessage(), ex);
 
-        ApiResponse<Object> response = new ApiResponse<>(
+        ApiResponseDTO<Object> response = new ApiResponseDTO<>(
                 "error",
                 error.getMessage(),
                 null
@@ -56,7 +57,7 @@ public class GlobalExceptionHandler {
      * Handles DTO validation errors (from @Valid).
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiResponseDTO<Map<String, String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -67,7 +68,7 @@ public class GlobalExceptionHandler {
         // Log validation issues (field → error)
         log.warn("Validation failed for request: {}", errors);
 
-        ApiResponse<Map<String, String>> response = new ApiResponse<>(
+        ApiResponseDTO<Map<String, String>> response = new ApiResponseDTO<>(
                 "validation_error",
                 "Validation failed",
                 errors
@@ -81,11 +82,11 @@ public class GlobalExceptionHandler {
      * Fallback for unhandled exceptions.
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> handleGeneralException(Exception ex) {
+    public ResponseEntity<ApiResponseDTO<Object>> handleGeneralException(Exception ex) {
         // Log stacktrace for debugging
         log.error("Unhandled exception occurred: {}", ex.getMessage(), ex);
 
-        ApiResponse<Object> response = new ApiResponse<>(
+        ApiResponseDTO<Object> response = new ApiResponseDTO<>(
                 "error",
                 "Something went wrong: " + ex.getMessage(),
                 null
