@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.scm.constants.Gender;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -58,15 +62,33 @@ public class Contact {
      * Unique identifier for the contact.
      * Acts as the primary key in the database.
      */
-    @Id
-    private String id;
+     @Id
+    private String id; // Technical PK (UUID / custom)
+
+    // ✅ PER-USER SEQUENCE NUMBER (1,2,3...)
+    @Column(nullable = false)
+    private Long contactSequence;
+
+    // ✅ READABLE CONTACT ID (CNT-001)
+    @Column(nullable = false)
+    private String contactCode;
+
+    // ✅ SOFT DELETE FLAG
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     /**
-     * Name of the contact.
+     * FirstName of the contact.
      * Cannot be {@code null}.
      */
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+
+    /**
+     * LastName of the contact.
+     */
+    private String lastName;
 
     /**
      * Phone number of the contact.
@@ -85,6 +107,9 @@ public class Contact {
      */
     private String picture;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Gender gender;
     /**
      * Short description or note about the contact.
      */

@@ -1,8 +1,18 @@
-<nav th:fragment="navbar-header" class="bg-yellow-100 border-gray-200 dark:bg-gray-900 text-sm">
+<nav th:fragment="user-navbar-header" class="bg-yellow-100 border-gray-200 dark:bg-gray-900 sm:pl-64 text-sm pl-64 fixed w-full top-0 left-0 right-0">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
+        <!-- sidebar menu button -->
+        <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button"
+            class="text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base ms-3 mt-3 text-sm p-2 focus:outline-none inline-flex sm:hidden">
+            <span class="sr-only">Open sidebar</span>
+            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h10" />
+            </svg>
+        </button>
+
         <!-- brand logo -->
         <a data-th-href="@{/home}" class="flex items-center space-x-2 rtl:space-x-reverse">
-            <img data-th-src="@{'./images/contact-book.png'}" class="h-6" alt="SCM Logo" />
+            <img data-th-src="@{/images/contact-book.png}" class="h-6" alt="SCM Logo" />
             <span class="self-center text-black text-lg font-semibold whitespace-nowrap dark:text-white">SCM</span>
         </a>
         <!-- end of brand logo -->
@@ -13,19 +23,19 @@
                 <i class="fa-solid fa-circle-half-stroke"></i><span> Light</span>
             </button>
 
-            <!-- LOGIN BUTTON -->
-            <a th:href="@{/login}">
+            <!-- User Profile BUTTON -->
+            <a th:href="@{/user/profile}">
                 <button type="button"
-                    class="text-gray-900 bg-gray-400 hover:bg-gray-600 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-gray-500 dark:hover:bg-gray-600 dark:focus:ring-gray-800">
-                    <b>LOGIN</b>
+                    class="hidden md:flex text-green-900 bg-green-400 hover:bg-green-600 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-gray-500 dark:hover:bg-gray-600 dark:focus:ring-gray-800">
+                    <b>Welcome ! </b><b th:text="${loggedInUser.firstName}"> </b>
                 </button>
             </a>
 
             <!-- SIGNUP BUTTON -->
-            <a th:href="@{/signup}">
+            <a th:href="@{/logout}">
                 <button type="button"
-                    class="text-gray-900 bg-gray-400 hover:bg-gray-600 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-gray-500 dark:hover:bg-gray-600 dark:focus:ring-gray-800">
-                    <b>SIGNUP</b>
+                    class="hidden md:flex text-red-900 bg-red-400 hover:bg-red-600 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-gray-500 dark:hover:bg-gray-600 dark:focus:ring-gray-800">
+                    <b>Logout</b>
                 </button>
             </a>
 
@@ -61,6 +71,24 @@
                 <li>
                     <a data-th-href="@{/contact}"
                         class="block py-1 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-600 md:dark:hover:text-blue-400 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contacts</a>
+                </li>
+                <li>
+                     <!-- User Profile BUTTON -->
+                    <a th:href="@{/user/profile}">
+                        <button type="button"
+                            class="md:hidden block py-1 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-600 md:dark:hover:text-blue-400 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+                            <b>Welcome ! </b><b th:text="${loggedInUser.firstName}"> </b>
+                        </button>
+                    </a>
+                </li>
+                <li>
+                    <!-- Logout BUTTON -->
+                    <a th:href="@{/logout}">
+                        <button type="button"
+                            class="md:hidden block py-1 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-600 md:dark:hover:text-blue-400 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+                            <b>Logout</b>
+                        </button>
+                    </a>
                 </li>
             </ul>
         </div>

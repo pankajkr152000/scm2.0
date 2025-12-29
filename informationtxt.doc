@@ -22,16 +22,104 @@ for initialising TailWind
 Thymeleaf Fragments -> for inserting commons html file into a html page like header or footer file which is commons
                        many html pages.
 
+============================================================
+:::::::::::::::::::::::    REQUEST    ::::::::::::::::::::::
+============================================================
+JSON (HTTP Request)
+ ↓
+Spring MVC
+ ↓
+@RequestBody + @Valid   ← validation (before controller logic)
+ ↓
+Controller
+ ↓
+Request DTO
+ ↓
+Mapper (DTO → Entity)
+ ↓
+Service (Interface)
+ ↓
+Service Implementation
+ ↓
+Business Logic
+ ↓
+Repository
+ ↓
+Database
 
+============================================================
+:::::::::::::::::::::::    RESPONSE    ::::::::::::::::::::::
+============================================================
+Database
+ ↓
+Repository
+ ↓
+Service
+ ↓
+Entity
+ ↓
+Mapper (Entity → Response DTO)
+ ↓
+Controller
+ ↓
+Response DTO
+ ↓
+JSON (HTTP Response)
+
+
+============================================================
+::::::::::::::::::::    Clear View    ::::::::::::::::::::::
+============================================================
+Client
+  ↓
 JSON
- ↓
-@RequestBody + @Valid   ← validation happens here
- ↓
-Mapper                 ← mapping happens here
- ↓
-Service logic           ← business rules
- ↓
-Repository              ← DB
+  ↓
+Controller
+  ↓
+DTO  ↔ Mapper ↔ Entity
+  ↓
+Service (interface)
+  ↓
+ServiceImpl (logic)
+  ↓
+Repository
+  ↓
+Database
 
+
+
+
+Transaction starts
+ → lock row
+ → increment value
+ → save contact
+ → commit
+
+
+✅ Repository SHOULD
+        Fetch / save data
+❌ Repository SHOULD NOT
+        Contain business logic
+
+
+
+✅ Service SHOULD
+        Handle business rules
+        Handle transactions
+        Decide what happens
+❌ Service SHOULD NOT
+        Parse JSON
+        Handle HTTP objects
+
+
+
+✅ Controller SHOULD
+        Accept DTO
+        Call service
+        Return DTO
+❌ Controller SHOULD NOT
+        Generate IDs
+        Call repositories
+        Contain business logic
 
                        

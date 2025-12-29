@@ -14,7 +14,14 @@
 
 <body class="bg-yellow-50 dark:bg-gray-900 min-h-screen">
     <!-- Navbar -->
-    <section data-th-replace="~{navbar :: #navbar-header}"></section>
+     <!-- if user is logged in -->
+    <div th:if="${loggedInUser}">
+        <section data-th-replace="~{user/userNavbar :: user-navbar-header}"></section>
+    </div>
+     <!-- unless login user navbar -->
+    <div th:unless="${loggedInUser}">
+        <section data-th-replace="~{navbar :: navbar-header}"></section>
+    </div>
 
     <!-- Main content -->
     <div class="w-full p-4">
@@ -23,7 +30,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-    <script data-th-src="@{'js/script.js'}"></script>
+    <script data-th-src="@{/js/script.js}"></script>
     <th:block data-th-replace="${script}"></th:block>
 </body>
 
