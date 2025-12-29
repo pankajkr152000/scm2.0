@@ -1,0 +1,193 @@
+<div th:fragment="addNewContactForm"
+    class="block p-5 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+
+    <!-- Form -->
+    <form class="mt-3 flex-auto justify-center py-4" data-th-action="@{'/do-signup'}" method="post"
+        data-th-object="${userSignupFormRequestDTO}" novalidate>
+
+
+        <!-- 1. Contact Name -->
+        <div id="fullName" class="mb-3">
+            <label for="input-group-1" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">1. Contact
+                Name <b class="text-red-700 text-sm">*</b></label>
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
+                    <i class="fa-regular fa-user w-4 h-4"></i>
+                </div>
+                <input type="text" id="input-group-1"
+                    class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
+                    placeholder="Enter name here">
+            </div>
+            <!-- <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
+                                px-2 text-xs"></p> -->
+        </div>
+
+        <!-- if screen is large then contact & email will appear in one row that's why it is placed in a wrapper -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <!-- 2. Contact phone number -->
+            <div id="contact" class="mb-0">
+                <label for="input-group-1"
+                    class="block mb-1 min-h-[1.25rem] text-xs font-medium text-gray-900 dark:text-white">2. Contact
+                    Number <b class="text-red-700 text-sm">*</b></label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
+                        <i class="fa-solid fa-square-phone w-4 h-4"></i>
+                    </div>
+                    <input type="text" id="input-group-1"
+                        class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
+                        placeholder="Enter name here">
+                </div>
+                <!-- <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
+                                    px-2 text-xs"></p> -->
+            </div>
+
+
+            <!-- 3. Contact Email -->
+            <div id="email" class="mb-0">
+                <label for="input-group-3"
+                    class="block mb-1 min-h-[1.25rem] text-xs font-medium text-gray-900 dark:text-white">3. Contact
+                    Email</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
+                        <i class="fa-regular fa-envelope w-4 h-4"></i>
+                    </div>
+                    <input type="email" id="input-group-3"
+                        class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
+                        placeholder="Enter email here">
+                </div>
+                <!-- <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
+                                    px-2 text-xs"></p> -->
+            </div>
+        </div> <!-- end of wrapper contact and email-->
+
+
+        <!-- 4. Contact Address -->
+        <div id="address" class="mb-3 mt-3">
+            <label for="input-group-4" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">4. Contact
+                Address</label>
+            <div class="relative">
+                <textarea type="text" id="input-group-4" rows="3" placeholder="Address of the contact"
+                    class="block w-full bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                        dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+            </div>
+            <!-- <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
+                                px-2 text-xs"></p> -->
+        </div>
+
+        <!-- 5. Contact Description -->
+        <div id="description" class="mb-3">
+            <label for="input-group-5" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">5. Contact
+                Description</label>
+            <div class="relative">
+                <textarea type="text" id="input-group-4" rows="3"
+                    class="block w-full bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                        dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Write about your contact"></textarea>
+            </div>
+            <!-- <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
+                                px-2 text-xs"></p> -->
+        </div>
+
+        <!-- 6. Contact Favorite and Gender Selection -->
+        <!-- if screen is large then contact & email will appear in one row that's why it is placed in a wrapper -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <!-- Checkbox for favorite contact -->
+            <div class="mt-4">
+                <fieldset>
+                    <legend class="sr-only">Checkbox variants</legend>
+                    <div class="flex items-center mt-1 mb-4">
+                        <input id="checkbox-1" type="checkbox" value=""
+                            class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft appearance-auto accent-green-500">
+                        <label for="checkbox-1"
+                            class="ms-2 text-sm font-medium text-heading select-none  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            Add to Favorite <i class="fa-solid fa-star"></i></label>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- 7. Gender male or female -->
+            <div class="mt-2">
+                <div class="flex items-center mb-1">
+                    <input id="default-radio-1" type="radio" value="" name="default-radio"
+                        class="w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border border-default appearance-auto accent-blue-500">
+                    <label for="default-radio-1"
+                        class="select-none ms-2 text-sm font-medium text-heading  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500">Male</label>
+                </div>
+                <div class="flex items-center mb-2">
+                    <input id="default-radio-2" type="radio" value="" name="default-radio"
+                        class="w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border border-default appearance-auto accent-blue-500">
+                    <label for="default-radio-2"
+                        class="select-none ms-2 text-sm font-medium text-heading  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500">Female</label>
+                </div>
+            </div>
+        </div> <!-- End of Wrapper of favorite & Gender selection-->
+
+        <!-- image avatar upload -->
+        <div>
+            <label
+                class="block mb-2.5 text-sm font-medium text-heading  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                for="file_input">Upload file</label>
+            <input accept="image/*"
+                class="cursor-pointer bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full shadow-xs text-red-700 dark:text-red-500 placeholder:text-body"
+                aria-describedby="file_input_help" id="file_input" type="file">
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF <b>(MAX
+                    2mb)</b></p>
+            <!-- 🔽 ADD THIS IMAGE PREVIEW RIGHT HERE -->
+            <img id="avatarPreview" src="/images/avatar-default.png" alt="Avatar Preview"
+                class="mt-3 w-20 h-20 rounded-full border border-gray-300 dark:border-gray-600">
+        </div>
+
+        <!-- 9. Social Links (Single for now) -->
+        <!-- if screen is large then contact & email will appear in one row that's why it is placed in a wrapper -->
+        <div class="mt-3 grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <!-- 9.1. Contact website -->
+            <div id="contact" class="mb-0">
+                <label for="input-group-1"
+                    class="block mb-1 min-h-[1.25rem] text-xs font-medium text-gray-900 dark:text-white">Website
+                    Link</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
+                        <i class="fa-solid fa-globe w-4 h-4"></i>
+                    </div>
+                    <input type="text" id="input-group-1"
+                        class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
+                        placeholder="https://website.in/">
+                </div>
+                <!-- <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
+                                    px-2 text-xs"></p> -->
+            </div>
+
+
+            <!-- 9.2. Contact linkedin -->
+            <div id="email" class="mb-0">
+                <label for="input-group-3"
+                    class="block mb-1 min-h-[1.25rem] text-xs font-medium text-gray-900 dark:text-white">Linkedin
+                    Profile</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
+                        <i class="fa-brands fa-linkedin w-4 h-4"></i>
+                    </div>
+                    <input type="email" id="input-group-3"
+                        class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
+                        placeholder="https://www.linkedin.com/">
+                </div>
+                <!-- <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
+                                    px-2 text-xs"></p> -->
+            </div>
+        </div> <!-- end of wrapper website and profile links -->
+
+        <!-- Submit & Reset Btton -->
+        <!-- Buttons -->
+        <div class="flex justify-center space-x-12 mt-10">
+            <button type="submit"
+                class="px-3 py-2 text-xs font-bold bg-blue-800 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-800">Add Contact</button>
+            <button type="reset"
+                class="px-3 py-2 text-xs font-bold bg-orange-800 text-white rounded-lg hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-800">Reset</button>
+        </div>
+    </form>
+</div>

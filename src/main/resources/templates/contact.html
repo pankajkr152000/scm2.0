@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}" >
+<html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
+
 <head>
-    <title>Contact</title>
+    <title th:text="${loggedInUser.firstName}+' | Contact Page'">Contact Page</title>
 </head>
+
 <body>
     <div id="content">
+        <div th:if="${loggedInUser}">
+            <div data-th-replace="~{user/userSidebar :: user-sidebar}"></div>
+        </div>
+        <div class="sm:pl-64 pt-12" style="height: 1000px">
+            <div>
+                <H1>Welcome to Contact Page....</H1>
+                <p class="text-cyan-500">Contact Page of SCM2.0</p>
 
-        <h1>This is contact page</h1>
+            </div>
+        </div>
     </div>
     <script>
-        console.log("contact page")
+        console.log("Contact Page")
     </script>
 </body>
 

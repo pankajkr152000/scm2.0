@@ -1,0 +1,64 @@
+package com.scm.dto;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.scm.constants.Gender;
+import com.scm.validation.annotation.ContactNumberValidator;
+import com.scm.validation.annotation.ValidImageFile;
+import com.scm.validation.annotation.ValidProfileLink;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
+public class ContactFormDTO {
+
+    /** Username or display name chosen by the user */
+    @NotBlank(message="Name Required")
+    @Size(min=3 , message="Minimum 3 characters")
+    private String fullName;
+
+    /** Phone number of the user */
+    @ContactNumberValidator
+    @NotBlank(message="Contact Number Required")
+    private String contactNumber;
+
+    /** Email address of the user (required for login) */
+    @Email(message="Invalid Email Address")
+    private String email;
+    
+    @Size(max=100, message="Your contact address is exceeding!!")
+    private String address;
+
+    @Size(max=100, message="Your contact description is exceeding!!")
+    private String description;
+
+    @Builder.Default
+    private boolean isFavoriteContact = false;
+
+    private String image;
+
+    @Builder.Default
+    // 👇 OPTIONAL (default MALE)
+    private Gender gender = Gender.MALE;
+
+    @ValidImageFile
+    private MultipartFile picture;
+
+    // 👇 IMPORTANT
+    @ValidProfileLink(message="Invalid/Broken Profile Link")
+    @Builder.Default
+    private List<SocialLinkDTO> socialLinks = new ArrayList<>();
+
+
+}
+

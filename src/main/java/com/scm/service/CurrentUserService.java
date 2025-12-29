@@ -37,7 +37,7 @@ public class CurrentUserService {
             }
         } else {
             loggedinEmail = authentication.getName();
-            log.info("Email logged in email : {}", loggedinEmail);
+            log.info("Current User logged in email : {}", loggedinEmail);
         }
 
 

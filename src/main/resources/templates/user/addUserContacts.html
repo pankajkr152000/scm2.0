@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/fileUpload.css}">
+    <title th:text="${loggedInUser.firstName}+' | Add Contact'">Add Contact</title>
+</head>
+
+<body>
+    <div id="content">
+        <div th:if="${loggedInUser}">
+            <div data-th-replace="~{user/userSidebar :: user-sidebar}"></div>
+        </div>
+        <!-- <div class="sm:pl-64 pt-12" style="height: 1000px"> -->
+            <!-- card or signup form -->
+        <!-- <div class="grid place-items-center min-h-screen p-4"> -->
+        <div class="sm:pl-64 pt-12 flex items-center justify-center min-h-screen bg-yellow-50 dark:bg-black p-4">
+            <div class="w-full sm:w-3/4 md:w-4/5 lg:w-2/3 xl:w-3/5">
+                <div
+                    class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-6">
+                    <h5 class="mb-2 text-lg font-bold text-gray-900 dark:text-white text-center">Add New Contact Here</h5>
+                    <div class="mb-4 text-xs text-gray-400 dark:text-gray-400 text-center">
+                        Start Managing Contacts On Cloud....
+                    </div>
+
+                    <!-- Success / failure / error alert maessage fragment additoion -->
+                    <div class="text-xs"
+                        th:replace="~{fragments/messageAlert.html :: success-alert-message(messageType=${messageType})}">
+                    </div>
+                    <!-- add new contact form -->
+                    <div class="text-xs"
+                        th:replace="~{fragments/addNewContactForm.html :: addNewContactForm}">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>console.log("add new contacts page")</script>
+    <script th:src="@{/js/avatar.js}"></script>
+    <th:block data-th-replace="${script}"></th:block>
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+/* File upload validation colors */
+input[type="file"]:invalid {
+    border-color: #dc2626; /* red */
+    color: #dc2626;
+}
+
+input[type="file"]:valid {
+    border-color: #16a34a; /* green */
+    color: #16a34a;
+}

@@ -10,6 +10,10 @@ import com.scm.entity.User;
 import com.scm.service.CurrentUserService;
 import com.scm.service.IUserSignupFormService;
 
+/**
+ * the method inside this class will be executed every time when a handler requests
+ *  that is why we use @ControllerAdvice
+ */
 @ControllerAdvice
 public class RootController {
 
