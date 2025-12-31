@@ -3,15 +3,18 @@ package com.scm.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.scm.entity.ContactIdSequence;
 
 import jakarta.persistence.LockModeType;
 
-public interface IContactIdSequenceRepository {
+@Repository
+public interface IContactIdSequenceRepository extends JpaRepository<ContactIdSequence, Long> {
     /* =====================================================
      * BASIC READ
      * ===================================================== */
@@ -20,6 +23,7 @@ public interface IContactIdSequenceRepository {
      * Find sequence row by userId (WITHOUT lock)
      * Used for read-only operations
      */
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<ContactIdSequence> findByUserId(String userId);
 
 
