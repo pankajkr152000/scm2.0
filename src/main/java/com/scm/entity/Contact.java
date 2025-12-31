@@ -1,5 +1,7 @@
 package com.scm.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,9 +14,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -62,8 +67,14 @@ public class Contact {
      * Unique identifier for the contact.
      * Acts as the primary key in the database.
      */
-     @Id
-    private String id; // Technical PK (UUID / custom)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_pk_gen")
+    @SequenceGenerator(
+        name = "contact_pk_gen",
+        sequenceName = "contact_pk_seq",
+        allocationSize = 4
+    )
+    private Long id; // Technical PK (UUID / custom)
 
     // ✅ PER-USER SEQUENCE NUMBER (1,2,3...)
     @Column(nullable = false)
@@ -78,6 +89,10 @@ public class Contact {
     @Column(nullable = false)
     private boolean deleted = false;
 
+    /**
+     * Contact deletion date & time
+     */
+    private LocalDateTime deletedAt;
     /**
      * FirstName of the contact.
      * Cannot be {@code null}.
@@ -97,6 +112,10 @@ public class Contact {
     @Column(nullable = false)
     private String contactNumber;
 
+    /**
+     * DOB of the Contact
+     */
+    private LocalDate dateOfBirth;
     /**
      * Address of the contact.
      */

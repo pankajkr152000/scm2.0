@@ -3,7 +3,7 @@ package com.scm.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.scm.repository.UserIdSequenceRepository;
+import com.scm.repository.IUserIdSequenceRepository;
 import com.scm.utils.DateUtils;
 
 @Service
@@ -12,9 +12,9 @@ public class UserIdGeneratorService {
     private static final String PREFIX = "SCM07";
     private static final int SEQ_LENGTH = 6;
 
-    private final UserIdSequenceRepository sequenceRepository;
+    private final IUserIdSequenceRepository sequenceRepository;
 
-    public UserIdGeneratorService(UserIdSequenceRepository sequenceRepository) {
+    public UserIdGeneratorService(IUserIdSequenceRepository sequenceRepository) {
         this.sequenceRepository = sequenceRepository;
     }
 
