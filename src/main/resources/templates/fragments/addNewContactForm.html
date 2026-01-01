@@ -2,19 +2,19 @@
     class="block p-5 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
 
     <!-- Form -->
-    <form class="mt-3 flex-auto justify-center py-4" data-th-action="@{'/do-signup'}" method="post"
-        data-th-object="${userSignupFormRequestDTO}" novalidate>
+    <form class="mt-3 flex-auto justify-center py-4" data-th-action="@{'/user/contacts/addNewContact'}" method="post"
+        data-th-object="${contactFormDTO}" novalidate>
 
 
         <!-- 1. Contact Name -->
         <div id="fullName" class="mb-3">
-            <label for="input-group-1" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">1. Contact
+            <label for="fullName" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">1. Contact
                 Name <b class="text-red-700 text-sm">*</b></label>
             <div class="relative">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
                     <i class="fa-regular fa-user w-4 h-4"></i>
                 </div>
-                <input type="text" id="input-group-1"
+                <input type="text" id="fullName" th:field="*{fullName}"
                     class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
                     placeholder="Enter name here">
@@ -26,15 +26,15 @@
         <!-- if screen is large then contact & email will appear in one row that's why it is placed in a wrapper -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
             <!-- 2. Contact phone number -->
-            <div id="contact" class="mb-0">
-                <label for="input-group-1"
+            <div id="contactNumber" class="mb-0">
+                <label for="contactNumber"
                     class="block mb-1 min-h-[1.25rem] text-xs font-medium text-gray-900 dark:text-white">2. Contact
                     Number <b class="text-red-700 text-sm">*</b></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
                         <i class="fa-solid fa-square-phone w-4 h-4"></i>
                     </div>
-                    <input type="text" id="input-group-1"
+                    <input type="text" id="contactNumber" th:field="*{contactNumber}"
                         class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
                         placeholder="Enter name here">
@@ -46,14 +46,14 @@
 
             <!-- 3. Contact Email -->
             <div id="email" class="mb-0">
-                <label for="input-group-3"
+                <label for="email"
                     class="block mb-1 min-h-[1.25rem] text-xs font-medium text-gray-900 dark:text-white">3. Contact
                     Email</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
                         <i class="fa-regular fa-envelope w-4 h-4"></i>
                     </div>
-                    <input type="email" id="input-group-3"
+                    <input type="email" id="email" th:field="*{email}"
                         class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
                         placeholder="Enter email here">
@@ -66,10 +66,10 @@
 
         <!-- 4. Contact Address -->
         <div id="address" class="mb-3 mt-3">
-            <label for="input-group-4" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">4. Contact
+            <label for="address" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">4. Contact
                 Address</label>
             <div class="relative">
-                <textarea type="text" id="input-group-4" rows="3" placeholder="Address of the contact"
+                <textarea type="text" id="address" rows="3" th:field="*{address}" placeholder="Address of the contact"
                     class="block w-full bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
             </div>
@@ -79,10 +79,10 @@
 
         <!-- 5. Contact Description -->
         <div id="description" class="mb-3">
-            <label for="input-group-5" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">5. Contact
+            <label for="description" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">5. Contact
                 Description</label>
             <div class="relative">
-                <textarea type="text" id="input-group-4" rows="3"
+                <textarea type="text" id="description" rows="3" th:field="*{description}"
                     class="block w-full bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Write about your contact"></textarea>
@@ -102,7 +102,7 @@
                         <div
                             class="text-sm font-medium text-heading select-none text-gray-900 dark:text-white col-span-full mr-1">
                             6. </div>
-                        <input id="checkbox-1" type="checkbox" value=""
+                        <input id="checkbox-1" type="checkbox" th:field="*{favoriteContact}"
                             class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft appearance-auto accent-green-500">
                         <label for="checkbox-1"
                             class="ms-2 text-sm font-medium text-heading select-none  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -130,25 +130,17 @@
                 </button>
 
                 <!-- Dropdown -->
-                <div id="genderDropdown" class="absolute top-full left-0 mt-2 z-50 hidden
-                                bg-white border hover:bg-gray-500 border-gray-200 rounded-lg shadow-lg w-44">
-
+                <div id="genderDropdown" class="absolute top-full left-0 mt-2 z-50 hidden bg-white border hover:bg-gray-500 border-gray-200 rounded-lg shadow-lg w-44">
                     <ul class="p-2 text-sm">
-                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="MALE">
-                            MALE
-                        </li>
-                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="FEMALE">
-                            FEMALE
-                        </li>
-                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="UNKNOWN">
-                            UNKNOWN
-                        </li>
+                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="MALE">MALE</li>
+                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="FEMALE"></li>
+                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="UNKNOWN">UNKNOWN</li>
                     </ul>
                 </div>
             </div>
 
             <!-- Hidden input (THIS is submitted to Spring) -->
-            <input type="hidden" name="gender" id="genderInput">
+            <input type="hidden" id="genderInput" th:field="*{gender}">
 
             <!-- 8. DOB date of birth of the contact datepicker -->
             <div class="max-w-sm">
@@ -177,7 +169,7 @@
                         datepicker-autohide datepicker-max-date="today" type="text" class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium
                                    border border-default-medium text-heading text-sm
                                    rounded-base focus:ring-brand focus:border-brand
-                                   shadow-xs placeholder:text-body" placeholder="Select DOB">
+                                   shadow-xs placeholder:text-body" placeholder="Select DOB" th:field="*{dateOfBirth}">
                 </div>
             </div>
 
@@ -190,7 +182,7 @@
                 for="file_input">9. Upload file</label>
             <input accept="image/*"
                 class="cursor-pointer bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full shadow-xs text-red-700 dark:text-red-500 placeholder:text-body"
-                aria-describedby="file_input_help" id="file_input" type="file">
+                aria-describedby="file_input_help" id="file_input" type="file" th:field="*{image}">
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF <b>(MAX
                     2mb)</b></p>
             <!-- 🔽 ADD THIS IMAGE PREVIEW RIGHT HERE -->
@@ -198,19 +190,21 @@
                 class="mt-3 w-20 h-20 rounded-full border border-gray-300 dark:border-gray-600">
         </div>
 
-        <!-- 9. Social Links (Single for now) -->
+        <!-- 10. Social Links (Single for now) -->
         <!-- if screen is large then contact & email will appear in one row that's why it is placed in a wrapper -->
         <div class="mt-3 grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-            <!-- 9.1. Contact website -->
-            <div id="contact" class="mb-0">
-                <label for="input-group-1"
+            <!-- 10.1. Contact website -->
+            <div id="contactWebsite" class="mb-0">
+                <label for="contactWebsite"
                     class="block mb-1 min-h-[1.25rem] text-xs font-medium text-gray-900 dark:text-white">Website
                     Link</label>
+                <!-- title -->
+                <input type="hidden" th:field="*{socialLinks[0].title}" th:value="'Website'"/>
                 <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
                         <i class="fa-solid fa-globe w-4 h-4"></i>
                     </div>
-                    <input type="text" id="input-group-1"
+                    <input type="url" id="contactWebsite" th:field="*{socialLinks[0].link}" 
                         class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
                         placeholder="https://website.in/">
@@ -220,16 +214,18 @@
             </div>
 
 
-            <!-- 9.2. Contact linkedin -->
-            <div id="email" class="mb-0">
-                <label for="input-group-3"
+            <!-- 10.2. Contact linkedin -->
+            <div id="contactLinkedIn" class="mb-0">
+                <label for="contactLinkedIn"
                     class="block mb-1 min-h-[1.25rem] text-xs font-medium text-gray-900 dark:text-white">Linkedin
                     Profile</label>
+                <!-- title -->
+                <input type="hidden" th:field="*{socialLinks[1].title}" th:value="'LinkedIn'"/>
                 <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
                         <i class="fa-brands fa-linkedin w-4 h-4"></i>
                     </div>
-                    <input type="email" id="input-group-3"
+                    <input type="url" id="contactLinkedIn" th:field="*{socialLinks[1].link}"
                         class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
                         placeholder="https://www.linkedin.com/">
@@ -241,7 +237,7 @@
 
         <!-- Submit & Reset Btton -->
         <!-- Buttons -->
-        <div class="flex justify-center space-x-12 mt-10">
+        <div class="flex justify-center space-x-20 mt-12">
             <button type="submit"
                 class="px-3 py-2 text-xs font-bold bg-blue-800 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-800">Add
                 Contact</button>
