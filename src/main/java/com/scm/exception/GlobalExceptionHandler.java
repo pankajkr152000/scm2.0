@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.scm.constants.ErrorCodes;
 import com.scm.dto.ApiResponseDTO;
@@ -94,5 +95,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(response);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<?> handleNoResource(NoResourceFoundException ex) {
+        // log as DEBUG, not ERROR
+        log.debug("Static resource not found: {}", ex.getMessage());
+        return ResponseEntity.notFound().build();
     }
 }

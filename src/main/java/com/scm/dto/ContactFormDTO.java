@@ -1,5 +1,6 @@
 package com.scm.dto;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,15 +32,17 @@ public class ContactFormDTO {
     @Size(min=3 , message="Minimum 3 characters")
     private String fullName;
 
-    /** Phone number of the user */
+    /** Phone number of the contact */
     @ContactNumberValidator
     @NotBlank(message="Contact Number Required")
     private String contactNumber;
 
-    /** Email address of the user (required for login) */
+    /** Email address of the contact */
     @Email(message="Invalid Email Address")
     private String email;
     
+    private LocalDate dateOfBirth;
+
     @Size(max=100, message="Your contact address is exceeding!!")
     private String address;
 
@@ -53,7 +56,7 @@ public class ContactFormDTO {
 
     @Builder.Default
     // 👇 OPTIONAL (default MALE)
-    private Gender gender = Gender.MALE;
+    private Gender gender = Gender.UNKNOWN;
 
     @ValidImageFile
     private MultipartFile picture;

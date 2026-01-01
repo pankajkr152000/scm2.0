@@ -95,10 +95,13 @@
         <!-- if screen is large then contact & email will appear in one row that's why it is placed in a wrapper -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
             <!-- Checkbox for favorite contact -->
-            <div class="mt-4">
+            <div class="mt-4 flex items-center gap-2">
                 <fieldset>
                     <legend class="sr-only">Checkbox variants</legend>
                     <div class="flex items-center mt-1 mb-4">
+                        <div
+                            class="text-sm font-medium text-heading select-none text-gray-900 dark:text-white col-span-full mr-1">
+                            6. </div>
                         <input id="checkbox-1" type="checkbox" value=""
                             class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft appearance-auto accent-green-500">
                         <label for="checkbox-1"
@@ -109,27 +112,82 @@
             </div>
 
             <!-- 7. Gender male or female -->
-            <div class="mt-2">
-                <div class="flex items-center mb-1">
-                    <input id="default-radio-1" type="radio" value="" name="default-radio"
-                        class="w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border border-default appearance-auto accent-blue-500">
-                    <label for="default-radio-1"
-                        class="select-none ms-2 text-sm font-medium text-heading  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500">Male</label>
-                </div>
-                <div class="flex items-center mb-2">
-                    <input id="default-radio-2" type="radio" value="" name="default-radio"
-                        class="w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border border-default appearance-auto accent-blue-500">
-                    <label for="default-radio-2"
-                        class="select-none ms-2 text-sm font-medium text-heading  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500">Female</label>
+            <!-- Dropdown radio for male or female -->
+            <!-- Gender Dropdown -->
+
+            <div class="relative inline-block mt-4 font-bold">
+
+                <button type="button" id="genderButton" class="inline-flex items-center gap-2 bg-gray-700 text-white hover:bg-gray-600
+                                        dark:bg-gray-400 dark:text-black px-4 py-2 rounded-lg text-sm">
+                    <!-- Number -->
+                    <span class="text-sm font-medium text-heading text-white dark:text-black">7.</span>
+                    <!-- Label -->
+                    <span id="genderButtonText">Gender</span>
+                    <!-- Icon -->
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-width="2" d="m19 9-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <!-- Dropdown -->
+                <div id="genderDropdown" class="absolute top-full left-0 mt-2 z-50 hidden
+                                bg-white border hover:bg-gray-500 border-gray-200 rounded-lg shadow-lg w-44">
+
+                    <ul class="p-2 text-sm">
+                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="MALE">
+                            MALE
+                        </li>
+                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="FEMALE">
+                            FEMALE
+                        </li>
+                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="UNKNOWN">
+                            UNKNOWN
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div> <!-- End of Wrapper of favorite & Gender selection-->
+
+            <!-- Hidden input (THIS is submitted to Spring) -->
+            <input type="hidden" name="gender" id="genderInput">
+
+            <!-- 8. DOB date of birth of the contact datepicker -->
+            <div class="max-w-sm">
+
+                <!-- Label -->
+                <div class="text-sm font-medium text-heading select-none text-gray-900 dark:text-white">
+                    8. Contact DOB
+                </div>
+
+                <!-- Input wrapper (IMPORTANT) -->
+                <div class="relative mt-1">
+
+                    <!-- Calendar icon -->
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14
+                                                    a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5
+                                                    a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
+                        </svg>
+                    </div>
+
+                    <!-- Input -->
+                    <input id="datepicker-actions" datepicker datepicker-format="dd-mm-yyyy" datepicker-buttons
+                        datepicker-autohide datepicker-max-date="today" type="text" class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium
+                                   border border-default-medium text-heading text-sm
+                                   rounded-base focus:ring-brand focus:border-brand
+                                   shadow-xs placeholder:text-body" placeholder="Select DOB">
+                </div>
+            </div>
+
+        </div><!-- End of Wrapper of favorite & Gender selection-->
 
         <!-- image avatar upload -->
         <div>
             <label
-                class="block mb-2.5 text-sm font-medium text-heading  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                for="file_input">Upload file</label>
+                class="block mt-4 text-sm font-medium text-heading  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                for="file_input">9. Upload file</label>
             <input accept="image/*"
                 class="cursor-pointer bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full shadow-xs text-red-700 dark:text-red-500 placeholder:text-body"
                 aria-describedby="file_input_help" id="file_input" type="file">
@@ -185,7 +243,8 @@
         <!-- Buttons -->
         <div class="flex justify-center space-x-12 mt-10">
             <button type="submit"
-                class="px-3 py-2 text-xs font-bold bg-blue-800 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-800">Add Contact</button>
+                class="px-3 py-2 text-xs font-bold bg-blue-800 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-800">Add
+                Contact</button>
             <button type="reset"
                 class="px-3 py-2 text-xs font-bold bg-orange-800 text-white rounded-lg hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-800">Reset</button>
         </div>

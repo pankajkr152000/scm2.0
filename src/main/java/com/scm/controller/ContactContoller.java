@@ -15,8 +15,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/user/contacts")
 
 public class ContactContoller {
-    @RequestMapping(value = "/add" , method = RequestMethod.POST)
-    public String addUserContact(@Valid @ModelAttribute ContactFormDTO contactFormDTO, BindingResult bindingResults, HttpSession session) {
+    @RequestMapping(value = "/add" , method = {RequestMethod.POST, RequestMethod.GET})
+    public String addUserContact(@ModelAttribute ContactFormDTO contactFormDTO, BindingResult bindingResults, HttpSession session) {
         if(bindingResults.hasErrors()) {
             return "user/addUserContacts";
         }
