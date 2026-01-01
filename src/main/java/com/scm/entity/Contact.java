@@ -67,13 +67,14 @@ public class Contact {
      * Unique identifier for the contact.
      * Acts as the primary key in the database.
      */
-    @Id
+    
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_pk_gen")
     @SequenceGenerator(
         name = "contact_pk_gen",
         sequenceName = "contact_pk_seq",
         allocationSize = 4
     )
+    @Id
     private Long id; // Technical PK (UUID / custom)
 
     // ✅ PER-USER SEQUENCE NUMBER (1,2,3...)
@@ -113,7 +114,7 @@ public class Contact {
     private String contactNumber;
 
     /**
-     * DOB of the Contact
+     * DOB (Date of Birth) of the Contact
      */
     private LocalDate dateOfBirth;
     /**

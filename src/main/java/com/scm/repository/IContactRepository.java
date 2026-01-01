@@ -8,17 +8,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.scm.entity.Contact;
 import com.scm.entity.User;
 
-public interface IContactRepository extends JpaRepository<Contact, String> {
+@Repository
+public interface IContactRepository extends JpaRepository<Contact, Long> {
 
     /* =====================================================
      * BASIC READ
      * ===================================================== */
 
-    Optional<Contact> findByIdAndDeletedFalse(String id);
+    Optional<Contact> findByIdAndDeletedFalse(Long id);
 
     Optional<Contact> findByUserAndContactCodeAndDeletedFalse(
             User user,
@@ -81,16 +83,16 @@ public interface IContactRepository extends JpaRepository<Contact, String> {
      * SOFT DELETE / RESTORE
      * ===================================================== */
 
-    List<Contact> findByIdIn(List<String> ids);
+    List<Contact> findByIdIn(List<Long> ids);
 
 
     /* =====================================================
      * OWNERSHIP / SECURITY
      * ===================================================== */
 
-    boolean existsByIdAndUser(String contactId, User user);
+    boolean existsByIdAndUser(Long contactId, User user);
 
-    boolean existsByIdAndUserAndDeletedFalse(String contactId, User user);
+    boolean existsByIdAndUserAndDeletedFalse(Long contactId, User user);
 
 
     /* =====================================================
