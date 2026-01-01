@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.scm.constants.Gender;
 import com.scm.validation.annotation.ContactNumberValidator;
 import com.scm.validation.annotation.ValidImageFile;
-import com.scm.validation.annotation.ValidProfileLink;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -41,7 +40,7 @@ public class ContactFormDTO {
     @Email(message="Invalid Email Address")
     private String email;
     
-    private LocalDate dateOfBirth;
+    private String dateOfBirth;
 
     @Size(max=100, message="Your contact address is exceeding!!")
     private String address;
@@ -50,7 +49,7 @@ public class ContactFormDTO {
     private String description;
 
     @Builder.Default
-    private boolean isFavoriteContact = false;
+    private boolean favoriteContact = false;
 
     private String image;
 
@@ -62,7 +61,7 @@ public class ContactFormDTO {
     private MultipartFile picture;
 
     // 👇 IMPORTANT
-    @ValidProfileLink(message="Invalid/Broken Profile Link")
+    //@ValidProfileLink(message="Invalid/Broken Profile Link")
     @Builder.Default
     private List<SocialLinkDTO> socialLinks = new ArrayList<>();
 
