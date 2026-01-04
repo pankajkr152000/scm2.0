@@ -3,7 +3,7 @@
 
     <!-- Form -->
     <form class="mt-3 flex-auto justify-center py-4" data-th-action="@{'/user/contacts/addNewContact'}" method="post"
-        data-th-object="${contactFormDTO}" novalidate>
+        data-th-object="${contactFormDTO}"enctype="multipart/form-data" novalidate> <!--enctype for accepting image file-->
 
 
         <!-- 1. Contact Name -->
@@ -131,9 +131,9 @@
 
                 <!-- Dropdown -->
                 <div id="genderDropdown" class="absolute top-full left-0 mt-2 z-50 hidden bg-white border hover:bg-gray-500 border-gray-200 rounded-lg shadow-lg w-44">
-                    <ul class="p-2 text-sm">
+                    <ul class="p-2 text-sm max-h-60 overflow-y-auto">
                         <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="MALE">MALE</li>
-                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="FEMALE"></li>
+                        <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="FEMALE">FEMALE</li>
                         <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="UNKNOWN">UNKNOWN</li>
                     </ul>
                 </div>
@@ -175,20 +175,64 @@
 
         </div><!-- End of Wrapper of favorite & Gender selection-->
 
-        <!-- image avatar upload -->
-        <div>
+        <!-- 9. image file avatar upload -->
+        <!-- <div>
             <label
                 class="block mt-4 text-sm font-medium text-heading  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 for="file_input">9. Upload file</label>
-            <input accept="image/*"
+            <input 
+                type="file"
+                accept="image/*"
                 class="cursor-pointer bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full shadow-xs text-red-700 dark:text-red-500 placeholder:text-body"
-                aria-describedby="file_input_help" id="file_input" type="file" th:field="*{image}">
+                aria-describedby="file_input_help" id="file_input" th:field="*{picture}">
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF <b>(MAX
-                    2mb)</b></p>
+                    2mb)</b></p> -->
             <!-- 🔽 ADD THIS IMAGE PREVIEW RIGHT HERE -->
-            <img id="avatarPreview" src="/images/avatar-default.png" alt="Avatar Preview"
-                class="mt-3 w-20 h-20 rounded-full border border-gray-300 dark:border-gray-600">
+            <!-- <img id="avatarPreview" src="/images/avatar-default.png" alt="Avatar Preview"
+                class="mt-3 w-20 h-20 rounded-lg border border-gray-300 dark:border-gray-600">
+        </div> -->
+
+        <!-- 9. image avatar upload -->
+        <div>
+            <label class="block mt-4 text-sm font-medium text-gray-900 dark:text-white">
+                9. Upload Image
+            </label>
+
+            <input
+                id="file_input"
+                type="file"
+                accept="image/*"
+                th:field="*{picture}"
+                onchange="handleImageSelect(this)"
+                class="cursor-pointer border rounded-base block w-full text-sm"
+            >
+
+            <p id="fileError" class="mt-1 text-sm text-red-600 hidden"></p>
+
+            <img id="avatarPreview"
+                src="/images/avatar-default.png"
+                class="mt-3 w-20 h-20 rounded-lg border">
+
+            <!-- Progress bar -->
+            <div class="mt-3 w-full bg-gray-200 rounded-full h-2 hidden" id="progressWrapper">
+                <div id="progressBar"
+                    class="bg-blue-600 h-2 rounded-full"
+                    style="width: 0%">
+                </div>
+            </div>
+
+            <p id="progressText" class="mt-1 text-xs text-gray-600 hidden">0%</p>
+
+            <button
+                id="uploadBtn" 
+                type="button"
+                onclick="uploadImage(event)"
+                class="mt-3 px-4 py-1 bg-blue-600 text-white rounded-lg">
+                Upload
+            </button>
         </div>
+
+
 
         <!-- 10. Social Links (Single for now) -->
         <!-- if screen is large then contact & email will appear in one row that's why it is placed in a wrapper -->

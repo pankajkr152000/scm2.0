@@ -15,9 +15,11 @@ import jakarta.persistence.LockModeType;
 
 @Repository
 public interface IContactIdSequenceRepository extends JpaRepository<ContactIdSequence, Long> {
-    /* =====================================================
+    /*
+     * =====================================================
      * BASIC READ
-     * ===================================================== */
+     * =====================================================
+     */
 
     /**
      * Find sequence row by userId (WITHOUT lock)
@@ -26,10 +28,11 @@ public interface IContactIdSequenceRepository extends JpaRepository<ContactIdSeq
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<ContactIdSequence> findByUserId(String userId);
 
-
-    /* =====================================================
+    /*
+     * =====================================================
      * LOCKED READ (CRITICAL)
-     * ===================================================== */
+     * =====================================================
+     */
 
     /**
      * Find sequence row by userId WITH row-level lock
@@ -37,48 +40,48 @@ public interface IContactIdSequenceRepository extends JpaRepository<ContactIdSeq
      */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""
-        SELECT s FROM ContactIdSequence s
-        WHERE s.userId = :userId
-    """)
+                SELECT s FROM ContactIdSequence s
+                WHERE s.userId = :userId
+            """)
     Optional<ContactIdSequence> findByUserIdForUpdate(
-            @Param("userId") String userId
-    );
+            @Param("userId") String userId);
 
 
-    /* =====================================================
+    /*
+     * =====================================================
      * EXISTENCE CHECK
-     * ===================================================== */
+     * =====================================================
+     */
 
     /**
      * Check if sequence exists for a user
      */
     boolean existsByUserId(String userId);
 
-
-    /* =====================================================
+    /*
+     * =====================================================
      * BULK / ADMIN (FUTURE)
-     * ===================================================== */
+     * =====================================================
+     */
 
     /**
      * Fetch sequences for multiple users
      */
     List<ContactIdSequence> findByUserIdIn(List<String> userIds);
 
-
-    /* =====================================================
+    /*
+     * =====================================================
      * REPORTING / DEBUG
-     * ===================================================== */
+     * =====================================================
+     */
 
     /**
      * Get current sequence value for a user
      */
     @Query("""
-        SELECT s.currentValue
-        FROM ContactIdSequence s
-        WHERE s.userId = :userId
-    """)
-    Long getCurrentValueByUserId(
-            @Param("userId") String userId
-    );
+                SELECT s.currentValue
+                FROM ContactIdSequence s
+                WHERE s.userId = :userId
+            """)
+    Long getCurrentValueByUserId(@Param("userId") String userId);
 }
-

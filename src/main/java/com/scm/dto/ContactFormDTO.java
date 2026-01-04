@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.scm.constants.Gender;
 import com.scm.validation.annotation.ContactNumberValidator;
+import com.scm.validation.annotation.ValidDOBString;
 import com.scm.validation.annotation.ValidImageFile;
 
 import jakarta.validation.constraints.Email;
@@ -40,6 +41,7 @@ public class ContactFormDTO {
     @Email(message="Invalid Email Address")
     private String email;
     
+    @ValidDOBString(message="Invalid DOB")
     private String dateOfBirth;
 
     @Size(max=100, message="Your contact address is exceeding!!")

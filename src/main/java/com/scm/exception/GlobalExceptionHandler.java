@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.scm.constants.ErrorCodes;
@@ -102,5 +103,12 @@ public class GlobalExceptionHandler {
         // log as DEBUG, not ERROR
         log.debug("Static resource not found: {}", ex.getMessage());
         return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<?> handleMaxSizeException(MaxUploadSizeExceededException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body("Image size must be less than 2MB");
     }
 }
