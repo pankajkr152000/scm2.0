@@ -32,6 +32,38 @@
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script data-th-src="@{/js/script.js}"></script>
     <th:block data-th-replace="${script}"></th:block>
+    
+    <!-- 1️⃣ Eye Toggle Script (REQUIRED) -->
+    <script>
+    function togglePassword(fieldId) {
+        const input = document.getElementById(fieldId);
+        const eyeOpen = document.getElementById(fieldId + "-eye-open");
+        const eyeClosed = document.getElementById(fieldId + "-eye-closed");
+
+        if (!input) return;
+
+        if (input.type === "password") {
+            input.type = "text";
+            eyeOpen.classList.add("hidden");
+            eyeClosed.classList.remove("hidden");
+        } else {
+            input.type = "password";
+            eyeOpen.classList.remove("hidden");
+            eyeClosed.classList.add("hidden");
+        }
+    }
+    </script>
+
+    <!-- 2️⃣ Password Copy/Paste Protection (RECOMMENDED) -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("input[type='password']").forEach(input => {
+            ["copy", "paste", "cut", "drag", "drop"].forEach(evt => {
+                input.addEventListener(evt, e => e.preventDefault());
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>
