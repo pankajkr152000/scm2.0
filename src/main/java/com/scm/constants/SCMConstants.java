@@ -8,6 +8,10 @@ public class SCMConstants {
     
     public static final String YYYY_MM_DD = "yyyy-MM-dd";
 
+    public static final String DD_MM_UUUU = "dd-MM-uuuu";
+
+    public static final String UUUU_MM_DD = "uuuu-MM-dd";
+
     public enum PeriodType {
         DAYS {
             

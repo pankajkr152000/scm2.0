@@ -3,7 +3,8 @@
 
     <!-- Form -->
     <form class="mt-3 flex-auto justify-center py-4" data-th-action="@{'/user/contacts/addNewContact'}" method="post"
-        data-th-object="${contactFormDTO}"enctype="multipart/form-data" novalidate> <!--enctype for accepting image file-->
+        data-th-object="${contactFormDTO}" enctype="multipart/form-data" novalidate>
+        <!--enctype for accepting image file-->
 
 
         <!-- 1. Contact Name -->
@@ -103,7 +104,7 @@
                             class="text-sm font-medium text-heading select-none text-gray-900 dark:text-white col-span-full mr-1">
                             6. </div>
                         <input id="checkbox-1" type="checkbox" th:field="*{favoriteContact}"
-                            class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft appearance-auto accent-green-500">
+                            class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft rounded-lg appearance-auto accent-green-500">
                         <label for="checkbox-1"
                             class="ms-2 text-sm font-medium text-heading select-none  text-gray-900 dark:text-white  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             Add to Favorite <i class="fa-solid fa-star"></i></label>
@@ -130,7 +131,8 @@
                 </button>
 
                 <!-- Dropdown -->
-                <div id="genderDropdown" class="absolute top-full left-0 mt-2 z-50 hidden bg-white border hover:bg-gray-500 border-gray-200 rounded-lg shadow-lg w-44">
+                <div id="genderDropdown"
+                    class="absolute top-full left-0 mt-2 z-50 hidden bg-white border hover:bg-gray-500 border-gray-200 rounded-lg shadow-lg w-44">
                     <ul class="p-2 text-sm max-h-60 overflow-y-auto">
                         <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="MALE">MALE</li>
                         <li class="p-2 hover:bg-gray-300 cursor-pointer gender-option" data-value="FEMALE">FEMALE</li>
@@ -154,6 +156,21 @@
                 <div class="relative mt-1">
 
                     <!-- Calendar icon -->
+
+                    <!-- <div class="relative max-w-sm">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z" />
+                            </svg>
+                        </div>
+                        <input id="datepicker-actions" datepicker datepicker-format="dd-mm-yyyy" datepicker-buttons
+                            datepicker-autohide datepicker-max-date="today"
+                            class="block w-full ps-9 pe-3 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="DD-MM-YYYY" th:field="*{dateOfBirth}">
+                    </div> -->
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                         <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24">
@@ -166,10 +183,8 @@
 
                     <!-- Input -->
                     <input id="datepicker-actions" datepicker datepicker-format="dd-mm-yyyy" datepicker-buttons
-                        datepicker-autohide datepicker-max-date="today" type="text" class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium
-                                   border border-default-medium text-heading text-sm
-                                   rounded-base focus:ring-brand focus:border-brand
-                                   shadow-xs placeholder:text-body" placeholder="Select DOB" th:field="*{dateOfBirth}">
+                        datepicker-autohide datepicker-max-date="today" type="text" class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body" placeholder="DD-MM-YYYY" th:field="*{dateOfBirth}">
                 </div>
             </div>
 
@@ -187,47 +202,35 @@
                 aria-describedby="file_input_help" id="file_input" th:field="*{picture}">
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF <b>(MAX
                     2mb)</b></p> -->
-            <!-- 🔽 ADD THIS IMAGE PREVIEW RIGHT HERE -->
-            <!-- <img id="avatarPreview" src="/images/avatar-default.png" alt="Avatar Preview"
+        <!-- 🔽 ADD THIS IMAGE PREVIEW RIGHT HERE -->
+        <!-- <img id="avatarPreview" src="/images/avatar-default.png" alt="Avatar Preview"
                 class="mt-3 w-20 h-20 rounded-lg border border-gray-300 dark:border-gray-600">
         </div> -->
 
         <!-- 9. image avatar upload -->
         <div>
-            <label class="block mt-4 text-sm font-medium text-gray-900 dark:text-white">
+            <label class="block mt-4 text-sm font-medium dark:text-white">
                 9. Upload Image
             </label>
 
-            <input
-                id="file_input"
-                type="file"
-                accept="image/*"
-                th:field="*{picture}"
-                onchange="handleImageSelect(this)"
-                class="cursor-pointer border rounded-base block w-full text-sm"
-            >
+            <input id="file_input" type="file" accept="image/*" th:field="*{picture}" onchange="handleImageSelect(this)"
+                class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-green-700 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-green-600 dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body">
 
             <p id="fileError" class="mt-1 text-sm text-red-600 hidden"></p>
 
-            <img id="avatarPreview"
-                src="/images/avatar-default.png"
-                class="mt-3 w-20 h-20 rounded-lg border">
+            <img id="avatarPreview" src="/images/avatar-default.png" class="mt-3 w-20 h-20 rounded-lg border">
 
             <!-- Progress bar -->
-            <div class="mt-3 w-full bg-gray-200 rounded-full h-2 hidden" id="progressWrapper">
-                <div id="progressBar"
-                    class="bg-blue-600 h-2 rounded-full"
-                    style="width: 0%">
+            <div class="mt-3 w-full bg-gray-200 rounded-lg h-2 hidden" id="progressWrapper">
+                <div id="progressBar" class="bg-green-600 h-2 rounded-lg" style="width: 0%">
                 </div>
             </div>
 
             <p id="progressText" class="mt-1 text-xs text-gray-600 hidden">0%</p>
 
-            <button
-                id="uploadBtn" 
-                type="button"
-                onclick="uploadImage(event)"
-                class="mt-3 px-4 py-1 bg-blue-600 text-white rounded-lg">
+            <button id="uploadBtn" type="button" onclick="uploadImage(event)"
+                class="mt-3 px-4 py-1 bg-green-600 text-white rounded-lg">
                 Upload
             </button>
         </div>
@@ -243,12 +246,12 @@
                     class="block mb-1 min-h-[1.25rem] text-xs font-medium text-gray-900 dark:text-white">Website
                     Link</label>
                 <!-- title -->
-                <input type="hidden" th:field="*{socialLinks[0].title}" th:value="'Website'"/>
+                <input type="hidden" th:field="*{socialLinks[0].title}" th:value="'Website'" />
                 <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
                         <i class="fa-solid fa-globe w-4 h-4"></i>
                     </div>
-                    <input type="url" id="contactWebsite" th:field="*{socialLinks[0].link}" 
+                    <input type="url" id="contactWebsite" th:field="*{socialLinks[0].link}"
                         class="block w-full ps-9 pe-3 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-body"
                         placeholder="https://website.in/">
@@ -264,7 +267,7 @@
                     class="block mb-1 min-h-[1.25rem] text-xs font-medium text-gray-900 dark:text-white">Linkedin
                     Profile</label>
                 <!-- title -->
-                <input type="hidden" th:field="*{socialLinks[1].title}" th:value="'LinkedIn'"/>
+                <input type="hidden" th:field="*{socialLinks[1].title}" th:value="'LinkedIn'" />
                 <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none rounded-lg">
                         <i class="fa-brands fa-linkedin w-4 h-4"></i>

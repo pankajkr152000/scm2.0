@@ -1,0 +1,25 @@
+/* File upload validation colors */
+input[type="file"]:invalid {
+    border-color: #dc2626; /* red */
+    color: #dc2626;
+}
+
+input[type="file"]:valid {
+    border-color: #16a34a; /* green */
+    color: #16a34a;
+}
+
+/* ONLY month navigation arrows */
+/* ONLY month navigation arrows (safe selector) */
+
+/* .datepicker-header button[aria-label="Previous month"] svg,
+.datepicker-header button[aria-label="Next month"] svg {
+  color: #111827;
+} */
+
+/* .datepicker-header .datepicker-prev-button:hover svg,
+.datepicker-header .datepicker-next-button:hover svg {
+  color: #000000;
+} */
+
+
