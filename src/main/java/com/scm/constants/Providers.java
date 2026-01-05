@@ -36,6 +36,9 @@ public enum Providers {
     /** Local authentication within the system */
     SELF,
 
+    /** Authentication via Website */
+    WEBSITE,
+
     /** Authentication via Facebook */
     FACEBOOK,
 

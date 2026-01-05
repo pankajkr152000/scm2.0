@@ -4,15 +4,26 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
+import com.scm.dto.ContactFormDTO;
 import com.scm.entity.Contact;
 import com.scm.entity.User;
 import com.scm.service.IContactService;
 
+@Service
 public class ContactServiceImpl implements IContactService{
 
     @Override
-    public Contact createContact(User user, Contact contact) {
+    public Contact createContact(User user, ContactFormDTO contactFormDTO) {
+        
+        
+
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Contact saveContact(User user, Contact contact) {
         
 
 

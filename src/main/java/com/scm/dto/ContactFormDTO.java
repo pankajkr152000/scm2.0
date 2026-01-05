@@ -1,6 +1,5 @@
 package com.scm.dto;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +34,7 @@ public class ContactFormDTO {
     /** Phone number of the contact */
     @ContactNumberValidator
     @NotBlank(message="Contact Number Required")
+    @Size(min=10, max=10)
     private String contactNumber;
 
     /** Email address of the contact */

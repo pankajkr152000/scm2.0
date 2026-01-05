@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
+import com.scm.dto.ContactFormDTO;
 import com.scm.entity.Contact;
 import com.scm.entity.User;
 
@@ -18,7 +19,12 @@ public interface IContactService {
     /**
      * Create a new contact for a user
      */
-    Contact createContact(User user, Contact contact);
+    Contact createContact(User user, ContactFormDTO contactFormDTO);
+
+    /**
+     * Save a new contact for a user
+     */
+    Contact saveContact(User user, Contact contact);
 
 
     /* =====================================================

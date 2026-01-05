@@ -1,5 +1,7 @@
 package com.scm.service;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -8,10 +10,18 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import com.scm.constants.Providers;
+import com.scm.entity.User;
 
 @Service
 public class CurrentUserService {
     final static Logger log = LoggerFactory.getLogger(CurrentUserService.class);
+
+    private final IUserSignupFormService userSignupFormService;
+
+    public CurrentUserService(IUserSignupFormService userSignupFormService) {
+        this.userSignupFormService = userSignupFormService;
+    }
+
     @SuppressWarnings("null")
     public String getEmailOfLoggedinUser(Authentication authentication) {
         String loggedinEmail = null;
@@ -42,5 +52,26 @@ public class CurrentUserService {
 
 
         return loggedinEmail;
+    }
+
+    public User getCurrentUser(Authentication authentication) {
+        String currentuserEmailId = this.getEmailOfLoggedinUser(authentication);
+        Optional<User> currentUser = userSignupFormService.getUserByEmail(currentuserEmailId);
+
+        return currentUser.orElse(null);
+    }
+    
+    public String getCurrentUserUserId(Authentication authentication) {
+        String currentuserEmailId = this.getEmailOfLoggedinUser(authentication);
+        Optional<User> currentUser = userSignupFormService.getUserByEmail(currentuserEmailId);
+        if(currentUser.isPresent())
+            return currentUser.get().getUserId();
+
+        return null;
+    }
+
+    public User getCurrentUser(String userId) {
+        Optional<User> currentUser = userSignupFormService.getUserById(userId);
+        return currentUser.orElse(null);
     }
 }
