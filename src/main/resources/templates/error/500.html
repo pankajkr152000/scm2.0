@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>500 | Server Error</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
+
+<div class="bg-white rounded-2xl shadow-2xl p-12 max-w-md text-center">
+    <h1 class="text-8xl font-bold text-red-500">500</h1>
+
+    <h2 class="mt-4 text-2xl font-semibold text-gray-800">
+        Something Went Wrong
+    </h2>
+
+    <p class="mt-4 text-gray-500 text-sm">
+        An unexpected error occurred on our server.
+        Please try again later or return to the dashboard.
+    </p>
+
+    <!-- Thymeleaf error info -->
+    <div class="mt-4 text-xs text-gray-400">
+        <p>Status: <span th:text="${status}">500</span></p>
+        <p>Error: <span th:text="${error}">Internal Server Error</span></p>
+        <p th:if="${timestamp}">
+            Time: <span th:text="${timestamp}"></span>
+        </p>
+    </div>
+
+    <a th:href="@{/dashboard}"
+       class="inline-block mt-8 px-6 py-3 rounded-lg bg-red-500 text-white font-medium
+              hover:bg-red-600 transition">
+        ← Go to Dashboard
+    </a>
+</div>
+
+</body>
+</html>

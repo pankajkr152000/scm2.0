@@ -20,21 +20,21 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
      * BASIC READ
      * ===================================================== */
 
-    Optional<Contact> findByIdAndDeletedFalse(Long id);
+    Optional<Contact> findByIdAndIsDeletedFalse(Long id);
 
-    Optional<Contact> findByUserAndContactCodeAndDeletedFalse(
+    Optional<Contact> findByUserAndContactCodeAndIsDeletedFalse(
             User user,
             String contactCode
     );
 
-    List<Contact> findByUserAndDeletedFalse(User user);
+    List<Contact> findByUserAndIsDeletedFalse(User user);
 
 
     /* =====================================================
      * PAGINATION
      * ===================================================== */
 
-    Page<Contact> findByUserAndDeletedFalse(
+    Page<Contact> findByUserAndIsDeletedFalse(
             User user,
             Pageable pageable
     );
@@ -45,9 +45,9 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
      * ===================================================== */
 
     @Query("""
-        SELECT c FROM contacts c
+        SELECT c FROM Contact c
         WHERE c.user = :user
-          AND c.deleted = false
+          AND c.isDeleted = false
           AND (
                lower(c.firstName) LIKE lower(concat('%', :keyword, '%'))
             OR lower(c.lastName) LIKE lower(concat('%', :keyword, '%'))
@@ -65,16 +65,16 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
      * FAVORITES
      * ===================================================== */
 
-    List<Contact> findByUserAndIsFavoriteContactTrueAndDeletedFalse(User user);
+    List<Contact> findByUserAndIsFavoriteContactTrueAndIsDeletedFalse(User user);
 
-    long countByUserAndIsFavoriteContactTrueAndDeletedFalse(User user);
+    long countByUserAndIsFavoriteContactTrueAndIsDeletedFalse(User user);
 
 
     /* =====================================================
      * COUNTS / STATS
      * ===================================================== */
 
-    long countByUserAndDeletedFalse(User user);
+    long countByUserAndIsDeletedFalse(User user);
 
     long countByUser(User user);
 
@@ -92,7 +92,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
 
     boolean existsByIdAndUser(Long contactId, User user);
 
-    boolean existsByIdAndUserAndDeletedFalse(Long contactId, User user);
+    boolean existsByIdAndUserAndIsDeletedFalse(Long contactId, User user);
 
 
     /* =====================================================
@@ -101,7 +101,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
 
     @Query("""
         SELECT MAX(c.contactSequence)
-        FROM contacts c
+        FROM Contact c
         WHERE c.user = :user
     """)
     Long findMaxContactSequenceByUser(@Param("user") User user);

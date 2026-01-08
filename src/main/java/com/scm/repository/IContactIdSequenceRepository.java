@@ -25,7 +25,7 @@ public interface IContactIdSequenceRepository extends JpaRepository<ContactIdSeq
      * Find sequence row by userId (WITHOUT lock)
      * Used for read-only operations
      */
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    //@Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<ContactIdSequence> findByUserId(String userId);
 
     /*

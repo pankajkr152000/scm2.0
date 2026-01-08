@@ -3,11 +3,13 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-output.css
+# output.css
 .sql
 *.sql
 application.properties
 .doc
+.log
+*.log
 
 ### STS ###
 .apt_generated

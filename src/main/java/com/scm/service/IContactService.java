@@ -19,7 +19,7 @@ public interface IContactService {
     /**
      * Create a new contact for a user
      */
-    Contact createContact(User user, ContactFormDTO contactFormDTO);
+    void createContact(User user, ContactFormDTO contactFormDTO);
 
     /**
      * Save a new contact for a user
