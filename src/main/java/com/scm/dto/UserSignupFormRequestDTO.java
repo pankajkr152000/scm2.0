@@ -73,6 +73,7 @@ public class UserSignupFormRequestDTO {
     /** Phone number of the user */
     @ContactNumberValidator
     @NotBlank(message="Contact Number Required")
+    @Size(min=10, max=10)
     private String contactNumber;
 
     /** Short bio or description provided by the user */

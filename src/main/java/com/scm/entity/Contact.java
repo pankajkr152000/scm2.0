@@ -20,6 +20,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,7 +57,13 @@ import lombok.Setter;
  *   <li>Lazy fetching is applied to {@code socialLinkList} for optimization.</li>
  * </ul>
  */
-@Entity(name = "contacts")
+@Entity
+@Table(
+    name = "contacts",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "contact_code")
+    }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -82,13 +90,18 @@ public class Contact {
     private Long contactSequence;
 
     // ✅ READABLE CONTACT ID (CNT-001)
-    @Column(nullable = false)
+     @Column(
+        name = "contact_code",
+        nullable = false,
+        unique = true,
+        updatable = false
+    )
     private String contactCode;
 
     // ✅ SOFT DELETE FLAG
     @Builder.Default
     @Column(nullable = false)
-    private boolean deleted = false;
+    private boolean isDeleted = false;
 
     /**
      * Contact deletion date & time
@@ -112,6 +125,11 @@ public class Contact {
      */
     @Column(nullable = false)
     private String contactNumber;
+    
+    /**
+     * Email of the contact.
+     */
+    private String email;
 
     /**
      * DOB (Date of Birth) of the Contact
@@ -139,7 +157,7 @@ public class Contact {
      * Indicates whether this contact is marked as a favorite.
      */
     @Builder.Default
-    private boolean isFavoriteContact = false;
+    private boolean isFavoriteContact = true;
 
     /**
      * Website link of the contact.
@@ -155,6 +173,23 @@ public class Contact {
      * store the time of contact addition
      */
     private Date contactAdditionRecordDate;
+
+    /**
+     * contact is active or not
+     */
+    @Builder.Default
+    private boolean isActive = true;
+
+    /**
+     * contact is updated or not
+     */
+    @Builder.Default
+    private boolean isUpdated = false;
+
+    /**
+     * store the time of contact last get updated
+     */
+    private Date contactLastUpdateRecordDate;
     
     /**
      * User who owns this contact.

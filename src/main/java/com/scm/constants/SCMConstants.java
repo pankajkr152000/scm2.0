@@ -11,6 +11,13 @@ public class SCMConstants {
     public static final String DD_MM_UUUU = "dd-MM-uuuu";
 
     public static final String UUUU_MM_DD = "uuuu-MM-dd";
+    
+    // String Symbol
+    public static final String UNDERSCORE = "_";
+    
+    public static final String BACKSLASH = "/";
+    
+    public static final String DASH = "-";
 
     public enum PeriodType {
         DAYS {

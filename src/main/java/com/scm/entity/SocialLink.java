@@ -71,8 +71,12 @@ public class SocialLink {
      * - Relationship is managed via {@link Contacts}.
      * </p>
      */
-    @ManyToOne
-    @JoinColumn(name = "contact_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(
+        name = "contact_contact_code",
+        referencedColumnName = "contact_code",
+        nullable = false
+    )
     private Contact contact;
 
     /**
