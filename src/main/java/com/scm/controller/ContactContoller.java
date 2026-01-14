@@ -21,7 +21,7 @@ import com.scm.dto.ContactFormDTO;
 import com.scm.dto.SocialLinkDTO;
 import com.scm.entity.User;
 import com.scm.service.CurrentUserService;
-import com.scm.service.impl.ContactServiceImpl;
+import com.scm.service.IContactService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -32,11 +32,11 @@ import jakarta.validation.Valid;
 public class ContactContoller {
     private static final Logger log = LoggerFactory.getLogger(ContactContoller.class);
     
-    private final ContactServiceImpl contactServiceImpl;
+    private final IContactService contactService;
     private final CurrentUserService currentUserService;
 
-    public ContactContoller(ContactServiceImpl contactServiceImpl, CurrentUserService currentUserService) {
-        this.contactServiceImpl = contactServiceImpl;
+    public ContactContoller(IContactService contactService, CurrentUserService currentUserService) {
+        this.contactService = contactService;
         this.currentUserService = currentUserService;
     }
 
@@ -65,7 +65,7 @@ public class ContactContoller {
         MultipartFile image = contactFormDTO.getPicture();
         if (image != null && !image.isEmpty()) {
             log.info("File name: {}", image.getOriginalFilename());
-            log.info("File size: {}mb", image.getSize()/(1024*1024));
+            log.info("File size: {}kB", image.getSize()/(1024));
             log.info("Content type: {}", image.getContentType());
         }
         if(bindingResults.hasErrors()) {
@@ -76,7 +76,7 @@ public class ContactContoller {
         //Get the current user from Authentication 
         User user = currentUserService.getCurrentUser(authentication);
         // ✅ Save Contact if no duplicates
-        contactServiceImpl.createContact(user, contactFormDTO);
+        contactService.createContact(user, contactFormDTO, image);
 
         session.setAttribute("message", MessageType.CONTACT_SAVED.getDisplayValue());
         return "redirect:/user/contacts/add";
@@ -91,7 +91,6 @@ public class ContactContoller {
         if (picture == null || picture.isEmpty()) {
             return ResponseEntity.badRequest().body("No file uploaded");
         }
-
         // save image (DB / FS / cloud)
         return ResponseEntity.ok("Uploaded");
     }
