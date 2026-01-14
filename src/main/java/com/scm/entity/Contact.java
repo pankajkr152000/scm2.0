@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.annotations.NaturalId;
+
 import com.scm.constants.Gender;
 
 import jakarta.persistence.CascadeType;
@@ -19,6 +21,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -47,7 +50,7 @@ import lombok.Setter;
  *   <li>{@code user}              - {@link Users} : The user who owns this contact (Many-to-One relationship)</li>
  *   <li>{@code socialLinkList}    - {@link java.util.List}{@code <SocialLinks>} : List of social links associated with the contact</li>
  * </ol>
- *
+ * 
  * <p>Other notes:</p>
  * <ul>
  *   <li>Uses Lombok annotations {@code @Getter}, {@code @Setter}, {@code @NoArgsConstructor}, {@code @AllArgsConstructor}, {@code @Builder}.</li>
@@ -56,6 +59,28 @@ import lombok.Setter;
  *   <li>Cascade operations and orphan removal are enabled for {@code socialLinkList}.</li>
  *   <li>Lazy fetching is applied to {@code socialLinkList} for optimization.</li>
  * </ul>
+ *  1. address, 
+ *  2. contact_addition_record_date, 
+ *  3. contact_code, 
+ *  4. contact_last_update_record_date, 
+ *  5. contact_number, 
+ *  6. contact_sequence, 
+ *  7. date_of_birth,
+ *  8. deleted_at, 
+ *  9. description, 
+ * 10. email, 
+ * 11. first_name, 
+ * 12. gender, 
+ * 13. is_active, 
+ * 14. is_deleted, 
+ * 15. is_favorite_contact, 
+ * 16. is_updated, 
+ * 17. last_name, 
+ * 18. linked_in_link, 
+ * 19. picture, 
+ * 20. user_user_id, 
+ * 21. website_link, 
+ * 22. id
  */
 @Entity
 @Table(
@@ -90,7 +115,8 @@ public class Contact {
     private Long contactSequence;
 
     // ✅ READABLE CONTACT ID (CNT-001)
-     @Column(
+    @NaturalId(mutable = false)
+    @Column(
         name = "contact_code",
         nullable = false,
         unique = true,
@@ -99,10 +125,13 @@ public class Contact {
     private String contactCode;
 
     // ✅ SOFT DELETE FLAG
-    @Builder.Default
     @Column(nullable = false)
-    private boolean isDeleted = false;
+    private boolean isDeleted;
 
+    @PrePersist
+    public void prePersist() {
+        this.isDeleted = false;
+    }
     /**
      * Contact deletion date & time
      */
@@ -213,5 +242,17 @@ public class Contact {
     @Builder.Default
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<SocialLink> socialLinkList = new ArrayList<>();
+
+    // ✅ HELPER METHOD to add socialLink
+    public void addSocialLink(SocialLink link) {
+        this.socialLinkList.add(link);
+        link.setContact(this);
+    }
+
+    // (Optional but recommended)
+    public void removeSocialLink(SocialLink link) {
+        this.socialLinkList.remove(link);
+        link.setContact(null);
+    }
 }
 

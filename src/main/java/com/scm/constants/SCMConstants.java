@@ -17,9 +17,14 @@ public class SCMConstants {
     
     public static final String BACKSLASH = "/";
     
+    public static final String VERTCAL_BAR = "|";
+    
     public static final String DASH = "-";
+    
+    public static final String SPACE = " ";
 
     public enum PeriodType {
+
         DAYS {
             
         },

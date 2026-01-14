@@ -34,7 +34,7 @@ public class SocialLinkServiceImpl implements ISocialLinkService{
     @Override
     public void saveSocialLink(SocialLink socialLink) {
         socialLink.setSocialLinkRecordDate(DateUtils.getBusinessDate());
-        //socialLinkRepository.save(socialLink);
+        socialLinkRepository.save(socialLink);
     }
 
     @Override

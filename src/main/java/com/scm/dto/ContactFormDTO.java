@@ -51,7 +51,7 @@ public class ContactFormDTO {
     private String description;
 
     @Builder.Default
-    private boolean favoriteContact = false;
+    private boolean favoriteContact = true;
 
     private String image;
 

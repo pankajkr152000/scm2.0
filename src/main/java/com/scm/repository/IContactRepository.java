@@ -78,6 +78,9 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
 
     long countByUser(User user);
 
+    @Query(value = "SELECT nextval('CONTACT_IMAGE_SEQ')", nativeQuery = true)
+    long getNextImageSequence();
+
 
     /* =====================================================
      * SOFT DELETE / RESTORE
