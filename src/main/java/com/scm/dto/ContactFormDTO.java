@@ -59,8 +59,6 @@ public class ContactFormDTO {
     // 👇 OPTIONAL (default MALE)
     private Gender gender = Gender.UNKNOWN;
 
-    @ValidImageFile
-    private MultipartFile picture;
 
     // 👇 IMPORTANT
     //@ValidProfileLink(message="Invalid/Broken Profile Link")

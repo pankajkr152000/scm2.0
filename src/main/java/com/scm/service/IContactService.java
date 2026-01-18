@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.scm.dto.ContactFormDTO;
 import com.scm.entity.Contact;
@@ -19,8 +18,9 @@ public interface IContactService {
 
     /**
      * Create a new contact for a user
+     * @return 
      */
-    void createContact(User user, ContactFormDTO contactFormDTO, MultipartFile imageFile);
+    Contact createContact(User user, ContactFormDTO contactFormDTO);
 
     /**
      * Save a new contact for a user
