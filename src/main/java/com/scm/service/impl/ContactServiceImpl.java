@@ -1,6 +1,5 @@
 package com.scm.service.impl;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -11,20 +10,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.scm.constants.SCMConstants;
 import com.scm.dto.ContactFormDTO;
 import com.scm.dto.SocialLinkDTO;
 import com.scm.entity.Contact;
 import com.scm.entity.ContactIdSequence;
+import com.scm.entity.GlobalContactSequence;
 import com.scm.entity.SocialLink;
 import com.scm.entity.User;
 import com.scm.repository.IContactIdSequenceRepository;
 import com.scm.repository.IContactRepository;
-import com.scm.service.ContactImageService;
+import com.scm.repository.IGlobalContactSequenceRepository;
 import com.scm.service.IContactService;
-import com.scm.service.ISocialLinkService;
 import com.scm.utils.DateUtils;
 import com.scm.utils.SCMUtilities;
 
@@ -36,36 +34,41 @@ public class ContactServiceImpl implements IContactService{
     private static final int SEQ_LENGTH = 6;
 
     private final IContactIdSequenceRepository contactIdSequenceRepository;
-    private final ISocialLinkService socialLinkService;
+    private final IGlobalContactSequenceRepository globalContactSequenceRepository;
     private final IContactRepository contactRepository;
-    private final ContactImageService contactImageService;
+    
 
-    public ContactServiceImpl(IContactIdSequenceRepository contactIdSequenceRepository, ISocialLinkService socialLinkService, IContactRepository contactRepository,
-                                ContactImageService contactImageService
-    ) {
+    public ContactServiceImpl(IContactIdSequenceRepository contactIdSequenceRepository, IContactRepository contactRepository,
+                                IGlobalContactSequenceRepository globalContactSequenceRepository) {
         this.contactIdSequenceRepository = contactIdSequenceRepository;
-        this.socialLinkService = socialLinkService;
         this.contactRepository = contactRepository;
-        this.contactImageService = contactImageService;
+        this.globalContactSequenceRepository = globalContactSequenceRepository;
     }
 
     @Transactional
     @Override
-    public void createContact(User user, ContactFormDTO contactFormDTO, MultipartFile imageFile) {
+    public Contact createContact(User user, ContactFormDTO contactFormDTO) {
         Contact contact = new Contact();
         populateContact(user, contactFormDTO, contact);
-        contactRepository.save(contact); // MUST happen first
+        // contactRepository.save(contact); // MUST happen first
 
-        if (imageFile != null && !imageFile.isEmpty()) {
-            try {
-                String path = contactImageService.saveProfileImage(imageFile, contact);
-                contact.setPicture(path);
-            } catch (IOException ex) {
-                System.getLogger(ContactServiceImpl.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            }
-        }
+        // image handling must NOT throw unchecked exception
+        // if (imageFile != null && !imageFile.isEmpty()) {
+        //     try {
+        //         String path = contactImageService.saveProfileImage(imageFile, contact);
+        //         contact.setPicture(path);
+        //         contactRepository.save(contact);
+        //     } catch (IOException e) {
+        //         // OPTION 1: rethrow → rollback (clean)
+        //         throw new RuntimeException("Image upload failed", e);
+
+        //         // OPTION 2 (if image optional):
+        //         // log.warn("Image upload failed", e);
+        //     }
+        // }
 
         contactRepository.save(contact); // update picture path
+        return contact;
     }
 
     @Override
@@ -145,16 +148,23 @@ public class ContactServiceImpl implements IContactService{
 
 
     public void populateContact(User user, ContactFormDTO contactFormDTO, Contact contact) { 
-        Long nextContactSequence = getNextContactSequence(user);
-        contact.setContactSequence(nextContactSequence);
+        // 1️⃣ GLOBAL SEQUENCE (100% UNIQUE)
+        GlobalContactSequence globalSeq = globalContactSequenceRepository.save(new GlobalContactSequence());
+        long globalContactSeq = globalSeq.getId();
+
+        // 2️⃣ PER-USER SEQUENCE
+        Long nextPerUserContactSequence = getPerUserNextContactSequence(user);
+        contact.setContactSequence(nextPerUserContactSequence);
 
         String contactFirstName = SCMUtilities.firstNameFromString(contactFormDTO.getFullName());
         String contactLastName = SCMUtilities.lastNameFromString(contactFormDTO.getFullName());
 
-        String prefix = contactFirstName.substring(0, 3).toUpperCase();
-        String year = DateUtils.getYear();
-        String paddedSeq = String.format("%0" + SEQ_LENGTH + "d", nextContactSequence);
-        contact.setContactCode(prefix + SCMConstants.UNDERSCORE + year + SCMConstants.UNDERSCORE + paddedSeq);
+        // 3️⃣ NAME PREFIX
+        String prefix = contactFirstName.length() >= 3 ? contactFirstName.substring(0, 3).toUpperCase() : contactFirstName.toUpperCase();
+
+         // 4️⃣ CONTACT CODE
+        String contactCode = String.format("%s/%07d/%06d", prefix, globalContactSeq, nextPerUserContactSequence);
+        contact.setContactCode(contactCode);
 
         contact.setFirstName(contactFirstName);
         contact.setLastName(contactLastName);
@@ -174,17 +184,6 @@ public class ContactServiceImpl implements IContactService{
         contact.setGender(contactFormDTO.getGender());
         contact.setFavoriteContact(contactFormDTO.isFavoriteContact());
 
-        // social links if the contact
-        // SocialLink websiteSocialLink = new SocialLink();
-        // websiteSocialLink.setTitle(contactFormDTO.getSocialLinks().get(0).getTitle());
-        // websiteSocialLink.setLink(contactFormDTO.getSocialLinks().get(0).getLink());
-        // socialLinkService.createSocialLink(websiteSocialLink, contact);
-
-        // SocialLink linkedInSocialLink = new SocialLink();
-        // linkedInSocialLink.setTitle(contactFormDTO.getSocialLinks().get(0).getTitle());
-        // linkedInSocialLink.setLink(contactFormDTO.getSocialLinks().get(0).getLink());
-        // socialLinkService.createSocialLink(linkedInSocialLink, contact);
-
         if (contactFormDTO.getSocialLinks() != null) {
             for (SocialLinkDTO dto : contactFormDTO.getSocialLinks()) {
                 if(dto.getLink() != null && StringUtils.hasText(dto.getLink())) {
@@ -199,9 +198,7 @@ public class ContactServiceImpl implements IContactService{
             }
         }
 
-        //contact.setActive(true);
         contact.setContactAdditionRecordDate(DateUtils.getBusinessDate());
-        //contact.setPicture(year);
         contact.setUser(user);
         if(contactFormDTO.getSocialLinks() != null){
             if(contactFormDTO.getSocialLinks().get(0).getLink() != null && StringUtils.hasText(contactFormDTO.getSocialLinks().get(0).getLink()))
@@ -216,7 +213,7 @@ public class ContactServiceImpl implements IContactService{
      * contact id next sequence 
      */
    @Transactional
-    public Long getNextContactSequence(User user) {
+    public Long getPerUserNextContactSequence(User user) {
 
         ContactIdSequence seq = contactIdSequenceRepository
             .findByUserId(user.getUserId())
@@ -227,11 +224,11 @@ public class ContactServiceImpl implements IContactService{
                 return contactIdSequenceRepository.save(s); // ✅ SAVE HERE
             });
 
-        long next = seq.getCurrentValue() + 1;
-        seq.setCurrentValue(next);
+        long perUserNextSeq = seq.getCurrentValue() + 1;
+        seq.setCurrentValue(perUserNextSeq);
 
         contactIdSequenceRepository.save(seq); // ✅ SAVE UPDATE
-        return next;
+        return perUserNextSeq;
     }
 
 

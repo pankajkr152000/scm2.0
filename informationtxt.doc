@@ -122,4 +122,13 @@ Transaction starts
         Call repositories
         Contain business logic
 
-                       
+
+
+Golden rule (memorize this)
+If a transactional method catches a RuntimeException,
+the transaction is already dead.
+
+
+
+
+

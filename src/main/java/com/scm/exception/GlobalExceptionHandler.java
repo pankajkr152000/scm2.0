@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.UnexpectedRollbackException;
+import org.springframework.ui.Model;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -83,20 +85,20 @@ public class GlobalExceptionHandler {
     /**
      * Fallback for unhandled exceptions.
      */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponseDTO<Object>> handleGeneralException(Exception ex) {
-        // Log stacktrace for debugging
-        log.error("Unhandled exception occurred: {}", ex.getMessage(), ex);
+    // @ExceptionHandler(Exception.class)
+    // public ResponseEntity<ApiResponseDTO<Object>> handleGeneralException(Exception ex) {
+    //     // Log stacktrace for debugging
+    //     log.error("Unhandled exception occurred: {}", ex.getMessage(), ex);
 
-        ApiResponseDTO<Object> response = new ApiResponseDTO<>(
-                "error",
-                "Something went wrong: " + ex.getMessage(),
-                null
-        );
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(response);
-    }
+    //     ApiResponseDTO<Object> response = new ApiResponseDTO<>(
+    //             "error",
+    //             "Something went wrong: " + ex.getMessage(),
+    //             null
+    //     );
+    //     return ResponseEntity
+    //             .status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(response);
+    // }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<?> handleNoResource(NoResourceFoundException ex) {
@@ -110,5 +112,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body("Image size must be less than 2MB");
+    }
+
+    @ExceptionHandler(UnexpectedRollbackException.class)
+    public String handleTxException(
+            UnexpectedRollbackException ex,
+            Model model
+    ) {
+        model.addAttribute("message", "Transaction failed. Please retry.");
+        return "error";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handleGeneralException(
+            Exception ex,
+            Model model
+    ) {
+        model.addAttribute("message", ex.getMessage());
+        return "error";
     }
 }
