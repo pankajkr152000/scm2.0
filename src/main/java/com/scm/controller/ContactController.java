@@ -34,15 +34,15 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/user/contacts")
 
-public class ContactContoller {
-    private static final Logger log = LoggerFactory.getLogger(ContactContoller.class);
+public class ContactController {
+    private static final Logger log = LoggerFactory.getLogger(ContactController.class);
     
     private final IContactService contactService;
     private final CurrentUserService currentUserService;
     private final ContactImageService contactImageService;
     private final IContactRepository contactRepository;
 
-    public ContactContoller(IContactService contactService, CurrentUserService currentUserService, ContactImageService contactImageService,
+    public ContactController(IContactService contactService, CurrentUserService currentUserService, ContactImageService contactImageService,
                                         IContactRepository contactRepository) {
         this.contactService = contactService;
         this.currentUserService = currentUserService;
@@ -78,11 +78,17 @@ public class ContactContoller {
             log.info("File size: {}kB", picture.getSize()/(1024));
             log.info("Content type: {}", picture.getContentType());
         }
-        if(bindingResults.hasErrors()) {
-            session.setAttribute("message", MessageType.ERROR.getDisplayValue());
-            log.error("Contact Form details filled wrongly somewhere");
-            return "user/addUserContacts";
+        // if(bindingResults.hasErrors()) {
+        //     session.setAttribute("message", MessageType.ERROR.getDisplayValue());
+        //     log.error("Contact Form details filled wrongly somewhere");
+        //     return "user/addUserContacts";
+        // }
+        if (bindingResults.hasErrors()) {
+            log.warn("Contact Form details filled wrongly somewhere");
+            session.setAttribute("errorMessage", "Please fix the errors and try again");
+            return "user/addNewContact";
         }
+
         //Get the current user from Authentication 
         User user = currentUserService.getCurrentUser(authentication);
 
