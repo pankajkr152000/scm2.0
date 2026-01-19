@@ -23,6 +23,13 @@
                         Start Managing Contacts On Cloud....
                     </div>
 
+                    <!-- 🔴 SERVER-SIDE VALIDATION ERRORS (ADD THIS) -->
+                    <div id="serverErrors"
+                        class="mb-3 hidden text-red-600 text-sm text-center"
+                        th:if="${session.errorMessage}"
+                        th:text="${session.errorMessage}">
+                    </div>
+
                     <!-- Success / failure / error alert maessage fragment additoion -->
                     <div class="text-xs"
                         th:replace="~{fragments/messageAlert.html :: success-alert-message(messageType=${messageType})}">
@@ -40,6 +47,7 @@
     <script th:src="@{/js/avatar.js}"></script>
     <script th:src="@{/js/gender.js}"></script>
     <script th:src="@{/js/imageValidatorAndProgress.js}"></script>
+    <script th:src="@{/js/addNewContactFormValidator.js}"></script>
     <th:block data-th-replace="${script}"></th:block>
 </body>
 
