@@ -128,6 +128,37 @@ Golden rule (memorize this)
 If a transactional method catches a RuntimeException,
 the transaction is already dead.
 
+======================================================================================
+**************************************************************************************
+======================================================================================
+
+❌ What You Should NEVER Do
+private User user;        // ❌
+private static User user; // ❌
+
+🧠 Final Recommendation (for your SCM project)
+
+Since you’re building a learning + real-world Spring app:
+
+👉 Use this combo:
+
+@AuthenticationPrincipal User user → in controllers
+
+SecurityContextHolder → inside services
+
+@ModelAttribute → when user is needed everywhere
+
+This keeps your app:
+
+✅ Thread-safe
+
+✅ Secure
+
+✅ Production-grade
+
+======================================================================================
+**************************************************************************************
+======================================================================================
 
 
 

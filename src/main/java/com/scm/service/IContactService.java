@@ -61,7 +61,15 @@ public interface IContactService {
             int page,
             int size
     );
-
+    /**
+     * Get all contacts of a specific user
+     */
+    Page<Contact> getAllContactsListByUser(User user, int page, int size);
+    
+    /**
+     * Get all contacts of a specific user userId
+     */
+    //Page<Contact> getAllContactsListByUserId(User user);
 
     /* =====================================================
      * UPDATE

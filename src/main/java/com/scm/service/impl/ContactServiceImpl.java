@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -231,5 +234,24 @@ public class ContactServiceImpl implements IContactService{
         return perUserNextSeq;
     }
 
+    /**
+     * Get all contacts of a specific user
+     */
+    @Override
+    public Page<Contact> getAllContactsListByUser(User user, int page, int size) {
+         Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("firstName").ascending()
+        );
+        return contactRepository.findByUserAndIsDeletedFalse(user, pageable);
+    }
+    
+    /**
+     * Get all contacts of a specific user userId
+     */
+    // Page<Contact> getAllContactsListByUserId(User user) {
+
+    // }
 
 }

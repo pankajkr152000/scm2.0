@@ -34,7 +34,7 @@ public class ContactFormDTO {
     /** Phone number of the contact */
     @ContactNumberValidator
     @NotBlank(message="Contact Number Required")
-    @Size(min=10, max=10)
+    @Size(min=10, max=10, message="Contact number must be 10 digits")
     private String contactNumber;
 
     /** Email address of the contact */

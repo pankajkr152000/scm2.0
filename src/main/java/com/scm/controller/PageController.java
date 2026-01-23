@@ -72,13 +72,13 @@ public class PageController {
         return "services";
     }
 
-    @RequestMapping("/contact")
-    public String contact(Model model) {
-        // model.addAttribute("isTrue", false);
-        // System.out.println("This is contact page.");
-        log.info("Contact page.");
-        return "contact";
-    }
+    // @RequestMapping("/contact")
+    // public String contact(Model model) {
+    //     // model.addAttribute("isTrue", false);
+    //     // System.out.println("This is contact page.");
+    //     log.info("Contact page.");
+    //     return "contact";
+    // }
 
     @RequestMapping("/login")
     public String login(Model model) {

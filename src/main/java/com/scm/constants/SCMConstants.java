@@ -23,6 +23,12 @@ public class SCMConstants {
     
     public static final String SPACE = " ";
 
+    public static final String ZERO  = "0";
+
+    public static final String CONTACT_PAGES  = "10";
+
+    
+
     public enum PeriodType {
 
         DAYS {
