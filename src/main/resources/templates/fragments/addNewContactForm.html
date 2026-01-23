@@ -21,7 +21,7 @@
                     placeholder="Enter name here">
             </div>
             <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
-                                px-2 text-xs"></p>
+                                px-2 text-xs">Name Required</p>
         </div>
 
         <!-- if screen is large then contact & email will appear in one row that's why it is placed in a wrapper -->
@@ -41,7 +41,7 @@
                         placeholder="Enter name here">
                 </div>
                 <p th:if="${#fields.hasErrors('contactNumber')}" th:errors="*{contactNumber}" class="text-red-500
-                                    px-2 text-xs"></p>
+                                    px-2 text-xs">Enter a valid contact number</p>
             </div>
 
 
@@ -60,7 +60,7 @@
                         placeholder="Enter email here">
                 </div>
                 <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500
-                                    px-2 text-xs"></p>
+                                    px-2 text-xs">Enater a valid email</p>
             </div>
         </div> <!-- end of wrapper contact and email-->
 
@@ -74,8 +74,8 @@
                     class="block w-full bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
             </div>
-            <!-- <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
-                                px-2 text-xs"></p> -->
+            <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-red-500
+                                px-2 text-xs">Your contact address is exceeding!!</p>
         </div>
 
         <!-- 5. Contact Description -->
@@ -88,8 +88,8 @@
                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Write about your contact"></textarea>
             </div>
-            <!-- <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500
-                                px-2 text-xs"></p> -->
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-red-500
+                                px-2 text-xs">Your contact description is exceeding!!</p>
         </div>
 
         <!-- 6. Contact Favorite and Gender Selection -->
