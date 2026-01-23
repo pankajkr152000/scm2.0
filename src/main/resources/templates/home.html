@@ -13,17 +13,17 @@
 </head>
 
 <body>
-    <div id="content">
-        <h1 class="bg-emerald-200 fill-stone-600">
-            Welcome to My Home Page of Smart Contact Manager <br>
-            <p> Name : <span th:text="${name}"></span></p>
-            <p>Company name : <span data-th-text="${company}"></span></p>
-        </h1>
-        <p>Company name : <span data-th-text="${company}"></span></p>
-        <p>
-            I am currently learing springboot + thymeleaf <br>
-            for styling i am using <b>tailwindcss.</b>
-        </p>
+    <div class="sm:pl-64 pt-16 min-h-[calc(100vh-4rem)] bg-indigo-50 text-gray-950 dark:bg-gray-700 dark:text-gray-50 p-4"
+        id="content">
+        <div th:if="${loggedInUser}">
+            <div data-th-replace="~{user/userSidebar :: user-sidebar}"></div>
+        </div>
+
+        <div
+            class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base  ">
+            welcome to home page
+    
+        </div>
     </div>
     <script>console.log("home page");</script>
 </body>
