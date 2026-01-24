@@ -96,24 +96,34 @@ public class ContactController {
             return "user/addUserContacts";
         }
         
-        //MultipartFile image = contactFormDTO.getPicture();
-        if (picture != null && !picture.isEmpty()) {
-            log.info("File name: {}", picture.getOriginalFilename());
-            log.info("File size: {}kB", picture.getSize()/(1024));
-            log.info("Content type: {}", picture.getContentType());
-        }
         //Get the current user from Authentication 
         // user = currentUserService.getCurrentUser(authentication);
 
         // ✅ Save Contact if no duplicates
         Contact contact = contactService.createContact(user, contactFormDTO);
 
-        // image handling must NOT throw unchecked exception
+        // image handling must NOT throw unchecked exception and image upload cannot came in transactional process
+        setContactPicture(contact, picture); 
+
+        contactRepository.save(contact);
+
+        session.setAttribute("message", MessageType.CONTACT_SAVED.getDisplayValue());
+        return "redirect:/user/contacts/add";
+    }
+    /**
+     * set the contact image if photo is not provided then it will take default image according to gender selection
+     */
+    public void setContactPicture(Contact contact, MultipartFile picture) {
         if (picture != null && !picture.isEmpty()) {
-            try {
+            try {  
+                //MultipartFile image = contactFormDTO.getPicture();
+                log.info("File name: {}", picture.getOriginalFilename());
+                log.info("File size: {}kB", picture.getSize()/(1024));
+                log.info("Content type: {}", picture.getContentType());
+        
                 String path = contactImageService.saveProfileImage(picture, contact);
                 contact.setPicture(path);
-                contactRepository.save(contact);
+                
             } catch (IOException e) {
                 // OPTION 1: rethrow → rollback (clean)
                 throw new RuntimeException("Image upload failed", e);
@@ -121,11 +131,23 @@ public class ContactController {
                 // OPTION 2 (if image optional):
                 // log.warn("Image upload failed", e);
             }
+        } else {
+            if(null == contact.getGender()) {
+                contact.setPicture(SCMConstants.DEFAULT_IMAGE);
+            } else switch (contact.getGender()) {
+                case MALE -> {
+                    contact.setPicture(SCMConstants.DEFAULT_MALE);
+                }
+                case FEMALE -> {
+                    contact.setPicture(SCMConstants.DEFAULT_FEMALE);
+                }
+                default -> {
+                    contact.setPicture(SCMConstants.DEFAULT_IMAGE);
+                }
+            }
         }
-
-        session.setAttribute("message", MessageType.CONTACT_SAVED.getDisplayValue());
-        return "redirect:/user/contacts/add";
     }
+
 
     // 2️⃣ AJAX image upload (progress bar)
     @PostMapping("/upload-avatar")

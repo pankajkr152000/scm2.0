@@ -59,12 +59,8 @@
                 </div>
                 <label for="input-group-1" class="sr-only">Search</label>
                 <div class="relative">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                                d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                        </svg>
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none dark:cursor-pointer dark:bg-slate-500">
+                        <i class="fa-solid fa-magnifying-glass fa-bounce "></i>
                     </div>
                     <input type="text" id="input-group-1"
                         class="block w-full max-w-96 ps-9 pe-3 py-2 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
@@ -75,14 +71,14 @@
                 <thead
                     class="text-sm text-body bg-neutral-secondary-medium border-b border-t border-default-medium">
                     <tr>
-                        <th scope="col" class="px-6 py-3  font-medium">
+                        <th scope="col" class="px-6 py-3 font-medium">
                             Name
                         </th>
                         <th scope="col" class="px-6 py-3 font-medium">
-                            Position
+                            Phone
                         </th>
                         <th scope="col" class="px-6 py-3 font-medium">
-                            Status
+                            Links
                         </th>
                         <th scope="col" class="px-6 py-3 font-medium">
                             Action
@@ -90,36 +86,51 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
+                    <tr  th:each="contact : ${contacts}"
+                        class="bg-neutral-primary-soft border-b border-default  rounded-lg  hover:bg-neutral-secondary-medium">
                         <td class="w-4 p-4">
                             <div class="flex items-center">
                                 <input id="table-checkbox-46" type="checkbox" value=""
-                                    class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft">
+                                    class="w-4 h-4 border border-default-medium rounded-full bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft appearance-auto accent-blue-500">
                                 <label for="table-checkbox-46" class="sr-only">Table checkbox</label>
                             </div>
                         </td>
                         <th scope="row" class="flex items-center px-6 py-4 text-heading whitespace-nowrap">
-                            <img class="w-10 h-10 rounded-full" src="/docs/images/people/profile-picture-1.jpg"
-                                alt="Jese image">
+                            <img class="w-10 h-10 rounded-full" th:src="*{contact.picture}" onerror="this.src='/images/avatar-male.svg'" alt="Contact Image">
                             <div class="ps-3">
-                                <div class="text-base font-semibold">Neil Sims</div>
-                                <div class="font-normal text-body">neil.sims@flowbite.com</div>
+                                <div class="text-base font-semibold" th:text="*{contact.lastName != null and !#strings.isEmpty(contact.lastName) ? contact.firstName + ' ' + contact.lastName : contact.firstName}">Neil Sims</div>
+                                <div class="font-normal text-body" th:text="*{contact.email}">neil.sims@flowbite.com</div>
                             </div>
                         </th>
                         <td class="px-6 py-4">
-                            React Developer
+                            <!-- <i class="fa-solid fa-phone fa-shake h-4 w-4"></i> -->
+                             <i class="fa-solid fa-phone h-4 w-4"></i>
+                            <span class="font-normal text-body" th:text="*{contact.contactNumber}"></span>
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center">
-                                <div class="h-2.5 w-2.5 rounded-full bg-success me-2"></div> Online
+                                <a th:if="${!#strings.isEmpty(contact.websiteLink)}"
+                                th:href="${contact.websiteLink}"
+                                target="_blank"
+                                class="text-blue-600 hover:underline">
+                                    Website
+                                </a>
+
+                                <a th:if="${!#strings.isEmpty(contact.linkedInLink)}"
+                                th:href="${contact.linkedInLink}"
+                                target="_blank"
+                                class="text-blue-600 hover:underline">
+                                    LinkedIn
+                                </a>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <a href="#" class="font-medium text-fg-brand hover:underline">Edit user</a>
+                            <a href="#" class="font-semibold text-fg-brand hover:underline text-blue-700 dark:text-blue-500 ">Edit user</a>
                         </td>
-                    </tr>                    
+                    </tr>            
                 </tbody>
+                
+
             </table>
         </div>
     </div>

@@ -27,6 +27,15 @@ public class SCMConstants {
 
     public static final String CONTACT_PAGES  = "10";
 
+    // contact default image path
+    public static final String DEFAULT_IMAGE  = "/images/avatar-default.png";
+
+    public static final String DEFAULT_MALE  = "/images/avatar-male.svg";
+
+    public static final String DEFAULT_FEMALE  = "/images/avatar-female.webp";
+
+
+
     
 
     public enum PeriodType {
