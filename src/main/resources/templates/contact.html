@@ -96,7 +96,9 @@
                             </div>
                         </td>
                         <th scope="row" class="flex items-center px-6 py-4 text-heading whitespace-nowrap">
-                            <img class="w-10 h-10 rounded-full" th:src="*{contact.picture}" onerror="this.src='/images/avatar-male.svg'" alt="Contact Image">
+                            <img class="w-10 h-10 rounded-full" 
+                            th:src="@{*{contact.picture}}" 
+                            onerror="this.src='/images/avatar-default.png'" alt="Contact Image">
                             <div class="ps-3">
                                 <div class="text-base font-semibold" th:text="*{contact.lastName != null and !#strings.isEmpty(contact.lastName) ? contact.firstName + ' ' + contact.lastName : contact.firstName}">Neil Sims</div>
                                 <div class="font-normal text-body" th:text="*{contact.email}">neil.sims@flowbite.com</div>
@@ -115,7 +117,7 @@
                                 class="text-blue-600 hover:underline">
                                     Website
                                 </a>
-
+                                <div>&emsp;</div>
                                 <a th:if="${!#strings.isEmpty(contact.linkedInLink)}"
                                 th:href="${contact.linkedInLink}"
                                 target="_blank"

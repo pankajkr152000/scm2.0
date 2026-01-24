@@ -58,8 +58,9 @@ public class ContactController {
     /**
      * Centralize user fetch via @ModelAttribute (Very Useful)
      * If many methods need the user, do this once:
+     * vvi : Disable binding for currentUser because current user details changed with contact details that's why binding == false
      */
-    @ModelAttribute("currentUser")
+    @ModelAttribute(name = "currentUser", binding = false)
     public User addCurrentUser(Authentication authentication) {
         return currentUserService.getCurrentUser(authentication);
     }
@@ -99,13 +100,15 @@ public class ContactController {
         //Get the current user from Authentication 
         // user = currentUserService.getCurrentUser(authentication);
 
+        log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
         // ✅ Save Contact if no duplicates
         Contact contact = contactService.createContact(user, contactFormDTO);
-
+        log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
         // image handling must NOT throw unchecked exception and image upload cannot came in transactional process
         setContactPicture(contact, picture); 
-
+        
         contactRepository.save(contact);
+        log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
 
         session.setAttribute("message", MessageType.CONTACT_SAVED.getDisplayValue());
         return "redirect:/user/contacts/add";
@@ -122,6 +125,7 @@ public class ContactController {
                 log.info("Content type: {}", picture.getContentType());
         
                 String path = contactImageService.saveProfileImage(picture, contact);
+                log.info("File path : {}", path);
                 contact.setPicture(path);
                 
             } catch (IOException e) {

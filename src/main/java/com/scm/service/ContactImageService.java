@@ -56,7 +56,7 @@ public class ContactImageService {
         Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
 
         // 5️⃣ Return relative path (stored in DB)
-        return "uploads/contacts/" + contact.getId() + "/" + fileName;
+        return "/uploads/contacts/" + contact.getId() + "/" + fileName;
     }
 
     // DEFAULT AVATAR

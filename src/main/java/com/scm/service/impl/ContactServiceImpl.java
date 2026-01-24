@@ -51,26 +51,13 @@ public class ContactServiceImpl implements IContactService{
     @Transactional
     @Override
     public Contact createContact(User user, ContactFormDTO contactFormDTO) {
+        log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
         Contact contact = new Contact();
         populateContact(user, contactFormDTO, contact);
-        // contactRepository.save(contact); // MUST happen first
-
-        // image handling must NOT throw unchecked exception
-        // if (imageFile != null && !imageFile.isEmpty()) {
-        //     try {
-        //         String path = contactImageService.saveProfileImage(imageFile, contact);
-        //         contact.setPicture(path);
-        //         contactRepository.save(contact);
-        //     } catch (IOException e) {
-        //         // OPTION 1: rethrow → rollback (clean)
-        //         throw new RuntimeException("Image upload failed", e);
-
-        //         // OPTION 2 (if image optional):
-        //         // log.warn("Image upload failed", e);
-        //     }
-        // }
-
+        
+        log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
         contactRepository.save(contact); // update picture path
+        log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
         return contact;
     }
 
