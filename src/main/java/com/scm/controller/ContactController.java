@@ -59,11 +59,12 @@ public class ContactController {
      * Centralize user fetch via @ModelAttribute (Very Useful)
      * If many methods need the user, do this once:
      * vvi : Disable binding for currentUser because current user details changed with contact details that's why binding == false
+     * it is better to remove this method this method is very dangerous
      */
-    @ModelAttribute(name = "currentUser", binding = false)
-    public User addCurrentUser(Authentication authentication) {
-        return currentUserService.getCurrentUser(authentication);
-    }
+    // @ModelAttribute(name = "currentUser", binding = false)
+    // public User addCurrentUser(Authentication authentication) {
+    //     return currentUserService.getCurrentUser(authentication);
+    // }
 
     @GetMapping("/add")
     public String addUserContact(Model model) {
@@ -83,7 +84,7 @@ public class ContactController {
     }
     
     @PostMapping("/addNewContact")
-    public String addNewContact(@ModelAttribute("currentUser") User user, 
+    public String addNewContact(Authentication authentication, 
                                 @Valid @ModelAttribute ContactFormDTO contactFormDTO, 
                                 @RequestParam(name = "picture", required = false) MultipartFile picture,
                                 BindingResult bindingResults, 
@@ -98,7 +99,7 @@ public class ContactController {
         }
         
         //Get the current user from Authentication 
-        // user = currentUserService.getCurrentUser(authentication);
+        User user = currentUserService.getCurrentUser(authentication);
 
         log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
         // ✅ Save Contact if no duplicates
@@ -172,12 +173,15 @@ public class ContactController {
 
     @GetMapping("/allContacts")
     public String listContacts(
-            @ModelAttribute("currentUser") User user,
+            Authentication authentication,
             @RequestParam(defaultValue = SCMConstants.ZERO) int page,
             @RequestParam(defaultValue = SCMConstants.CONTACT_PAGES) int size,
             Model model
     ) {
-
+                
+        //Get the current user from Authentication 
+        User user = currentUserService.getCurrentUser(authentication);
+        
         Page<Contact> contactPage =
                 contactService.getAllContactsListByUser(user, page, size);
 

@@ -3,12 +3,10 @@ package com.scm.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
 
 import com.scm.constants.Gender;
 import com.scm.validation.annotation.ContactNumberValidator;
 import com.scm.validation.annotation.ValidDOBString;
-import com.scm.validation.annotation.ValidImageFile;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
