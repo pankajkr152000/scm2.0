@@ -56,18 +56,18 @@ public class ContactImageService {
         Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
 
         // 5️⃣ Return relative path (stored in DB)
-        return "uploads/contacts/" + contact.getId() + "/" + fileName;
+        return "/uploads/contacts/" + contact.getId() + "/" + fileName;
     }
 
     // DEFAULT AVATAR
     public String getProfileImageOrDefault(String imagePath, Gender gender) {
         if (imagePath == null || imagePath.isBlank()) {
             if(null == gender)
-                return "/images/avatar-default.png";
+                return SCMConstants.DEFAULT_IMAGE;
             else return switch (gender) {
-                case MALE -> "/images/avatar-male.svg";
-                case FEMALE -> "/images/avatar-female.webp";
-                default -> "/images/avatar-default.png";
+                case MALE -> SCMConstants.DEFAULT_MALE;
+                case FEMALE -> SCMConstants.DEFAULT_FEMALE;
+                default -> SCMConstants.DEFAULT_IMAGE;
             };
         }
         return "/" + imagePath;

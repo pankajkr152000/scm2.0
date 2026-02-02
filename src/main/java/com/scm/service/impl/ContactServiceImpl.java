@@ -34,7 +34,7 @@ public class ContactServiceImpl implements IContactService{
 
     private final Logger log = LoggerFactory.getLogger(ContactServiceImpl.class);
     
-    private static final int SEQ_LENGTH = 6;
+    // private static final int SEQ_LENGTH = 6;
 
     private final IContactIdSequenceRepository contactIdSequenceRepository;
     private final IGlobalContactSequenceRepository globalContactSequenceRepository;
@@ -51,26 +51,14 @@ public class ContactServiceImpl implements IContactService{
     @Transactional
     @Override
     public Contact createContact(User user, ContactFormDTO contactFormDTO) {
+        log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
         Contact contact = new Contact();
-        populateContact(user, contactFormDTO, contact);
-        // contactRepository.save(contact); // MUST happen first
-
-        // image handling must NOT throw unchecked exception
-        // if (imageFile != null && !imageFile.isEmpty()) {
-        //     try {
-        //         String path = contactImageService.saveProfileImage(imageFile, contact);
-        //         contact.setPicture(path);
-        //         contactRepository.save(contact);
-        //     } catch (IOException e) {
-        //         // OPTION 1: rethrow → rollback (clean)
-        //         throw new RuntimeException("Image upload failed", e);
-
-        //         // OPTION 2 (if image optional):
-        //         // log.warn("Image upload failed", e);
-        //     }
-        // }
-
+        contact.setUser(user);
+        populateContact(contactFormDTO, contact);
+        
+        log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
         contactRepository.save(contact); // update picture path
+        log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
         return contact;
     }
 
@@ -150,13 +138,13 @@ public class ContactServiceImpl implements IContactService{
     }
 
 
-    public void populateContact(User user, ContactFormDTO contactFormDTO, Contact contact) { 
+    public void populateContact(ContactFormDTO contactFormDTO, Contact contact) { 
         // 1️⃣ GLOBAL SEQUENCE (100% UNIQUE)
         GlobalContactSequence globalSeq = globalContactSequenceRepository.save(new GlobalContactSequence());
         long globalContactSeq = globalSeq.getId();
 
         // 2️⃣ PER-USER SEQUENCE
-        Long nextPerUserContactSequence = getPerUserNextContactSequence(user);
+        Long nextPerUserContactSequence = getPerUserNextContactSequence(contact);
         contact.setContactSequence(nextPerUserContactSequence);
 
         String contactFirstName = SCMUtilities.firstNameFromString(contactFormDTO.getFullName());
@@ -202,7 +190,7 @@ public class ContactServiceImpl implements IContactService{
         }
 
         contact.setContactAdditionRecordDate(DateUtils.getBusinessDate());
-        contact.setUser(user);
+        
         if(contactFormDTO.getSocialLinks() != null){
             if(contactFormDTO.getSocialLinks().get(0).getLink() != null && StringUtils.hasText(contactFormDTO.getSocialLinks().get(0).getLink()))
                 contact.setWebsiteLink(contactFormDTO.getSocialLinks().get(0).getLink());
@@ -216,13 +204,13 @@ public class ContactServiceImpl implements IContactService{
      * contact id next sequence 
      */
    @Transactional
-    public Long getPerUserNextContactSequence(User user) {
+    public Long getPerUserNextContactSequence(Contact contact) {
 
         ContactIdSequence seq = contactIdSequenceRepository
-            .findByUserId(user.getUserId())
+            .findByUserId(contact.getUser().getUserId())
             .orElseGet(() -> {
                 ContactIdSequence s = new ContactIdSequence();
-                s.setUserId(user.getUserId());
+                s.setUserId(contact.getUser().getUserId());
                 s.setCurrentValue(0L);
                 return contactIdSequenceRepository.save(s); // ✅ SAVE HERE
             });
@@ -238,11 +226,13 @@ public class ContactServiceImpl implements IContactService{
      * Get all contacts of a specific user
      */
     @Override
-    public Page<Contact> getAllContactsListByUser(User user, int page, int size) {
+    public Page<Contact> getAllContactsListByUser(User user, int page, int size, String sortBy, String sortDirection) {
+        Sort sort = sortDirection.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
          Pageable pageable = PageRequest.of(
                 page,
                 size,
-                Sort.by("firstName").ascending()
+                sort
         );
         return contactRepository.findByUserAndIsDeletedFalse(user, pageable);
     }

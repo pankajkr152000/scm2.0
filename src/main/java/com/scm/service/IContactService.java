@@ -64,7 +64,7 @@ public interface IContactService {
     /**
      * Get all contacts of a specific user
      */
-    Page<Contact> getAllContactsListByUser(User user, int page, int size);
+    Page<Contact> getAllContactsListByUser(User user, int page, int size, String sortBy, String sortDirection);
     
     /**
      * Get all contacts of a specific user userId
