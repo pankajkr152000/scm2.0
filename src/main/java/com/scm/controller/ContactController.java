@@ -174,8 +174,10 @@ public class ContactController {
     @GetMapping("/allContacts")
     public String listContacts(
             Authentication authentication,
-            @RequestParam(defaultValue = SCMConstants.ZERO) int page,
-            @RequestParam(defaultValue = SCMConstants.CONTACT_PAGES) int size,
+            @RequestParam(value = "page", defaultValue = SCMConstants.ZERO) int page,
+            @RequestParam(value = "size", defaultValue = SCMConstants.MAX_CONTACTS_PER_PAGE) int size,
+            @RequestParam(value="sortBy" , defaultValue = "firstName") String sortBy, 
+            @RequestParam(value ="sortDirection", defaultValue = SCMConstants.ASCENDING_ORDER) String sortDirection,
             Model model
     ) {
                 
@@ -183,11 +185,12 @@ public class ContactController {
         User user = currentUserService.getCurrentUser(authentication);
         
         Page<Contact> contactPage =
-                contactService.getAllContactsListByUser(user, page, size);
+                contactService.getAllContactsListByUser(user, page, size, sortBy, sortDirection);
 
-        model.addAttribute("contacts", contactPage.getContent());
+        model.addAttribute("contactPage", contactPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", contactPage.getTotalPages());
+        model.addAttribute("pageSize", SCMConstants.MAX_CONTACT_PER_PAGE);
 
         return "contact";
     }

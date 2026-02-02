@@ -226,11 +226,13 @@ public class ContactServiceImpl implements IContactService{
      * Get all contacts of a specific user
      */
     @Override
-    public Page<Contact> getAllContactsListByUser(User user, int page, int size) {
+    public Page<Contact> getAllContactsListByUser(User user, int page, int size, String sortBy, String sortDirection) {
+        Sort sort = sortDirection.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
          Pageable pageable = PageRequest.of(
                 page,
                 size,
-                Sort.by("firstName").ascending()
+                sort
         );
         return contactRepository.findByUserAndIsDeletedFalse(user, pageable);
     }
