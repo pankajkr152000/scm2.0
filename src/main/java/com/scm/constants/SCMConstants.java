@@ -27,7 +27,7 @@ public class SCMConstants {
 
     public static final int MAX_CONTACT_PER_PAGE  = 3;
     
-    public static final String MAX_CONTACTS_PER_PAGE  = "10";
+    public static final String MAX_CONTACTS_PER_PAGE  = "3";
     // contact default image path
     public static final String DEFAULT_IMAGE  = "/images/avatar-default.png";
 
