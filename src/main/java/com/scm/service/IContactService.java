@@ -67,6 +67,11 @@ public interface IContactService {
     Page<Contact> getAllContactsListByUser(User user, int page, int size, String sortBy, String sortDirection);
     
     /**
+     * Get all contacts of a specific user
+     */
+    Page<Contact> getAllContactsListByUser(User user, String keyword, String query, int page, int size, String sortBy, String sortDirection);
+    
+    /**
      * Get all contacts of a specific user userId
      */
     //Page<Contact> getAllContactsListByUserId(User user);

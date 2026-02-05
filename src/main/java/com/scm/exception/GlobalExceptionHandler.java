@@ -9,14 +9,15 @@ import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.ui.Model;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.scm.constants.ErrorCodes;
 import com.scm.dto.ApiResponseDTO;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -33,8 +34,8 @@ import lombok.extern.slf4j.Slf4j;
  * </ul>
  * </p>
  */
+@RestControllerAdvice(basePackages = "com.scm.api")
 @Slf4j
-@ControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
@@ -82,24 +83,6 @@ public class GlobalExceptionHandler {
                 .body(response);
     }
 
-    /**
-     * Fallback for unhandled exceptions.
-     */
-    // @ExceptionHandler(Exception.class)
-    // public ResponseEntity<ApiResponseDTO<Object>> handleGeneralException(Exception ex) {
-    //     // Log stacktrace for debugging
-    //     log.error("Unhandled exception occurred: {}", ex.getMessage(), ex);
-
-    //     ApiResponseDTO<Object> response = new ApiResponseDTO<>(
-    //             "error",
-    //             "Something went wrong: " + ex.getMessage(),
-    //             null
-    //     );
-    //     return ResponseEntity
-    //             .status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //             .body(response);
-    // }
-
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<?> handleNoResource(NoResourceFoundException ex) {
         // log as DEBUG, not ERROR
@@ -123,12 +106,30 @@ public class GlobalExceptionHandler {
         return "error";
     }
 
+    // @ExceptionHandler(Exception.class)
+    // public String handleGeneralException(
+    //         Exception ex,
+    //         Model model
+    // ) {
+    //     model.addAttribute("message", ex.getMessage());
+    //     return "error";
+    // }
+
     @ExceptionHandler(Exception.class)
-    public String handleGeneralException(
+    public Object handleException(
             Exception ex,
-            Model model
-    ) {
-        model.addAttribute("message", ex.getMessage());
-        return "error";
+            HttpServletRequest request,
+            Model model) {
+
+        if (request.getRequestURI().startsWith("/api")) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", ex.getMessage()));
+        }
+
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "error/error-page";
     }
 }
+
+

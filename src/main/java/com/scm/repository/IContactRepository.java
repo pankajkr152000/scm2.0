@@ -118,4 +118,82 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
 
     Page<Contact> findByUser(User user, Pageable pageable);
 
+    /* =========================
+       SEARCH : ALL CONTACTS
+       ========================= */
+    @Query("""
+        SELECT c FROM Contact c
+        WHERE c.isDeleted = false
+        AND (
+            LOWER(c.firstName) LIKE LOWER(CONCAT('%', :query, '%'))
+            OR LOWER(c.lastName) LIKE LOWER(CONCAT('%', :query, '%'))
+            OR LOWER(c.email) LIKE LOWER(CONCAT('%', :query, '%'))
+            OR c.contactNumber LIKE CONCAT('%', :query, '%')
+        )
+    """)
+    Page<Contact> searchAll(
+            @Param("query") String query,
+            Pageable pageable
+    );
+
+    /* =========================
+       SEARCH : ACTIVE CONTACTS
+       ========================= */
+    @Query("""
+        SELECT c FROM Contact c
+        WHERE c.isDeleted = false
+        AND c.isActive = true
+        AND (
+            LOWER(c.firstName) LIKE LOWER(CONCAT('%', :query, '%'))
+            OR LOWER(c.lastName) LIKE LOWER(CONCAT('%', :query, '%'))
+            OR LOWER(c.email) LIKE LOWER(CONCAT('%', :query, '%'))
+            OR c.contactNumber LIKE CONCAT('%', :query, '%')
+        )
+    """)
+    Page<Contact> searchActive(
+            @Param("query") String query,
+            Pageable pageable
+    );
+
+    /* =========================
+       SEARCH : FAVORITE CONTACTS
+       ========================= */
+    @Query("""
+        SELECT c FROM Contact c
+        WHERE c.isDeleted = false
+        AND c.isFavoriteContact = true
+        AND (
+            LOWER(c.firstName) LIKE LOWER(CONCAT('%', :query, '%'))
+            OR LOWER(c.lastName) LIKE LOWER(CONCAT('%', :query, '%'))
+            OR LOWER(c.email) LIKE LOWER(CONCAT('%', :query, '%'))
+            OR c.contactNumber LIKE CONCAT('%', :query, '%')
+        )
+    """)
+    Page<Contact> searchFavorite(
+            @Param("query") String query,
+            Pageable pageable
+    );
+
+// ✅ (STRONGLY RECOMMENDED) — User-scoped search
+// Since contacts belong to a user, you should never return another user’s contacts.
+
+// 🔒 Safer version (with user filter)
+
+        @Query("""
+        SELECT c FROM Contact c
+        WHERE c.isDeleted = false
+        AND c.user = :user
+        AND (
+                LOWER(c.firstName) LIKE LOWER(CONCAT('%', :query, '%'))
+                OR LOWER(c.lastName) LIKE LOWER(CONCAT('%', :query, '%'))
+                OR LOWER(c.email) LIKE LOWER(CONCAT('%', :query, '%'))
+                OR c.contactNumber LIKE CONCAT('%', :query, '%')
+        )
+        """)
+        Page<Contact> searchAllByUser(
+                @Param("user") User user,
+                @Param("query") String query,
+                Pageable pageable
+        );
+
 }

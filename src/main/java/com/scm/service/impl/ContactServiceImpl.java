@@ -227,7 +227,7 @@ public class ContactServiceImpl implements IContactService{
      */
     @Override
     public Page<Contact> getAllContactsListByUser(User user, int page, int size, String sortBy, String sortDirection) {
-        Sort sort = sortDirection.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Sort sort = sortDirection.equals(SCMConstants.DESCENDING_ORDER) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
 
          Pageable pageable = PageRequest.of(
                 page,
@@ -241,7 +241,49 @@ public class ContactServiceImpl implements IContactService{
      * Get all contacts of a specific user userId
      */
     // Page<Contact> getAllContactsListByUserId(User user) {
+// }
+    @Override
+    public Page<Contact> getAllContactsListByUser(
+            User user,
+            String keyword,
+            String query,
+            int page,
+            int size,
+            String sortBy,
+            String direction) {
 
-    // }
+        String resolvedSortBy = resolveSortField(sortBy);
+
+        Sort sort = direction.equalsIgnoreCase(SCMConstants.DESCENDING_ORDER)
+                ? Sort.by(resolvedSortBy).descending()
+                : Sort.by(resolvedSortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return switch (keyword) {
+            case "active" ->
+                contactRepository.searchActive(query,pageable);
+            case "favorite" ->
+                contactRepository.searchFavorite(query, pageable);
+            default ->
+                contactRepository.searchAllByUser(user, query, pageable);
+        };
+    }
+
+    public void softDeleteContacts(List<Long> ids) {
+        List<Contact> contacts = contactRepository.findAllById(ids);
+        contacts.forEach(c -> c.setDeleted(true));
+        contactRepository.saveAll(contacts);
+    }
+
+
+    private String resolveSortField(String sortBy) {
+        return switch (sortBy) {
+            case "name" -> "firstName";      // UI name → entity field
+            case "createdAt" -> "contactAdditionRecordDate";
+            case "email" -> "email";
+            default -> "firstName";
+        };
+    }
 
 }
