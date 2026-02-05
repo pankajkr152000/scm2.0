@@ -163,4 +163,11 @@ This keeps your app:
 to add backslash / in the starting of a file path url
 th:src="@{'/' + *{contact.picture}}" 
 
+Golden Thymeleaf rule (remember forever)
+Syntax	Scope
+${...}	Model attributes
+*{...}	th:object
+#{...}	Messages
+@{...}	URLs
+
 

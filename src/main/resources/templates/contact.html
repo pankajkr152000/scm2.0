@@ -18,8 +18,9 @@
         <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
             <div class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 p-4">
                 <div>
-                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="inline-flex items-center gap-2 bg-gray-700 text-white hover:bg-gray-600
-                                        dark:bg-gray-400 dark:text-black px-4 py-2 rounded-lg text-sm" type="button">
+                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
+                        class="inline-flex items-center gap-2 bg-indigo-600 text-white hover:bg-indigo-500
+                                        dark:bg-gray-900 dark:text-white dark:hover:bg-gray-600 px-4 py-2 rounded-lg text-sm" type="button">
                         Action
                         <svg class="w-4 h-4 ms-1.5 -me-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -29,42 +30,55 @@
                     </button>
                     <!-- Dropdown menu -->
                     <div id="dropdown"
-                        class="absolute top-full left-0 mt-2 z-50 hidden bg-gray-700 border border-gray-200 rounded-lg shadow-lg w-44">
+                        class="absolute top-full left-0 mt-2 z-50 hidden bg-indigo-100  border border-gray-200 dark:bg-slate-500 rounded-lg shadow-lg w-44">
                         <ul class="p-2 text-sm max-h-60 overflow-y-auto" aria-labelledby="dropdownDefaultButton">
                             <li>
-                                <a href="#"
-                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">All
+                                <a href="#" onclick="event.preventDefault(); loadContacts('all')"
+                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">All
+                                    Contacts</a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="event.preventDefault(); loadContacts('active')"
+                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Active
+                                    Contacts</a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="event.preventDefault(); loadContacts('favorite')"
+                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Favorite
                                     Contacts</a>
                             </li>
                             <li>
                                 <a href="#"
-                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Active
-                                    Contacts</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Favroite
-                                    Contacts</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="inline-flex items-center w-full p-2 text-fg-danger hover:bg-neutral-tertiary-medium rounded">Delete</a>
+                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 text-fg-danger hover:bg-neutral-tertiary-medium rounded">Delete</a>
                             </li>
                         </ul>
                     </div>
                     <!-- Hidden input (THIS is submitted to Spring) -->
-                    <!-- <input type="hidden" id="actionInput" th:field="*{action}"> -->
+                    <input type="hidden" id="actionInput">
                 </div>
-                <label for="input-group-1" class="sr-only">Search</label>
+                <label for="search" class="sr-only">Search</label>
                 <div class="relative">
                     <div
                         class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none dark:cursor-pointer dark:bg-slate-500">
                         <i class="fa-solid fa-magnifying-glass fa-bounce "></i>
                     </div>
-                    <input type="text" id="input-group-1"
-                        class="block w-full max-w-96 ps-9 pe-3 py-2 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
+                    <input type="text" id="search"
+                        class="block w-full max-w-96 ps-9 pe-3 py-2 bg-neutral-secondary-medium border border-default-medium text-heading text-sm dark:text-black rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
                         placeholder="Search">
                 </div>
+                <!-- Sort By -->
+                <select onchange="changeSort(this.value)"
+                    class="px-3 py-2 text-sm rounded-base border border-default-medium bg-indigo-50 dark:bg-gray-700">
+                    <option value="name">Sort: Name</option>
+                    <option value="createdAt">Sort: Created Date</option>
+                </select>
+
+                <!-- Sort Direction -->
+                <select onchange="changeDirection(this.value)"
+                    class="px-3 py-2 text-sm rounded-base border border-default-medium bg-indigo-50 dark:bg-gray-700">
+                    <option value="ascending">ASC</option>
+                    <option value="descending">DESC</option>
+                </select>
             </div>
             <table class="w-full text-sm text-left rtl:text-right text-body">
                 <thead class="text-sm text-body bg-neutral-secondary-medium border-b border-t border-default-medium">
@@ -100,7 +114,8 @@
                                 <div class="text-base font-semibold"
                                     th:text="*{lastName != null and !#strings.isEmpty(lastName) ? firstName + ' ' + lastName : firstName}">
                                     Neil Sims</div>
-                                <div class="font-normal text-body italic" th:text="*{email}">neil.sims@flowbite.com
+                                <div class="font-normal text-body italic" th:text="*{email}">
+                                    neil.sims@flowbite.com
                                 </div>
                             </div>
                         </th>
@@ -111,12 +126,12 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center">
-                                <a th:if="${!#strings.isEmpty(websiteLink)}" th:href="${websiteLink}" target="_blank"
+                                <a th:if="*{!#strings.isEmpty(websiteLink)}" th:href="*{websiteLink}" target="_blank"
                                     class="text-blue-600 hover:underline">
                                     Website
                                 </a>
                                 <div>&emsp;</div>
-                                <a th:if="${!#strings.isEmpty(linkedInLink)}" th:href="${linkedInLink}" target="_blank"
+                                <a th:if="*{!#strings.isEmpty(linkedInLink)}" th:href="*{linkedInLink}" target="_blank"
                                     class="text-blue-600 hover:underline">
                                     LinkedIn
                                 </a>
@@ -156,9 +171,54 @@
             </div>
         </div>
     </div>
-    <script>
-        console.log("Contact Page")
-    </script>
+    <th:block th:fragment="script">
+        <script>
+            let currentType = "all";
+            let currentPage = 0;
+            let sortBy = "name";
+            let sortDirection = "ascending";
+            let searchQuery = "";
+
+            let debounceTimer;
+
+            document.getElementById("search").addEventListener("input", function (e) {
+                clearTimeout(debounceTimer);
+
+                debounceTimer = setTimeout(() => {
+                    searchQuery = e.target.value.trim();
+                    loadContacts(0);
+                }, 300); // 👈 debounce delay
+            });
+
+            function loadContacts(type, page = 0) {
+                currentType = type;
+                currentPage = page;
+
+                fetch(`/user/contacts/filter?keyword=${currentType}&page=${currentPage}&sortBy=${sortBy}&sortDirection=${sortDirection}&query=${encodeURIComponent(searchQuery)}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        document.querySelector("tbody").innerHTML = html;
+                    });
+            }
+
+            function changeSort(value) {
+                sortBy = value;
+                loadContacts(0);
+            }
+
+            function changeDirection(value) {
+                dir = value;
+                loadContacts(0);
+            }
+
+            function filterType(type) {
+                currentType = type;
+                loadContacts(0);
+            }
+        </script>
+    </th:block>
+
+
 </body>
 
 </html>

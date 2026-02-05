@@ -1,6 +1,7 @@
 package com.scm.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -175,7 +177,7 @@ public class ContactController {
     public String listContacts(
             Authentication authentication,
             @RequestParam(value = "page", defaultValue = SCMConstants.ZERO) int page,
-            @RequestParam(value = "size", defaultValue = SCMConstants.MAX_CONTACTS_PER_PAGE) int size,
+            @RequestParam(value = "size", defaultValue = SCMConstants.MAX_CONTACTS_PER_PAGE + "") int size,
             @RequestParam(value="sortBy" , defaultValue = "firstName") String sortBy, 
             @RequestParam(value ="sortDirection", defaultValue = SCMConstants.ASCENDING_ORDER) String sortDirection,
             Model model
@@ -190,8 +192,37 @@ public class ContactController {
         model.addAttribute("contactPage", contactPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", contactPage.getTotalPages());
-        model.addAttribute("pageSize", SCMConstants.MAX_CONTACT_PER_PAGE);
+        model.addAttribute("pageSize", SCMConstants.MAX_CONTACTS_PER_PAGE);
 
         return "contact";
+    }
+
+    @GetMapping("/filter")
+    public String filterContacts(
+            Authentication authentication,
+            @RequestParam(value = "keyword", defaultValue = "all") String keyword,
+            @RequestParam(required = false) String query,
+            @RequestParam(value = "page", defaultValue = SCMConstants.ZERO) int page,
+            @RequestParam(value = "size", defaultValue = SCMConstants.MAX_CONTACTS_PER_PAGE + "") int size,
+            @RequestParam(value="sortBy" , defaultValue = "firstName") String sortBy, 
+            @RequestParam(value ="sortDirection", defaultValue = SCMConstants.ASCENDING_ORDER) String sortDirection,
+            Model model) {
+        //Get the current user from Authentication 
+        User user = currentUserService.getCurrentUser(authentication);
+        Page<Contact> contactPage = contactService.getAllContactsListByUser(user, keyword, query, page, size, sortBy, sortDirection);
+
+        model.addAttribute("contactPage", contactPage);
+        model.addAttribute("page", contactPage);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDirection", sortDirection);
+
+        return "fragments/contact-list :: list";
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public void deleteContacts(@RequestBody List<String> ids) {
+        contactService.deleteContactsInBulk(ids);
     }
 }
