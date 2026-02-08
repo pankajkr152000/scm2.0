@@ -143,7 +143,7 @@ public interface IContactService {
     /**
      * Soft delete multiple contacts at once
      */
-    void deleteContactsInBulk(List<String> contactIds);
+    void deleteContactsInBulk(User user, List<Long> contactIds);
 
     /**
      * Check if contact belongs to a user

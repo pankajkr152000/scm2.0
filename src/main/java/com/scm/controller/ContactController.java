@@ -201,7 +201,7 @@ public class ContactController {
     public String filterContacts(
             Authentication authentication,
             @RequestParam(value = "keyword", defaultValue = "all") String keyword,
-            @RequestParam(required = false) String query,
+            @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "page", defaultValue = SCMConstants.ZERO) int page,
             @RequestParam(value = "size", defaultValue = SCMConstants.MAX_CONTACTS_PER_PAGE + "") int size,
             @RequestParam(value="sortBy" , defaultValue = "firstName") String sortBy, 
@@ -222,7 +222,10 @@ public class ContactController {
 
     @PostMapping("/delete")
     @ResponseBody
-    public void deleteContacts(@RequestBody List<String> ids) {
-        contactService.deleteContactsInBulk(ids);
+    public ResponseEntity<Void> deleteContacts(Authentication authentication, @RequestBody List<Long> ids) {
+        //Get the current user from Authentication 
+        User user = currentUserService.getCurrentUser(authentication);
+        contactService.deleteContactsInBulk(user, ids);
+        return ResponseEntity.ok().build();
     }
 }

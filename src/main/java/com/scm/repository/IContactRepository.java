@@ -142,6 +142,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
     @Query("""
         SELECT c FROM Contact c
         WHERE c.isDeleted = false
+        AND c.user = :user
         AND c.isActive = true
         AND (
             LOWER(c.firstName) LIKE LOWER(CONCAT('%', :query, '%'))
@@ -151,6 +152,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
         )
     """)
     Page<Contact> searchActive(
+            @Param("user") User user,
             @Param("query") String query,
             Pageable pageable
     );
@@ -161,6 +163,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
     @Query("""
         SELECT c FROM Contact c
         WHERE c.isDeleted = false
+        AND c.user = :user
         AND c.isFavoriteContact = true
         AND (
             LOWER(c.firstName) LIKE LOWER(CONCAT('%', :query, '%'))
@@ -170,6 +173,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
         )
     """)
     Page<Contact> searchFavorite(
+            @Param("user") User user,
             @Param("query") String query,
             Pageable pageable
     );

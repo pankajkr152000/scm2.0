@@ -3,8 +3,8 @@
 
 <head>
     <!-- REQUIRED FOR AJAX -->
-    <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <!-- <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"> -->
     <title th:text="${loggedInUser.firstName}+' | Contact Page'">Contact Page</title>
 </head>
 
@@ -33,28 +33,32 @@
                         class="absolute top-full left-0 mt-2 z-50 hidden bg-indigo-100  border border-gray-200 dark:bg-slate-500 rounded-lg shadow-lg w-44">
                         <ul class="p-2 text-sm max-h-60 overflow-y-auto" aria-labelledby="dropdownDefaultButton">
                             <li>
-                                <a href="#" onclick="event.preventDefault(); loadContacts('all')"
+                                <button type="button" onclick="event.preventDefault(); loadContacts('all')"
                                     class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">All
-                                    Contacts</a>
+                                    Contacts</b>
+                                </button>
                             </li>
                             <li>
-                                <a href="#" onclick="event.preventDefault(); loadContacts('active')"
+                                <button type="button" onclick="event.preventDefault(); loadContacts('active')"
                                     class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Active
-                                    Contacts</a>
+                                    Contacts</b>
+                                </button>
                             </li>
                             <li>
-                                <a href="#" onclick="event.preventDefault(); loadContacts('favorite')"
+                                <button type="button" onclick="event.preventDefault(); loadContacts('favorite')"
                                     class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Favorite
-                                    Contacts</a>
+                                    Contacts</b>
+                                </button>
                             </li>
                             <li>
-                                <a href="#"
-                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 text-fg-danger hover:bg-neutral-tertiary-medium rounded">Delete</a>
+                                <button type="button" onclick="deleteSelectedContacts()"
+                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 text-fg-danger hover:bg-neutral-tertiary-medium rounded">Delete</b>
+                                </button>
                             </li>
                         </ul>
                     </div>
                     <!-- Hidden input (THIS is submitted to Spring) -->
-                    <input type="hidden" id="actionInput">
+                    <!-- <input type="hidden" id="actionInput"> -->
                 </div>
                 <label for="search" class="sr-only">Search</label>
                 <div class="relative">
@@ -69,7 +73,7 @@
                 <!-- Sort By -->
                 <select onchange="changeSort(this.value)"
                     class="px-3 py-2 text-sm rounded-base border border-default-medium bg-indigo-50 dark:bg-gray-700">
-                    <option value="name">Sort: Name</option>
+                    <option value="firstName">Sort: Name</option>
                     <option value="createdAt">Sort: Created Date</option>
                 </select>
 
@@ -97,52 +101,8 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr th:object="${eachContact}" th:each="eachContact : ${contactPage.getContent()}"
-                        class="bg-neutral-primary-soft border-b border-default  rounded-lg  hover:bg-neutral-secondary-medium">
-                        <td class="w-4 p-4">
-                            <div class="flex items-center">
-                                <input id="table-checkbox-46" type="checkbox" value=""
-                                    class="w-4 h-4 border border-default-medium rounded-full bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft appearance-auto accent-blue-500">
-                                <label for="table-checkbox-46" class="sr-only">Table checkbox</label>
-                            </div>
-                        </td>
-                        <th scope="row" class="flex items-center px-6 py-4 text-heading whitespace-nowrap">
-                            <img class="w-10 h-10 rounded-full" th:src="@{*{picture}}"
-                                onerror="this.src='/images/avatar-default.png'" alt="Contact Image">
-                            <div class="ps-3">
-                                <div class="text-base font-semibold"
-                                    th:text="*{lastName != null and !#strings.isEmpty(lastName) ? firstName + ' ' + lastName : firstName}">
-                                    Neil Sims</div>
-                                <div class="font-normal text-body italic" th:text="*{email}">
-                                    neil.sims@flowbite.com
-                                </div>
-                            </div>
-                        </th>
-                        <td class="px-6 py-4">
-                            <!-- <i class="fa-solid fa-phone fa-shake h-4 w-4"></i> -->
-                            <i class="fa-solid fa-phone h-4 w-4"></i>
-                            <span class="font-normal text-body" th:text="*{contactNumber}"></span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center">
-                                <a th:if="*{!#strings.isEmpty(websiteLink)}" th:href="*{websiteLink}" target="_blank"
-                                    class="text-blue-600 hover:underline">
-                                    Website
-                                </a>
-                                <div>&emsp;</div>
-                                <a th:if="*{!#strings.isEmpty(linkedInLink)}" th:href="*{linkedInLink}" target="_blank"
-                                    class="text-blue-600 hover:underline">
-                                    LinkedIn
-                                </a>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <a href="#"
-                                class="font-semibold text-fg-brand hover:underline text-blue-700 dark:text-blue-500 ">Edit
-                                user</a>
-                        </td>
-                    </tr>
+                <!-- 👇 THIS must match the fragment -->
+                <tbody id="contactTableBody" th:replace="~{fragments/contact-list :: list}">
                 </tbody>
             </table>
             <!-- Pagination component -->
@@ -173,51 +133,115 @@
     </div>
     <th:block th:fragment="script">
         <script>
-            let currentType = "all";
-            let currentPage = 0;
-            let sortBy = "name";
-            let sortDirection = "ascending";
-            let searchQuery = "";
+            document.addEventListener("DOMContentLoaded", function () {
 
-            let debounceTimer;
+                const dropdownBtn = document.getElementById("dropdownDefaultButton");
+                const dropdown = document.getElementById("dropdown");
+                const searchInput = document.getElementById("search");
+                const tableBody = document.getElementById("contactTableBody");
 
-            document.getElementById("search").addEventListener("input", function (e) {
-                clearTimeout(debounceTimer);
+                if (!dropdownBtn || !dropdown || !searchInput || !tableBody) {
+                    console.warn("Contact page JS skipped (required DOM not found)");
+                    return;
+                }
 
-                debounceTimer = setTimeout(() => {
-                    searchQuery = e.target.value.trim();
-                    loadContacts(0);
-                }, 300); // 👈 debounce delay
+                window.currentType = "all";
+                window.currentPage = 0;
+                window.sortBy = "firstName";
+                window.sortDirection = "ascending";
+                window.searchQuery = "";
+
+
+                dropdownBtn.addEventListener("click", () => {
+                    dropdown.classList.toggle("hidden");
+                });
+
+                searchInput.addEventListener("input", function (e) {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => {
+                        searchQuery = e.target.value.trim();
+                        loadContacts(currentType, 0);
+                    }, 300);
+                });
+
+                // window.loadContacts = function (type, page = 0) {
+                //     currentType = type;
+                //     currentPage = page;
+
+                //     fetch(`/user/contacts/filter?keyword=${currentType}&page=${currentPage}&sortBy=${sortBy}&sortDirection=${sortDirection}&query=${encodeURIComponent(searchQuery)}`)
+                //         .then(res => res.text())
+                //         .then(html => {
+                //             tableBody.innerHTML = html;
+                //         });
+                // };
+                window.loadContacts = function (type, page = 0) {
+                    window.currentType = type;
+                    window.currentPage = page;
+
+                    fetch(`/user/contacts/filter?keyword=${window.currentType}&page=${window.currentPage}&sortBy=${window.sortBy}&sortDirection=${window.sortDirection}&query=${encodeURIComponent(window.searchQuery)}`)
+                        .then(res => res.text())
+                        .then(html => {
+                            document.getElementById("contactTableBody").innerHTML = html;
+                        });
+                };
+
+
+                window.changeSort = function (value) {
+                    sortBy = value;
+                    loadContacts(currentType, 0);
+                };
+
+                window.changeDirection = function (value) {
+                    sortDirection = value;
+                    loadContacts(currentType, 0);
+                };
             });
-
-            function loadContacts(type, page = 0) {
-                currentType = type;
-                currentPage = page;
-
-                fetch(`/user/contacts/filter?keyword=${currentType}&page=${currentPage}&sortBy=${sortBy}&sortDirection=${sortDirection}&query=${encodeURIComponent(searchQuery)}`)
-                    .then(res => res.text())
-                    .then(html => {
-                        document.querySelector("tbody").innerHTML = html;
-                    });
-            }
-
-            function changeSort(value) {
-                sortBy = value;
-                loadContacts(0);
-            }
-
-            function changeDirection(value) {
-                dir = value;
-                loadContacts(0);
-            }
-
-            function filterType(type) {
-                currentType = type;
-                loadContacts(0);
-            }
         </script>
     </th:block>
+    <th:block th:fragment="script">
+        <script>
+            window.deleteSelectedContacts = function () {
 
+                const selectedIds = Array.from(
+                    document.querySelectorAll(".contact-checkbox:checked")
+                ).map(cb => cb.value);
+
+                if (selectedIds.length === 0) {
+                    alert("Please select at least one contact to delete");
+                    return;
+                }
+
+                if (!confirm("Are you sure you want to delete selected contacts?")) {
+                    return;
+                }
+
+                const headers = { "Content-Type": "application/json" };
+
+                const csrfTokenMeta = document.querySelector('meta[name="_csrf"]');
+                const csrfHeaderMeta = document.querySelector('meta[name="_csrf_header"]');
+
+                if (csrfTokenMeta && csrfHeaderMeta &&
+                    csrfTokenMeta.content && csrfHeaderMeta.content) {
+                    headers[csrfHeaderMeta.content] = csrfTokenMeta.content;
+                }
+
+                fetch("/user/contacts/delete", {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify(selectedIds)
+                })
+                .then(res => {
+                    console.log("DELETE status:", res.status);
+                    // ✅ refresh works now
+                    loadContacts(window.currentType, window.currentPage);
+                })
+                .catch(err => {
+                    console.error("DELETE error:", err);
+                    alert("Delete failed. Check console.");
+                });
+            };
+        </script>
+    </th:block>
 
 </body>
 
