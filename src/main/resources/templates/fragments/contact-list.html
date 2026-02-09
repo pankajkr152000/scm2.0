@@ -1,14 +1,21 @@
 <tbody th:fragment="list" id="contactTableBody">
     <tr th:each="eachContact : ${contactPage.content}"
         th:object="${eachContact}"
-        class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
+        class="bg-neutral-primary-soft border-b border-default">
 
         <td class="w-4 p-4">
             <div class="flex items-center">
-                <input type="checkbox"
-                       id = "contact-checkbox"
-                       class="contact-checkbox w-4 h-4 border border-default-medium rounded-full bg-neutral-secondary-medium accent-blue-500 dark:accent-blue-500"
-                       th:value="*{id}">
+                <label class="flex items-center cursor-pointer">
+                    <input type="checkbox"
+                        class="contact-checkbox peer hidden"
+                        th:value="*{id}">
+
+                    <div class="w-4 h-4 rounded-lg border border-green-500
+                                peer-checked:bg-blue-600
+                                peer-checked:border-blue-600
+                                transition-shadow">
+                    </div>
+                </label>
             </div>
         </td>
 

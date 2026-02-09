@@ -34,27 +34,27 @@
                         <ul class="p-2 text-sm max-h-60 overflow-y-auto" aria-labelledby="dropdownDefaultButton">
                             <li>
                                 <button type="button" onclick="event.preventDefault(); loadContacts('all')"
-                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">All
-                                    Contacts</b>
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" onclick="event.preventDefault(); loadContacts('active')"
-                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Active
-                                    Contacts</b>
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" onclick="event.preventDefault(); loadContacts('favorite')"
-                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Favorite
+                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">All Deleted 
                                     Contacts</b>
                                 </button>
                             </li>
                             <li>
                                 <button type="button" onclick="deleteSelectedContacts()"
-                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 text-fg-danger hover:bg-neutral-tertiary-medium rounded">Delete</b>
+                                    class="inline-flex  w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Restore
+                                    Contacts</b>
                                 </button>
                             </li>
+                            <li>
+                                <button type="button" onclick="deleteSelectedContacts()"
+                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Delete
+                                    Permanently</b>
+                                </button>
+                            </li>
+                            <!-- <li>
+                                <button type="button" onclick="deleteSelectedContacts()"
+                                    class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 text-fg-danger hover:bg-neutral-tertiary-medium rounded">Delete</b>
+                                </button>
+                            </li> -->
                         </ul>
                     </div>
                     <!-- Hidden input (THIS is submitted to Spring) -->
@@ -225,11 +225,11 @@
                 ).map(cb => cb.value);
 
                 if (selectedIds.length === 0) {
-                    alert("Please select at least one contact to delete");
+                    alert("Please select at least one contact to restore");
                     return;
                 }
 
-                if (!confirm("Are you sure you want to delete selected contacts?")) {
+                if (!confirm("Are you sure you want to restore selected contacts?")) {
                     return;
                 }
 
@@ -257,24 +257,24 @@
                 //     console.error("DELETE error:", err);
                 //     alert("Delete failed. Check console.");
                 // });
-                fetch("/user/contacts/delete", {
+                fetch("/user/contacts/restore", {
                     method: "POST",
                     headers,
                     body: JSON.stringify(selectedIds)
                 })
                 .then(res => {
                     if (!res.ok) {
-                        throw new Error("Delete failed with status " + res.status);
+                        throw new Error("Restore failed with status " + res.status);
                     }
 
                     // ✅ success toast
-                    showSuccessToast("Contacts deleted successfully");
+                    showSuccessToast("Contacts restored successfully");
 
                     // refresh table
                     loadContacts(window.currentType, window.currentPage);
                 })
                 .catch(err => {
-                    console.error("DELETE error:", err);
+                    console.error("Restore error:", err);
                 });
 
             };

@@ -193,7 +193,10 @@ public class ContactController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", contactPage.getTotalPages());
         model.addAttribute("pageSize", SCMConstants.MAX_CONTACTS_PER_PAGE);
+         // ✅ THIS is what you need for modal
+        model.addAttribute("totalContacts", contactPage.getTotalElements());
 
+        log.info("Total User contacts: {}", contactPage.getTotalElements());
         return "contact";
     }
 
@@ -226,6 +229,43 @@ public class ContactController {
         //Get the current user from Authentication 
         User user = currentUserService.getCurrentUser(authentication);
         contactService.deleteContactsInBulk(user, ids);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/deletedContacts")
+    public String getDeletedContacts(
+        Authentication authentication,
+            @RequestParam(value = "page", defaultValue = SCMConstants.ZERO) int page,
+            @RequestParam(value = "size", defaultValue = SCMConstants.MAX_CONTACTS_PER_PAGE + "") int size,
+            @RequestParam(value="sortBy" , defaultValue = "firstName") String sortBy, 
+            @RequestParam(value ="sortDirection", defaultValue = SCMConstants.ASCENDING_ORDER) String sortDirection,
+            Model model
+    ) {
+                
+        //Get the current user from Authentication 
+        User user = currentUserService.getCurrentUser(authentication);
+        
+        Page<Contact> contactPage =
+                contactService.getAllDeletedContactsListByUser(user, page, size, sortBy, sortDirection);
+
+        model.addAttribute("contactPage", contactPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", contactPage.getTotalPages());
+        model.addAttribute("pageSize", SCMConstants.MAX_CONTACTS_PER_PAGE);
+         // ✅ THIS is what you need for modal
+        model.addAttribute("totalDeletedContacts", contactPage.getTotalElements());
+
+        log.info("Total deleted contacts: {}", contactPage.getTotalElements());
+        return "user/deletedContacts";
+    }
+
+    @PostMapping("/restore")
+    @ResponseBody
+    public ResponseEntity<Void> restoreContacts(Authentication authentication, @RequestBody List<Long> ids) {
+        // get the current user
+        User user = currentUserService.getCurrentUser(authentication);
+
+        contactService.restoreDeletedContactsInBulk(user, ids);
         return ResponseEntity.ok().build();
     }
 }

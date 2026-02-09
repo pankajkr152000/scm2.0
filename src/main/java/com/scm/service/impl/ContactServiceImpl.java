@@ -298,4 +298,41 @@ public class ContactServiceImpl implements IContactService {
         };
     }
 
+    @Override
+    public Page<Contact> getAllDeletedContactsListByUser(User user, int page, int size, String sortBy, String sortDirection) {
+        Sort sort = sortDirection.equals(SCMConstants.DESCENDING_ORDER) ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                sort);
+        return contactRepository.findByUserAndIsDeletedTrue(user, pageable);
+    }
+
+    @Override
+    public void restoreDeletedContactsInBulk(User currentUser, List<Long> contactIds) {
+         for (Long id : contactIds) {
+            Contact contact = contactRepository.findById(id).orElseThrow();
+            if (!contact.getUser().equals(currentUser)) {
+                // throw new AccessDeniedException("Unauthorized delete attempt");
+            }
+            contact.setDeleted(false);
+            contact.setUpdated(true);
+            contact.setContactLastUpdateRecordDate(DateUtils.getBusinessDate());
+            contact.setActive(false);
+            contactRepository.save(contact);
+        }
+    }
+
+    @Override
+    public long countContactsAndIsDeletedFalse(User user) {
+        return contactRepository.countByUserAndIsDeletedFalse(user);
+    }
+
+    @Override
+    public long countContactsAndIsDeletedTrue(User user) {
+        return contactRepository.countByUserAndIsDeletedTrue(user);
+    }
+
 }

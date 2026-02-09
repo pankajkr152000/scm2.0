@@ -76,6 +76,10 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
 
     long countByUserAndIsDeletedFalse(User user);
 
+    long countByUserAndIsDeletedTrue(User user);
+
+    long countByUserAndIsDeletedFalseAndIsFavoriteContactTrue(User user);
+
     long countByUser(User user);
 
     @Query(value = "SELECT nextval('CONTACT_IMAGE_SEQ')", nativeQuery = true)
@@ -88,6 +92,10 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
 
     List<Contact> findByIdIn(List<Long> ids);
 
+    /**
+     * get the deleted contact of the user
+     */
+    Page<Contact> findByUserAndIsDeletedTrue(User user, Pageable pageable);
 
     /* =====================================================
      * OWNERSHIP / SECURITY
@@ -199,5 +207,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
                 @Param("query") String query,
                 Pageable pageable
         );
+
+
 
 }

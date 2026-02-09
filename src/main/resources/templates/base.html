@@ -48,6 +48,15 @@
         <section data-th-replace="${content}"></section>
     </div>
 
+    <!-- ✅ Success Toast -->
+    <div id="toast-success"
+        class="fixed top-5 right-5 z-50 hidden items-center gap-3
+                bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg
+                transition-opacity duration-300">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toast-success-message">Success</span>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script data-th-src="@{/js/script.js}"></script>
