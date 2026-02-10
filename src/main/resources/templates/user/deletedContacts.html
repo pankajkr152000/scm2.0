@@ -39,13 +39,13 @@
                                 </button>
                             </li>
                             <li>
-                                <button type="button" onclick="deleteSelectedContacts()"
+                                <button type="button" onclick="restoreDeletedContacts()"
                                     class="inline-flex  w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Restore
                                     Contacts</b>
                                 </button>
                             </li>
                             <li>
-                                <button type="button" onclick="deleteSelectedContacts()"
+                                <button type="button" onclick="permanentlyDeleteSelectedContacts()"
                                     class="inline-flex items-center w-full p-2 hover:bg-indigo-600 dark:hover:bg-slate-600 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Delete
                                     Permanently</b>
                                 </button>
@@ -218,7 +218,7 @@
     </th:block>
     <th:block th:fragment="script">
         <script>
-            window.deleteSelectedContacts = function () {
+            window.restoreDeletedContacts = function () {
 
                 const selectedIds = Array.from(
                     document.querySelectorAll(".contact-checkbox:checked")
@@ -275,6 +275,70 @@
                 })
                 .catch(err => {
                     console.error("Restore error:", err);
+                });
+
+            };
+        </script>
+    </th:block>
+    <th:block th:fragment="script">
+        <script>
+            window.permanentlyDeleteSelectedContacts = function () {
+
+                const selectedIds = Array.from(
+                    document.querySelectorAll(".contact-checkbox:checked")
+                ).map(cb => cb.value);
+
+                if (selectedIds.length === 0) {
+                    alert("Please select at least one contact to delete permanently");
+                    return;
+                }
+
+                if (!confirm("Are you sure you want to delete permanently selected contacts?")) {
+                    return;
+                }
+
+                const headers = { "Content-Type": "application/json" };
+
+                const csrfTokenMeta = document.querySelector('meta[name="_csrf"]');
+                const csrfHeaderMeta = document.querySelector('meta[name="_csrf_header"]');
+
+                if (csrfTokenMeta && csrfHeaderMeta &&
+                    csrfTokenMeta.content && csrfHeaderMeta.content) {
+                    headers[csrfHeaderMeta.content] = csrfTokenMeta.content;
+                }
+
+                // fetch("/user/contacts/delete", {
+                //     method: "POST",
+                //     headers,
+                //     body: JSON.stringify(selectedIds)
+                // })
+                // .then(res => {
+                //     console.log("DELETE status:", res.status);
+                //     // ✅ refresh works now
+                //     loadContacts(window.currentType, window.currentPage);
+                // })
+                // .catch(err => {
+                //     console.error("DELETE error:", err);
+                //     alert("Delete failed. Check console.");
+                // });
+                fetch("/user/contacts/deletePermanently", {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify(selectedIds)
+                })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("Delete permanently failed with status " + res.status);
+                    }
+
+                    // ✅ success toast
+                    showSuccessToast("Contacts deleted permanently");
+
+                    // refresh table
+                    loadContacts(window.currentType, window.currentPage);
+                })
+                .catch(err => {
+                    console.error("Delete permanently error:", err);
                 });
 
             };

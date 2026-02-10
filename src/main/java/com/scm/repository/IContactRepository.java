@@ -97,6 +97,16 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
      */
     Page<Contact> findByUserAndIsDeletedTrue(User user, Pageable pageable);
 
+    /**
+     * delete permanently a contact
+     */
+    void deleteByIdAndUser(Long id, User user);
+
+    /**
+     * delete permanently contacts in bulk
+     */
+    void deleteAllByIdInAndUser(List<Long> ids, User user);
+
     /* =====================================================
      * OWNERSHIP / SECURITY
      * ===================================================== */

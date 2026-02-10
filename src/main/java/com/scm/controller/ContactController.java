@@ -268,4 +268,14 @@ public class ContactController {
         contactService.restoreDeletedContactsInBulk(user, ids);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/deletePermanently")
+    @ResponseBody
+    public ResponseEntity<Void> deleteContactPermanently(Authentication authentication, @RequestBody List<Long> ids) {
+        // get the current user
+        User user = currentUserService.getCurrentUser(authentication);
+
+        contactService.deleteContactsPermanently(user, ids);
+        return ResponseEntity.ok().build();
+    }
 }

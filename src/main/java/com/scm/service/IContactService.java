@@ -100,7 +100,7 @@ public interface IContactService {
      */
     void restoreContact(String contactId);
 
-    public void restoreDeletedContactsInBulk(User user, List<Long> ids);
+    void restoreDeletedContactsInBulk(User user, List<Long> ids);
 
      /**
      * Get all delted  contacts of a specific user
@@ -161,6 +161,11 @@ public interface IContactService {
      * Soft delete multiple contacts at once
      */
     void deleteContactsInBulk(User user, List<Long> contactIds);
+
+    /**
+     * Soft delete multiple contacts at once
+     */
+    void deleteContactsPermanently(User user, List<Long> contactIds);
 
     /**
      * Check if contact belongs to a user

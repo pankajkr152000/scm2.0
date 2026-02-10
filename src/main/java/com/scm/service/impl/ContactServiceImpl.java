@@ -335,4 +335,13 @@ public class ContactServiceImpl implements IContactService {
         return contactRepository.countByUserAndIsDeletedTrue(user);
     }
 
+    @Override
+    public void deleteContactsPermanently(User user, List<Long> contactIds) {
+        // delete contact links where contact_coontact_code =?
+        
+        // delete contact id sequence where user id =?
+
+        // finally delete the contact 
+    }
+
 }

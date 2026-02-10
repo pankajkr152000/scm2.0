@@ -69,6 +69,19 @@ public interface IContactIdSequenceRepository extends JpaRepository<ContactIdSeq
      */
     List<ContactIdSequence> findByUserIdIn(List<String> userIds);
 
+    /**
+     * Delete sequences for multiple users
+     */
+        /**
+     * delete permanently a contact
+     */
+    void deleteByIdAndUser(Long id);
+
+    /**
+     * delete permanently contacts in bulk
+     */
+    void deleteAllByIdInAndUser(List<Long> ids);
+
     /*
      * =====================================================
      * REPORTING / DEBUG
