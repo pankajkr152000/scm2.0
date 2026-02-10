@@ -30,19 +30,19 @@ import com.scm.utils.DateUtils;
 import com.scm.utils.SCMUtilities;
 
 @Service
-public class ContactServiceImpl implements IContactService{
+public class ContactServiceImpl implements IContactService {
 
     private final Logger log = LoggerFactory.getLogger(ContactServiceImpl.class);
-    
+
     // private static final int SEQ_LENGTH = 6;
 
     private final IContactIdSequenceRepository contactIdSequenceRepository;
     private final IGlobalContactSequenceRepository globalContactSequenceRepository;
     private final IContactRepository contactRepository;
-    
 
-    public ContactServiceImpl(IContactIdSequenceRepository contactIdSequenceRepository, IContactRepository contactRepository,
-                                IGlobalContactSequenceRepository globalContactSequenceRepository) {
+    public ContactServiceImpl(IContactIdSequenceRepository contactIdSequenceRepository,
+            IContactRepository contactRepository,
+            IGlobalContactSequenceRepository globalContactSequenceRepository) {
         this.contactIdSequenceRepository = contactIdSequenceRepository;
         this.contactRepository = contactRepository;
         this.globalContactSequenceRepository = globalContactSequenceRepository;
@@ -55,7 +55,7 @@ public class ContactServiceImpl implements IContactService{
         Contact contact = new Contact();
         contact.setUser(user);
         populateContact(contactFormDTO, contact);
-        
+
         log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
         contactRepository.save(contact); // update picture path
         log.info("Current User email : {} and user_id : {}", user.getEmail(), user.getUserId());
@@ -128,8 +128,18 @@ public class ContactServiceImpl implements IContactService{
     }
 
     @Override
-    public void deleteContactsInBulk(List<String> contactIds) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void deleteContactsInBulk(User currentUser, List<Long> contactIds) {
+        for (Long id : contactIds) {
+            Contact contact = contactRepository.findById(id).orElseThrow();
+            if (!contact.getUser().equals(currentUser)) {
+                // throw new AccessDeniedException("Unauthorized delete attempt");
+            }
+            contact.setDeleted(true);
+            contact.setDeletedAt(DateUtils.toLocalDateTime(DateUtils.getBusinessDate()));
+            contact.setActive(false);
+            contactRepository.save(contact);
+        }
+
     }
 
     @Override
@@ -137,8 +147,7 @@ public class ContactServiceImpl implements IContactService{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
-    public void populateContact(ContactFormDTO contactFormDTO, Contact contact) { 
+    public void populateContact(ContactFormDTO contactFormDTO, Contact contact) {
         // 1️⃣ GLOBAL SEQUENCE (100% UNIQUE)
         GlobalContactSequence globalSeq = globalContactSequenceRepository.save(new GlobalContactSequence());
         long globalContactSeq = globalSeq.getId();
@@ -151,25 +160,27 @@ public class ContactServiceImpl implements IContactService{
         String contactLastName = SCMUtilities.lastNameFromString(contactFormDTO.getFullName());
 
         // 3️⃣ NAME PREFIX
-        String prefix = contactFirstName.length() >= 3 ? contactFirstName.substring(0, 3).toUpperCase() : contactFirstName.toUpperCase();
+        String prefix = contactFirstName.length() >= 3 ? contactFirstName.substring(0, 3).toUpperCase()
+                : contactFirstName.toUpperCase();
 
-         // 4️⃣ CONTACT CODE
+        // 4️⃣ CONTACT CODE
         String contactCode = String.format("%s/%07d/%06d", prefix, globalContactSeq, nextPerUserContactSequence);
         contact.setContactCode(contactCode);
 
         contact.setFirstName(contactFirstName);
         contact.setLastName(contactLastName);
-        if(contactFormDTO.getEmail() != null)
+        if (contactFormDTO.getEmail() != null)
             contact.setEmail(contactFormDTO.getEmail().strip().toLowerCase());
         contact.setContactNumber(contactFormDTO.getContactNumber().strip());
-        if(contactFormDTO.getDescription() != null && StringUtils.hasText(contactFormDTO.getDescription())) {
+        if (contactFormDTO.getDescription() != null && StringUtils.hasText(contactFormDTO.getDescription())) {
             contact.setDescription(contactFormDTO.getDescription().strip());
         }
-        if(contactFormDTO.getDateOfBirth() != null && StringUtils.hasText(contactFormDTO.getDateOfBirth())) {
-            LocalDate contactDateOfBirth = DateUtils.stringToDate(contactFormDTO.getDateOfBirth(), SCMConstants.DD_MM_UUUU);
+        if (contactFormDTO.getDateOfBirth() != null && StringUtils.hasText(contactFormDTO.getDateOfBirth())) {
+            LocalDate contactDateOfBirth = DateUtils.stringToDate(contactFormDTO.getDateOfBirth(),
+                    SCMConstants.DD_MM_UUUU);
             contact.setDateOfBirth(contactDateOfBirth);
         }
-        if(contactFormDTO.getAddress() != null && StringUtils.hasText(contactFormDTO.getAddress())) {
+        if (contactFormDTO.getAddress() != null && StringUtils.hasText(contactFormDTO.getAddress())) {
             contact.setAddress(contactFormDTO.getAddress().strip());
         }
         contact.setGender(contactFormDTO.getGender());
@@ -177,7 +188,7 @@ public class ContactServiceImpl implements IContactService{
 
         if (contactFormDTO.getSocialLinks() != null) {
             for (SocialLinkDTO dto : contactFormDTO.getSocialLinks()) {
-                if(dto.getLink() != null && StringUtils.hasText(dto.getLink())) {
+                if (dto.getLink() != null && StringUtils.hasText(dto.getLink())) {
                     SocialLink link = SocialLink.builder()
                             .title(dto.getTitle())
                             .link(dto.getLink())
@@ -190,30 +201,32 @@ public class ContactServiceImpl implements IContactService{
         }
 
         contact.setContactAdditionRecordDate(DateUtils.getBusinessDate());
-        
-        if(contactFormDTO.getSocialLinks() != null){
-            if(contactFormDTO.getSocialLinks().get(0).getLink() != null && StringUtils.hasText(contactFormDTO.getSocialLinks().get(0).getLink()))
+
+        if (contactFormDTO.getSocialLinks() != null) {
+            if (contactFormDTO.getSocialLinks().get(0).getLink() != null
+                    && StringUtils.hasText(contactFormDTO.getSocialLinks().get(0).getLink()))
                 contact.setWebsiteLink(contactFormDTO.getSocialLinks().get(0).getLink());
-            if(contactFormDTO.getSocialLinks().get(1).getLink() != null && StringUtils.hasText(contactFormDTO.getSocialLinks().get(1).getLink()))
+            if (contactFormDTO.getSocialLinks().get(1).getLink() != null
+                    && StringUtils.hasText(contactFormDTO.getSocialLinks().get(1).getLink()))
                 contact.setLinkedInLink(contactFormDTO.getSocialLinks().get(1).getLink());
         }
 
     }
 
     /**
-     * contact id next sequence 
+     * contact id next sequence
      */
-   @Transactional
+    @Transactional
     public Long getPerUserNextContactSequence(Contact contact) {
 
         ContactIdSequence seq = contactIdSequenceRepository
-            .findByUserId(contact.getUser().getUserId())
-            .orElseGet(() -> {
-                ContactIdSequence s = new ContactIdSequence();
-                s.setUserId(contact.getUser().getUserId());
-                s.setCurrentValue(0L);
-                return contactIdSequenceRepository.save(s); // ✅ SAVE HERE
-            });
+                .findByUserId(contact.getUser().getUserId())
+                .orElseGet(() -> {
+                    ContactIdSequence s = new ContactIdSequence();
+                    s.setUserId(contact.getUser().getUserId());
+                    s.setCurrentValue(0L);
+                    return contactIdSequenceRepository.save(s); // ✅ SAVE HERE
+                });
 
         long perUserNextSeq = seq.getCurrentValue() + 1;
         seq.setCurrentValue(perUserNextSeq);
@@ -227,21 +240,21 @@ public class ContactServiceImpl implements IContactService{
      */
     @Override
     public Page<Contact> getAllContactsListByUser(User user, int page, int size, String sortBy, String sortDirection) {
-        Sort sort = sortDirection.equals(SCMConstants.DESCENDING_ORDER) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Sort sort = sortDirection.equals(SCMConstants.DESCENDING_ORDER) ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
 
-         Pageable pageable = PageRequest.of(
+        Pageable pageable = PageRequest.of(
                 page,
                 size,
-                sort
-        );
+                sort);
         return contactRepository.findByUserAndIsDeletedFalse(user, pageable);
     }
-    
+
     /**
      * Get all contacts of a specific user userId
      */
     // Page<Contact> getAllContactsListByUserId(User user) {
-// }
+    // }
     @Override
     public Page<Contact> getAllContactsListByUser(
             User user,
@@ -262,9 +275,9 @@ public class ContactServiceImpl implements IContactService{
 
         return switch (keyword) {
             case "active" ->
-                contactRepository.searchActive(query,pageable);
+                contactRepository.searchActive(user, query, pageable);
             case "favorite" ->
-                contactRepository.searchFavorite(query, pageable);
+                contactRepository.searchFavorite(user, query, pageable);
             default ->
                 contactRepository.searchAllByUser(user, query, pageable);
         };
@@ -276,14 +289,59 @@ public class ContactServiceImpl implements IContactService{
         contactRepository.saveAll(contacts);
     }
 
-
     private String resolveSortField(String sortBy) {
         return switch (sortBy) {
-            case "name" -> "firstName";      // UI name → entity field
+            case "name" -> "firstName"; // UI name → entity field
             case "createdAt" -> "contactAdditionRecordDate";
             case "email" -> "email";
             default -> "firstName";
         };
+    }
+
+    @Override
+    public Page<Contact> getAllDeletedContactsListByUser(User user, int page, int size, String sortBy, String sortDirection) {
+        Sort sort = sortDirection.equals(SCMConstants.DESCENDING_ORDER) ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                sort);
+        return contactRepository.findByUserAndIsDeletedTrue(user, pageable);
+    }
+
+    @Override
+    public void restoreDeletedContactsInBulk(User currentUser, List<Long> contactIds) {
+         for (Long id : contactIds) {
+            Contact contact = contactRepository.findById(id).orElseThrow();
+            if (!contact.getUser().equals(currentUser)) {
+                // throw new AccessDeniedException("Unauthorized delete attempt");
+            }
+            contact.setDeleted(false);
+            contact.setUpdated(true);
+            contact.setContactLastUpdateRecordDate(DateUtils.getBusinessDate());
+            contact.setActive(false);
+            contactRepository.save(contact);
+        }
+    }
+
+    @Override
+    public long countContactsAndIsDeletedFalse(User user) {
+        return contactRepository.countByUserAndIsDeletedFalse(user);
+    }
+
+    @Override
+    public long countContactsAndIsDeletedTrue(User user) {
+        return contactRepository.countByUserAndIsDeletedTrue(user);
+    }
+
+    @Override
+    public void deleteContactsPermanently(User user, List<Long> contactIds) {
+        // delete contact links where contact_coontact_code =?
+        
+        // delete contact id sequence where user id =?
+
+        // finally delete the contact 
     }
 
 }

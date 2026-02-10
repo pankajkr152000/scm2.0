@@ -76,6 +76,10 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
 
     long countByUserAndIsDeletedFalse(User user);
 
+    long countByUserAndIsDeletedTrue(User user);
+
+    long countByUserAndIsDeletedFalseAndIsFavoriteContactTrue(User user);
+
     long countByUser(User user);
 
     @Query(value = "SELECT nextval('CONTACT_IMAGE_SEQ')", nativeQuery = true)
@@ -88,6 +92,20 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
 
     List<Contact> findByIdIn(List<Long> ids);
 
+    /**
+     * get the deleted contact of the user
+     */
+    Page<Contact> findByUserAndIsDeletedTrue(User user, Pageable pageable);
+
+    /**
+     * delete permanently a contact
+     */
+    void deleteByIdAndUser(Long id, User user);
+
+    /**
+     * delete permanently contacts in bulk
+     */
+    void deleteAllByIdInAndUser(List<Long> ids, User user);
 
     /* =====================================================
      * OWNERSHIP / SECURITY
@@ -142,6 +160,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
     @Query("""
         SELECT c FROM Contact c
         WHERE c.isDeleted = false
+        AND c.user = :user
         AND c.isActive = true
         AND (
             LOWER(c.firstName) LIKE LOWER(CONCAT('%', :query, '%'))
@@ -151,6 +170,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
         )
     """)
     Page<Contact> searchActive(
+            @Param("user") User user,
             @Param("query") String query,
             Pageable pageable
     );
@@ -161,6 +181,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
     @Query("""
         SELECT c FROM Contact c
         WHERE c.isDeleted = false
+        AND c.user = :user
         AND c.isFavoriteContact = true
         AND (
             LOWER(c.firstName) LIKE LOWER(CONCAT('%', :query, '%'))
@@ -170,6 +191,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
         )
     """)
     Page<Contact> searchFavorite(
+            @Param("user") User user,
             @Param("query") String query,
             Pageable pageable
     );
@@ -195,5 +217,7 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
                 @Param("query") String query,
                 Pageable pageable
         );
+
+
 
 }

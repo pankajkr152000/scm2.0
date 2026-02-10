@@ -1,6 +1,7 @@
 package com.scm.utils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -141,5 +142,24 @@ public class DateUtils {
         return addDate(currDate, -period, periodType);
     }
 
+    /**
+    * Date to LocalDateTime
+     */
+    public static LocalDateTime toLocalDateTime(Date date) {
+        return date == null
+                ? null
+                : date.toInstant()
+                    .atZone(ZONE)
+                    .toLocalDateTime();
+    }
+
+    /**
+     * Convert LocalDateTime to Date
+     */
+    public static Date toDate(LocalDateTime localDateTime) {
+        return localDateTime == null
+                ? null
+                : Date.from(localDateTime.atZone(ZONE).toInstant());
+    }
 
 }

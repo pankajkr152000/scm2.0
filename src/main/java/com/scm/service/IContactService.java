@@ -100,6 +100,12 @@ public interface IContactService {
      */
     void restoreContact(String contactId);
 
+    void restoreDeletedContactsInBulk(User user, List<Long> ids);
+
+     /**
+     * Get all delted  contacts of a specific user
+     */
+    Page<Contact> getAllDeletedContactsListByUser(User user, int page, int size, String sortBy, String sortDirection);
 
     /* =====================================================
      * FAVORITES
@@ -129,6 +135,17 @@ public interface IContactService {
      * Count total active contacts of a user
      */
     long countActiveContacts(User user);
+    
+    /**
+     * Count total  contacts of a user which is not deleted
+     */
+    long countContactsAndIsDeletedFalse(User user);
+    
+    /**
+     * Count total deleted contacts of a user which is deleted
+     */
+    long countContactsAndIsDeletedTrue(User user);
+
 
     /**
      * Count favorite contacts of a user
@@ -143,11 +160,18 @@ public interface IContactService {
     /**
      * Soft delete multiple contacts at once
      */
-    void deleteContactsInBulk(List<String> contactIds);
+    void deleteContactsInBulk(User user, List<Long> contactIds);
+
+    /**
+     * Soft delete multiple contacts at once
+     */
+    void deleteContactsPermanently(User user, List<Long> contactIds);
 
     /**
      * Check if contact belongs to a user
      */
     boolean isContactOwnedByUser(String contactId, User user);
+
+
 }
 

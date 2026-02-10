@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="dark" lang="en" th:fragment="parent(content, title, script)" xmlns:th="http://www.thymeleaf.org">
 
-<head>
+<!-- <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-th-replace="${title}"></title>
@@ -10,7 +10,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head> -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ✅ REQUIRED FOR AJAX POST (CRITICAL) -->
+    <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}">
+    <meta name="_csrf_header" th:content="${_csrf != null ? _csrf.headerName : ''}">
+
+
+    <title data-th-replace="${title}"></title>
+
+    <link th:href="@{https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css}" rel="stylesheet" />
+    <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />
+    <link rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" 
+        referrerpolicy="no-referrer" />
 </head>
+
 
 <body class="bg-indigo-50 dark:bg-gray-700 min-h-screen">
     <!-- Navbar -->
@@ -26,6 +46,15 @@
     <!-- Main content -->
     <div class="w-full p-4">
         <section data-th-replace="${content}"></section>
+    </div>
+
+    <!-- ✅ Success Toast -->
+    <div id="toast-success"
+        class="fixed top-5 right-5 z-50 hidden items-center gap-3
+                bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg
+                transition-opacity duration-300">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toast-success-message">Success</span>
     </div>
 
     <!-- Scripts -->
