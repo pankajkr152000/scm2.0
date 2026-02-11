@@ -75,12 +75,12 @@ public interface IContactIdSequenceRepository extends JpaRepository<ContactIdSeq
         /**
      * delete permanently a contact
      */
-    void deleteByIdAndUser(Long id);
+    // void deleteByIdAndUser(Long id);
 
     /**
      * delete permanently contacts in bulk
      */
-    void deleteAllByIdInAndUser(List<Long> ids);
+    // void deleteAllByIdInAndUser(List<Long> ids);
 
     /*
      * =====================================================

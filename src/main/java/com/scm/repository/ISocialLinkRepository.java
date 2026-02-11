@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.scm.entity.Contact;
 import com.scm.entity.SocialLink;
@@ -30,6 +32,10 @@ public interface ISocialLinkRepository extends JpaRepository<SocialLink, Long> {
     void deleteByContact(Contact contact);
 
     void deleteByIdAndContact(Long id, Contact contact);
+
+
+    @Modifying
+    Integer deleteByContactContactCodeIn(List<String> contact_contact_code);
 
     /* ---------------- SORTING & FILTERING ---------------- */
 

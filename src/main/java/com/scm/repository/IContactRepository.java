@@ -6,9 +6,11 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.scm.entity.Contact;
 import com.scm.entity.User;
@@ -107,6 +109,12 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
      */
     void deleteAllByIdInAndUser(List<Long> ids, User user);
 
+    /**
+     * delete permanently contacts in bulk where is deleted is already true
+     */
+    @Modifying
+    Integer deleteAllByIdInAndUserAndIsDeletedTrue(List<Long> ids, User user);
+
     /* =====================================================
      * OWNERSHIP / SECURITY
      * ===================================================== */
@@ -135,6 +143,8 @@ public interface IContactRepository extends JpaRepository<Contact, Long> {
     List<Contact> findByUser(User user);
 
     Page<Contact> findByUser(User user, Pageable pageable);
+
+    List<Contact> findAllByIdInAndUserAndIsDeletedTrue(List<Long> ids, User user);
 
     /* =========================
        SEARCH : ALL CONTACTS

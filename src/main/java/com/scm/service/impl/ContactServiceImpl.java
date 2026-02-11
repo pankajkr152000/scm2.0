@@ -25,6 +25,7 @@ import com.scm.entity.User;
 import com.scm.repository.IContactIdSequenceRepository;
 import com.scm.repository.IContactRepository;
 import com.scm.repository.IGlobalContactSequenceRepository;
+import com.scm.repository.ISocialLinkRepository;
 import com.scm.service.IContactService;
 import com.scm.utils.DateUtils;
 import com.scm.utils.SCMUtilities;
@@ -39,13 +40,16 @@ public class ContactServiceImpl implements IContactService {
     private final IContactIdSequenceRepository contactIdSequenceRepository;
     private final IGlobalContactSequenceRepository globalContactSequenceRepository;
     private final IContactRepository contactRepository;
+    private final ISocialLinkRepository socialLinkRepository;
 
     public ContactServiceImpl(IContactIdSequenceRepository contactIdSequenceRepository,
             IContactRepository contactRepository,
-            IGlobalContactSequenceRepository globalContactSequenceRepository) {
+            IGlobalContactSequenceRepository globalContactSequenceRepository,
+            ISocialLinkRepository socialLinkRepository) {
         this.contactIdSequenceRepository = contactIdSequenceRepository;
         this.contactRepository = contactRepository;
         this.globalContactSequenceRepository = globalContactSequenceRepository;
+        this.socialLinkRepository = socialLinkRepository;
     }
 
     @Transactional
@@ -335,13 +339,52 @@ public class ContactServiceImpl implements IContactService {
         return contactRepository.countByUserAndIsDeletedTrue(user);
     }
 
-    @Override
-    public void deleteContactsPermanently(User user, List<Long> contactIds) {
-        // delete contact links where contact_coontact_code =?
-        
-        // delete contact id sequence where user id =?
+    // @Override
+    // public void deleteContactsPermanently(User user, List<Long> contactIds) {
+    //     // for (Long contactId : contactIds) {
 
-        // finally delete the contact 
+    //     //     Contact currentContact = contactRepository
+    //     //         .deleteByIdAndUserAndIsDeletedTrue(contactId)
+    //     //         .orElseThrow(() ->
+    //     //             new RuntimeException("Contact not found with id: " + contactId));
+            
+    //         // delete contact social links where contact_contact_code =?
+    //         //socialLinkRepository.deleteByContact(currentContact); -> no need because No manual child delete required if cascade is correct.
+    //         // delete contact id sequence where user id =? -> no need as it stores only the current count of each user contacts
+    
+    //         // finally delete the contact 
+    //     try {
+    //         contactRepository.deleteAllByIdInAndUserAndIsDeletedTrue(contactIds, user);
+            
+    //     } catch (Exception e) {
+    //     } finally {
+    //     }
+    // }
+    @Override
+    @Transactional
+    public void deleteContactsPermanently(User user, List<Long> contactIds) {
+
+        // int deletedCount =
+        //     contactRepository.deleteAllByIdInAndUserAndIsDeletedTrue(contactIds, user);
+
+        // if (deletedCount == 0) {
+        //     throw new RuntimeException("No contacts deleted");
+        // }
+        List<Contact> contacts = contactRepository.findAllByIdInAndUserAndIsDeletedTrue( contactIds, user);
+
+        List<Long> validContactIdsToDelete = contacts.stream()
+                                    .map(Contact::getId)
+                                    .toList();
+
+        List<String> validContactContactIdsToDelete = contacts.stream()
+                                    .map(Contact::getContactCode)
+                                    .toList();
+                                
+        int socialLinksRowsDeleted = socialLinkRepository.deleteByContactContactCodeIn(validContactContactIdsToDelete);
+        log.info("Social Links rows Deleted : {}", socialLinksRowsDeleted);
+
+        int contactsRowsDeleted = contactRepository.deleteAllByIdInAndUserAndIsDeletedTrue(validContactIdsToDelete, user);
+        log.info("Contacts rows Deleted : {}", contactsRowsDeleted);
     }
 
 }
