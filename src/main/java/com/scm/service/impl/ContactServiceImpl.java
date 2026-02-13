@@ -40,7 +40,7 @@ public class ContactServiceImpl implements IContactService {
     private final IContactIdSequenceRepository contactIdSequenceRepository;
     private final IGlobalContactSequenceRepository globalContactSequenceRepository;
     private final IContactRepository contactRepository;
-    private final ISocialLinkRepository socialLinkRepository;
+    // private final ISocialLinkRepository socialLinkRepository;
 
     public ContactServiceImpl(IContactIdSequenceRepository contactIdSequenceRepository,
             IContactRepository contactRepository,
@@ -49,7 +49,7 @@ public class ContactServiceImpl implements IContactService {
         this.contactIdSequenceRepository = contactIdSequenceRepository;
         this.contactRepository = contactRepository;
         this.globalContactSequenceRepository = globalContactSequenceRepository;
-        this.socialLinkRepository = socialLinkRepository;
+        // this.socialLinkRepository = socialLinkRepository;
     }
 
     @Transactional
@@ -376,12 +376,12 @@ public class ContactServiceImpl implements IContactService {
                                     .map(Contact::getId)
                                     .toList();
 
-        List<String> validContactContactIdsToDelete = contacts.stream()
-                                    .map(Contact::getContactCode)
-                                    .toList();
-                                
-        int socialLinksRowsDeleted = socialLinkRepository.deleteByContactContactCodeIn(validContactContactIdsToDelete);
-        log.info("Social Links rows Deleted : {}", socialLinksRowsDeleted);
+        // List<String> validContactContactIdsToDelete = contacts.stream()
+        //                             .map(Contact::getContactCode)
+        //                             .toList();
+                                    // no need to delete manually social links deleteing contacts will remove the corresponding sociallinks simultaneously
+        //int socialLinksRowsDeleted = socialLinkRepository.deleteByContactContactCodeIn(validContactContactIdsToDelete);
+        //log.info("Social Links rows Deleted : {}", socialLinksRowsDeleted);
 
         int contactsRowsDeleted = contactRepository.deleteAllByIdInAndUserAndIsDeletedTrue(validContactIdsToDelete, user);
         log.info("Contacts rows Deleted : {}", contactsRowsDeleted);
