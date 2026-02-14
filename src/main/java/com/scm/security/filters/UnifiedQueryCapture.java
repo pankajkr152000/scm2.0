@@ -1,6 +1,8 @@
 package com.scm.security.filters;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
@@ -11,7 +13,6 @@ import org.hibernate.event.spi.PreInsertEventListener;
 import org.hibernate.event.spi.PreUpdateEvent;
 import org.hibernate.event.spi.PreUpdateEventListener;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.hibernate.resource.jdbc.spi.StatementInspector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -49,13 +50,13 @@ import jakarta.persistence.EntityManagerFactory;
 public class UnifiedQueryCapture implements 
         PreInsertEventListener, 
         PreUpdateEventListener, 
-        PreDeleteEventListener, 
-        StatementInspector {
+        PreDeleteEventListener {
 
     private static final Logger log = LoggerFactory.getLogger(UnifiedQueryCapture.class);
 
     /** Thread-local for storing the last SQL query */
-    private static final ThreadLocal<String> lastQuery = new ThreadLocal<>();
+    private static final ThreadLocal<List<String>> queries = ThreadLocal.withInitial(ArrayList::new);
+
 
     /** Thread-local for storing parameters of INSERT/UPDATE/DELETE */
     private static final ThreadLocal<Object[]> lastParams = new ThreadLocal<>();
@@ -65,6 +66,12 @@ public class UnifiedQueryCapture implements
     public UnifiedQueryCapture(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
+
+    // static void setLastQuery(String sql) {
+    //     lastQuery.set(sql);
+        
+    // }
+
 
     /** Registers Hibernate event listeners on startup */
     @PostConstruct
@@ -139,30 +146,47 @@ public class UnifiedQueryCapture implements
             }
         }
 
-        lastQuery.set(sb.toString());
+        // lastQuery.set(sb.toString());
+        // lastParams.set(state);
+
+        
+        // UnifiedQueryCapture.showSQLQueries(action, lastQuery.get(), Arrays.toString(lastParams.get()));
+        String finalSql = sb.toString();
+
+        queries.get().add(finalSql);
+
         lastParams.set(state);
 
-        log.info("Hibernate Captured {} Query: {}", action, lastQuery.get());
-        log.debug("Hibernate Query Params: {}", Arrays.toString(lastParams.get()));
+        showSQLQueries(action, finalSql, Arrays.toString(state));
     }
+    
+    /**
+     * show all sql queries
+    */
+   
+    public static void showSQLQueries(String action, String sqlQuery, String parameters) {
+        log.info("Hibernate Captured {} Query: {}", action, sqlQuery);
+        log.debug("Hibernate Query Params: {}", parameters);
 
+    } 
     /* ===================== SELECT QUERY INTERCEPTOR ===================== */
 
-    @Override
-    public String inspect(String sql) {
-        // Store SELECT queries
-        lastQuery.set(sql);
-        lastParams.set(null); // no params available here
-        log.info("Hibernate Captured SELECT Query: {}", sql);
-        return sql; // must return original SQL for execution
-    }
+    // @Override
+    // public String inspect(String sql) {
+    //     // Store SELECT queries
+    //     lastQuery.set(sql);
+    //     lastParams.set(null); // no params available here
+    //     log.info("Hibernate Captured SELECT Query: {}", sql);
+    //     return sql; // must return original SQL for execution
+    // }
 
     /* ===================== THREAD-LOCAL GETTERS & CLEAR ===================== */
 
     /** Returns the last captured query for the current thread */
-    public static String getLastQuery() {
-        return lastQuery.get();
+    public static List<String> getAllQueries() {
+        return queries.get();
     }
+
 
     /** Returns the last captured parameters for the current thread */
     public static Object[] getLastParams() {
@@ -176,7 +200,13 @@ public class UnifiedQueryCapture implements
 
     /** Clears thread-local variables to avoid memory leaks */
     public static void clear() {
-        lastQuery.remove();
+        queries.remove();
         lastParams.remove();
     }
+
+    public static void addQuery(String action, String sql) {
+        queries.get().add(sql);
+        showSQLQueries(action, sql, "N/A");
+    }
+
 }

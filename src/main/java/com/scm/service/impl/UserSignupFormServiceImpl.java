@@ -183,11 +183,11 @@ public class UserSignupFormServiceImpl implements IUserSignupFormService {
 
         Long count = userRepository.countByContactNumber(contactNumber);
          ////////  Generated SQL Query from Event Listenser and HTTPSession  ////////
-        String sql = UnifiedQueryCapture.getLastQuery();
-        String params = UnifiedQueryCapture.getLastParamsAsString();
+        List<String> sql = UnifiedQueryCapture.getAllQueries();
+       String params = UnifiedQueryCapture.getLastParamsAsString();
 
-        System.out.println("Captured SQL: " + sql);
-        System.out.println("Captured Params: " + params);
+       System.out.println("Captured SQL: " + sql.toString());
+       System.out.println("Captured Params: " + params);
         //////////                                           /////////////////////////
         return count > 0;
     }
@@ -202,10 +202,10 @@ public class UserSignupFormServiceImpl implements IUserSignupFormService {
     public boolean isUserExistsByEmail(String email) {
         ////////  Generated SQL Query from Event Listenser and HTTPSession  ////////
        String userEmail = email.toLowerCase();
-       String sql = UnifiedQueryCapture.getLastQuery();
+       List<String> sql = UnifiedQueryCapture.getAllQueries();
        String params = UnifiedQueryCapture.getLastParamsAsString();
 
-       System.out.println("Captured SQL: " + sql);
+       System.out.println("Captured SQL: " + sql.toString());
        System.out.println("Captured Params: " + params);
        //////////                                           /////////////////////////
 
@@ -246,11 +246,11 @@ public class UserSignupFormServiceImpl implements IUserSignupFormService {
         System.out.println("User Saved : " + user);
 
         ////////  Generated SQL Query from Event Listenser and HTTPSession  ////////
-        String sql = UnifiedQueryCapture.getLastQuery();
-        String params = UnifiedQueryCapture.getLastParamsAsString();
+        List<String> sql = UnifiedQueryCapture.getAllQueries();
+       String params = UnifiedQueryCapture.getLastParamsAsString();
 
-        System.out.println("Captured SQL: " + sql);
-        System.out.println("Captured Params: " + params);
+       System.out.println("Captured SQL: " + sql.toString());
+       System.out.println("Captured Params: " + params);
         //////////                                           /////////////////////////
         return savedUser;
     }
